@@ -146,7 +146,7 @@ class HomeView extends StatelessWidget {
                             : Theme.of(context).unselectedWidgetColor,
                         BlendMode.srcIn),
                   ),
-                  label: AppStrings.hadith.tr(),
+                  label: AppStrings.ratibMaulid.tr(),
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
@@ -172,7 +172,7 @@ class HomeView extends StatelessWidget {
                             : Theme.of(context).unselectedWidgetColor,
                         BlendMode.srcIn),
                   ),
-                  label: AppStrings.adhkar.tr(),
+                  label: AppStrings.doaHarian.tr(),
                 ),
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.settings_outlined),

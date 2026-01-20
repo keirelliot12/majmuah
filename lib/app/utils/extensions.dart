@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:islamic/app/utils/constants.dart';
+import 'package:majmuah/app/utils/constants.dart';
 
 extension NonNulString on String? {
   String orEmpty() {
