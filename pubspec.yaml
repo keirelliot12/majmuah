@@ -70,6 +70,12 @@ flutter:
     - assets/images/pillars/
 
 
+  # ============================================================================
+  # FONT STRATEGY:
+  # - Poppins (via google_fonts package): Used for modern UI elements
+  # - Local Arabic fonts (below): Used for Quranic content and Arabic text
+  #   These are loaded from assets to ensure proper Arabic typography
+  # ============================================================================
   fonts:
     - family: ElMessiri
       fonts:
