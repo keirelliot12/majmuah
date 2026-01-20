@@ -22,6 +22,11 @@ class AppStrings {
   static const String basmalah = "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيم";
   static const String hadith = "hadith";
   static const String nawawi = "40_nawawi";
+  // Premium Majelis - Menu Labels
+  static const String ratibMaulid = "ratib_maulid"; // Renamed from Hadith
+  static const String ratibMaulidTitle = "ratib_maulid_title"; // Screen title
+  static const String doaHarian = "doa_harian"; // Renamed from Adhkar
+  static const String doaHarianTitle = "doa_harian_title"; // Screen title
   static const String prayerTimes = "prayer_times";
   static const String enableLocation = "enable_location";
   static const String gettingLocation = "getting_location";

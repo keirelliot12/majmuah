@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:islamic/app/utils/constants.dart';
-import 'package:islamic/presentation/browseyoutube/view/widget/videolist.dart';
+import 'package:majmuah/app/utils/constants.dart';
+import 'package:majmuah/presentation/browseyoutube/view/widget/videolist.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../../app/resources/resources.dart';

@@ -6,6 +6,8 @@ class FontConstants {
   static const String uthmanTNFontFamily = "UthmanTN";
   static const String elMessiriFontFamily = "ElMessiri";
   static const String hafsFontFamily = "Hafs";
+  // Poppins for modern UI text - Premium Majelis
+  static const String poppinsFontFamily = "Poppins";
 }
 
 class FontWeightsManager {

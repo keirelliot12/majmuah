@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:islamic/presentation/components/separator.dart';
+import 'package:majmuah/presentation/components/separator.dart';
 import '../../../app/resources/resources.dart';
 
 
@@ -26,10 +26,11 @@ class MyDrawer extends StatelessWidget {
             _draweritem(AppStrings.pillars.tr(), () {
               Navigator.of(context).pushNamed(Routes.pillarsRoute);
             }),
-            getSeparator(context),
-            _draweritem(AppStrings.browse.tr(), () {
-              Navigator.of(context).pushNamed(Routes.browsenetRoute);
-            })
+            // YouTube Browse hidden - Phase 1 cleanup (not in scope)
+            // getSeparator(context),
+            // _draweritem(AppStrings.browse.tr(), () {
+            //   Navigator.of(context).pushNamed(Routes.browsenetRoute);
+            // })
           ],
         ),
       ),

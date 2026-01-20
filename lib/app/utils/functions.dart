@@ -1,7 +1,7 @@
 
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:islamic/app/utils/extensions.dart';
+import 'package:majmuah/app/utils/extensions.dart';
 
 import '../../domain/models/quran/quran_model.dart';
 import '../resources/resources.dart';

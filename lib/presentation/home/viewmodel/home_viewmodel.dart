@@ -22,9 +22,9 @@ class HomeViewModel {
 
   List<String> titles = [
     AppStrings.quran.tr(),
-    AppStrings.nawawi.tr(),
+    AppStrings.ratibMaulidTitle.tr(), // Changed from nawawi
     AppStrings.prayerTimes.tr(),
-    AppStrings.adhkarDoaa.tr(),
+    AppStrings.doaHarianTitle.tr(), // Changed from adhkarDoaa
     AppStrings.settings.tr(),
   ];
 }
