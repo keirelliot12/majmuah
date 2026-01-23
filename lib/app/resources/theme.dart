@@ -54,7 +54,7 @@ ThemeData getApplicationLightTheme() {
       surface: ColorManager.lightPrimary,
       onSurface: ColorManager.lightSecondary,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: ColorManager.white,
       shadowColor: ColorManager.lightSecondary,
       elevation: AppSize.s4.r,
@@ -218,7 +218,7 @@ ThemeData getApplicationLDarkTheme() {
     ),
 
     //cardView theme
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
         color: ColorManager.white,
         shadowColor: ColorManager.black,
         elevation: AppSize.s4.r),

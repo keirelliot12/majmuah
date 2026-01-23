@@ -77,7 +77,7 @@ class PrayerTimingsScreen extends StatelessWidget {
                 isEnglish
                     ? Text(
                         "${prayerTimingsModel.data!.date!.hijri!.day} ${prayerTimingsModel.data!.date!.hijri!.month!.en} ${prayerTimingsModel.data!.date!.hijri!.year}",
-                        style: GoogleFonts.sourceSansPro(),
+                        style: GoogleFonts.sourceCodePro(),
                         textAlign: TextAlign.start,
                         textDirection: ui.TextDirection.ltr,
                       )

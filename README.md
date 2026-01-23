@@ -149,10 +149,83 @@ For more screen shots [Here](https://github.com/mo7amedaliEbaid/islamic/blob/523
    <img src="https://github.com/mo7amedaliEbaid/islamic/blob/b566b84719521bb430267794ee8b05db69b445bc/islamic_screenshots/Screenshot_20231031_013714.jpg" width="370" />
 </p>
 
-## How to Use
+## Development Setup
 
-Follow these steps to get started with the app:
+### Using Dev Container (Recommended)
 
-1. Clone the repository.
-2. Install dependencies using the provided `pubspec.yaml` file.
-3. Run the app on your Flutter-compatible device.
+This project includes a complete dev container configuration for automatic setup.
+
+#### GitHub Codespaces / VS Code Dev Containers
+
+1. **Open in Codespace/Container**: Click "Open in GitHub Codespaces" or open in VS Code with Dev Containers extension
+2. **Automatic Setup**: All dependencies will be installed automatically via the setup script
+3. **Start Developing**: Once setup is complete, you can start developing immediately!
+
+The dev container includes:
+- ✅ Flutter SDK (latest stable)
+- ✅ All system dependencies (GTK, build tools, graphics libraries)
+- ✅ VS Code extensions (Dart, Flutter, snippets)
+- ✅ Project dependencies from pubspec.yaml
+- ✅ Linux desktop support enabled
+
+#### Quick Commands
+
+Use the provided script for common tasks:
+
+```bash
+# Run the app
+./flutter-commands.sh run
+
+# Build for release
+./flutter-commands.sh build
+
+# Run tests
+./flutter-commands.sh test
+
+# Clean and rebuild
+./flutter-commands.sh clean
+
+# See all commands
+./flutter-commands.sh help
+```
+
+### Manual Setup
+
+If you prefer manual setup:
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/mo7amedaliEbaid/islamic.git
+   cd islamic
+   ```
+
+2. **Install Flutter SDK**
+   - Download from [flutter.dev](https://flutter.dev)
+   - Add Flutter to PATH
+
+3. **Install system dependencies** (Linux)
+   ```bash
+   sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev
+   ```
+
+4. **Get dependencies**
+   ```bash
+   flutter pub get
+   ```
+
+5. **Enable desktop support**
+   ```bash
+   flutter config --enable-linux-desktop
+   ```
+
+6. **Run the app**
+   ```bash
+   flutter run -d linux
+   ```
+
+### Supported Platforms
+
+- ✅ Android
+- ✅ iOS
+- ✅ Linux Desktop
+- ✅ Web (with limitations)

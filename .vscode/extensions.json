@@ -1,0 +1,23 @@
+{
+    // Dart & Flutter Extensions (Recommended)
+    "recommendations": [
+        "dart-code.dart-code",
+        "dart-code.flutter",
+        "alexisvt.flutter-snippets",
+        "nash.awesome-flutter-snippets",
+        // Code Quality
+        "usernamehw.errorlens",
+        "streetsidesoftware.code-spell-checker",
+        // Formatting & Linting
+        "esbenp.prettier-vscode",
+        // Git & GitHub
+        "github.vscode-pull-request-github",
+        "eamodio.gitlens",
+        // Utilities
+        "ms-azuretools.vscode-docker",
+        "ms-vscode-remote.remote-containers",
+        "visualstudioexptteam.vscodeintellicode",
+        // Markdown
+        "yzhang.markdown-all-in-one"
+    ]
+}

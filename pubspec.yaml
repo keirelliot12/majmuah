@@ -18,7 +18,7 @@ dependencies:
   youtube_player_flutter:
   dots_indicator:
   flutter_svg:
-  build_runner:
+  build_runner: ^2.4.13
   dartz:
   shared_preferences:
   get_it:
@@ -26,21 +26,21 @@ dependencies:
   flutter_phoenix:
   flutter_bloc:
   equatable:
-  flutter_screenutil:
+  flutter_screenutil: ^5.9.0
   conditional_builder_null_safety:
-  json_serializable:
-  json_annotation:
-  floor:
-  floor_generator:
+  json_serializable: ^6.8.0
+  json_annotation: ^4.9.0
+  floor: ^1.4.2
+  floor_generator: ^1.4.2
   sqlite3_flutter_libs:
-  retrofit:
-  retrofit_generator:
-  dio:
+  retrofit: ^4.0.0
+  retrofit_generator: ^8.0.0
+  dio: ^5.0.0
   pretty_dio_logger:
   internet_connection_checker:
   location:
   geocoding:
-  wakelock:
+  wakelock_plus:
   url_launcher:
   google_fonts:
   sqflite:

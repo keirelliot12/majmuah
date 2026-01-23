@@ -95,7 +95,7 @@ class _PillarsScreenState extends State<PillarsScreen> {
   _dotsindicator(int? dotsindex) {
     return DotsIndicator(
       dotsCount: 5,
-      position: dotsindex!,
+      position: dotsindex!.toDouble(),
       decorator: DotsDecorator(color: Colors.amber, activeColor: Colors.green),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,6 +32,7 @@ import '../presentation/home/screens/prayer_times/cubit/prayer_timings_cubit.dar
 import '../presentation/home/screens/quran/cubit/quran_cubit.dart';
 import '../presentation/home/viewmodel/home_viewmodel.dart';
 import '../app/utils/app_prefs.dart';
+import '../data/database/in_memory_database.dart';
 
 final instance = GetIt.instance;
 
@@ -42,7 +44,7 @@ Future initAppModule() async {
   instance.registerLazySingleton<AppPreferences>(() => AppPreferences());
 
   instance.registerLazySingleton<InternetConnectionChecker>(
-      () => InternetConnectionChecker());
+      () => InternetConnectionChecker.createInstance());
   instance.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
 
   instance.registerLazySingleton<DioFactory>(() => DioFactory());
@@ -56,9 +58,14 @@ Future initAppModule() async {
 
   instance.registerLazySingleton<LocalDataSource>(() => LocalDataSourceImpl());
 
-  final database =
-      await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-  instance.registerLazySingleton<AppDatabase>(() => database);
+  if (kIsWeb) {
+    final db = InMemoryAppDatabase();
+    instance.registerLazySingleton<AppDatabase>(() => db);
+  } else {
+    final database =
+        await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    instance.registerLazySingleton<AppDatabase>(() => database);
+  }
 
   instance.registerFactory<HomeCubit>(() => HomeCubit());
   instance.registerFactory<QuranCubit>(() => QuranCubit());
