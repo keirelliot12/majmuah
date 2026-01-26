@@ -21,6 +21,30 @@ class HomeView extends StatelessWidget {
   HomeView({Key? key}) : super(key: key);
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  // Helper method to map 6 internal indices to 5 bottom nav items
+  // Internal: 0=Home, 1=Quran, 2=Hadith, 3=Prayer, 4=Adhkar, 5=Settings
+  // BottomNav: 0=Home, 1=Quran, 2=Prayer, 3=Adhkar, 4=Settings (skip Hadith)
+  int _mapIndexTo5Items(int internalIndex) {
+    if (internalIndex == 0) return 0; // Home
+    if (internalIndex == 1) return 1; // Quran
+    if (internalIndex == 2) return 0; // Hadith -> show Home (hidden)
+    if (internalIndex == 3) return 2; // Prayer
+    if (internalIndex == 4) return 3; // Adhkar
+    if (internalIndex == 5) return 4; // Settings
+    return 0;
+  }
+
+  // Helper method to map 5 bottom nav items back to 6 internal indices
+  int _mapIndexFrom5Items(int navIndex) {
+    if (navIndex == 0) return 0; // Home
+    if (navIndex == 1) return 1; // Quran
+    if (navIndex == 2) return 3; // Prayer
+    if (navIndex == 3) return 4; // Adhkar
+    if (navIndex == 4) return 5; // Settings
+    return 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -75,78 +99,105 @@ class HomeView extends StatelessWidget {
                         ),
                       )
                     : Container(),
-            appBar: AppBar(
-              backgroundColor: Theme.of(context).primaryColor,
-              title: Text(
-                _viewModel.titles[currentIndex],
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(color: ColorManager.gold),
-              ),
-              leading: IconButton(
-                onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                icon: Icon(
-                  Icons.sort,
-                  size: AppSize.s20.r,
-                ),
-              ),
-              actions: currentIndex == Constants.quranIndex
-                  ? [
+            appBar: currentIndex == Constants.homeIndex
+                ? AppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    leading: IconButton(
+                      onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                      icon: Icon(
+                        Icons.menu,
+                        size: AppSize.s24.r,
+                        color: Colors.white,
+                      ),
+                    ),
+                    title: Text(
+                      _viewModel.titles[currentIndex],
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    centerTitle: true,
+                    actions: [
                       IconButton(
-                        icon: const Icon(Icons.search),
+                        icon: Icon(
+                          Icons.notifications_outlined,
+                          color: Colors.white,
+                          size: AppSize.s24.r,
+                        ),
                         onPressed: () {
-                          showSearch(
-                              context: context, delegate: CustomSearch());
+                          // Handle notifications
                         },
-                      )
-                    ]
-                  : [],
-            ),
+                      ),
+                    ],
+                  )
+                : AppBar(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    title: Text(
+                      _viewModel.titles[currentIndex],
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: ColorManager.gold),
+                    ),
+                    leading: IconButton(
+                      onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                      icon: Icon(
+                        Icons.sort,
+                        size: AppSize.s20.r,
+                      ),
+                    ),
+                    actions: currentIndex == Constants.quranIndex
+                        ? [
+                            IconButton(
+                              icon: const Icon(Icons.search),
+                              onPressed: () {
+                                showSearch(
+                                    context: context,
+                                    delegate: CustomSearch());
+                              },
+                            )
+                          ]
+                        : [],
+                  ),
             drawer: MyDrawer(),
             bottomNavigationBar: BottomNavigationBar(
-              selectedItemColor: ColorManager.gold,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: const Color(0xFF90A88E), // Sage green
               selectedIconTheme:
-                  IconThemeData(color: ColorManager.gold, size: AppSize.s20.r),
-              selectedLabelStyle: getSemiBoldStyle(fontSize: FontSize.s14),
-              unselectedLabelStyle: getRegularStyle(fontSize: FontSize.s12),
-              unselectedItemColor: Theme.of(context).unselectedWidgetColor,
+                  IconThemeData(color: const Color(0xFF90A88E), size: AppSize.s24.r),
+              selectedLabelStyle: getSemiBoldStyle(fontSize: FontSize.s12),
+              unselectedLabelStyle: getRegularStyle(fontSize: FontSize.s10),
+              unselectedItemColor: Colors.grey,
               unselectedIconTheme: IconThemeData(
-                  color: Theme.of(context).unselectedWidgetColor,
+                  color: Colors.grey,
                   size: AppSize.s20.r),
               showSelectedLabels: true,
               showUnselectedLabels: true,
               enableFeedback: true,
-              currentIndex: currentIndex,
+              currentIndex: _mapIndexTo5Items(currentIndex),
               onTap: (int index) {
-                cubit.changeBotNavIndex(index);
+                cubit.changeBotNavIndex(_mapIndexFrom5Items(index));
               },
               items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined),
+                  activeIcon: Icon(Icons.home),
+                  label: AppStrings.beranda.tr(),
+                ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
                     ImageAsset.quranIcon,
                     width: AppSize.s20.r,
                     height: AppSize.s20.r,
                     colorFilter: ColorFilter.mode(
-                        currentIndex == Constants.quranIndex
-                            ? ColorManager.gold
-                            : Theme.of(context).unselectedWidgetColor,
+                        _mapIndexTo5Items(currentIndex) == 1
+                            ? const Color(0xFF90A88E)
+                            : Colors.grey,
                         BlendMode.srcIn),
                   ),
                   label: AppStrings.quran.tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    ImageAsset.hadithIcon,
-                    width: AppSize.s20.r,
-                    height: AppSize.s20.r,
-                    colorFilter: ColorFilter.mode(
-                        currentIndex == Constants.hadithIndex
-                            ? ColorManager.gold
-                            : Theme.of(context).unselectedWidgetColor,
-                        BlendMode.srcIn),
-                  ),
-                  label: AppStrings.hadith.tr(),
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
@@ -154,9 +205,9 @@ class HomeView extends StatelessWidget {
                     width: AppSize.s20.r,
                     height: AppSize.s20.r,
                     colorFilter: ColorFilter.mode(
-                        currentIndex == Constants.prayerTimingsIndex
-                            ? ColorManager.gold
-                            : Theme.of(context).unselectedWidgetColor,
+                        _mapIndexTo5Items(currentIndex) == 2
+                            ? const Color(0xFF90A88E)
+                            : Colors.grey,
                         BlendMode.srcIn),
                   ),
                   label: AppStrings.prayerTimes.tr(),
@@ -167,23 +218,26 @@ class HomeView extends StatelessWidget {
                     width: AppSize.s20.r,
                     height: AppSize.s20.r,
                     colorFilter: ColorFilter.mode(
-                        currentIndex == Constants.adhkarIndex
-                            ? ColorManager.gold
-                            : Theme.of(context).unselectedWidgetColor,
+                        _mapIndexTo5Items(currentIndex) == 3
+                            ? const Color(0xFF90A88E)
+                            : Colors.grey,
                         BlendMode.srcIn),
                   ),
                   label: AppStrings.adhkar.tr(),
                 ),
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.settings_outlined),
+                  activeIcon: const Icon(Icons.settings),
                   label: AppStrings.settings.tr(),
                 ),
               ],
             ),
-            body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppPadding.p8.w),
-              child: _viewModel.screens[currentIndex],
-            ),
+            body: currentIndex == Constants.homeIndex
+                ? _viewModel.screens[currentIndex]
+                : Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppPadding.p8.w),
+                    child: _viewModel.screens[currentIndex],
+                  ),
           );
         },
       ),

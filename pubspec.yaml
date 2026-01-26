@@ -34,7 +34,6 @@ dependencies:
   floor_generator: ^1.4.2
   sqlite3_flutter_libs:
   retrofit: ^4.0.0
-  retrofit_generator: ^8.0.0
   dio: ^5.0.0
   pretty_dio_logger:
   internet_connection_checker:

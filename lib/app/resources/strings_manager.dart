@@ -23,6 +23,14 @@ class AppStrings {
   static const String hadith = "hadith";
   static const String nawawi = "40_nawawi";
   static const String prayerTimes = "prayer_times";
+  static const String home = "home";
+  static const String beranda = "beranda";
+  static const String namaz = "namaz";
+  static const String duas = "duas";
+  static const String zakat = "zakat";
+  static const String qibla = "qibla";
+  static const String tasbih = "tasbih";
+  static const String searchWordOrAyat = "search_word_or_ayat";
   static const String enableLocation = "enable_location";
   static const String gettingLocation = "getting_location";
   static const String giveLocationAccessPermission =

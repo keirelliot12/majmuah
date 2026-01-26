@@ -13,7 +13,7 @@ class _PrayerTimingsServiceClient implements PrayerTimingsServiceClient {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://api.aladhan.com/v1/timingsByCity/';
+    baseUrl ??= Constants.baseUrl;
   }
 
   final Dio _dio;
@@ -38,11 +38,18 @@ class _PrayerTimingsServiceClient implements PrayerTimingsServiceClient {
     )
             .compose(
               _dio.options,
-              '${date}?city=${city}&country=${country}',
+              Constants.prayerTimingPath
+                  .replaceAll('{date}', date)
+                  .replaceAll('{city}', city)
+                  .replaceAll('{country}', country),
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PrayerTimingsResponse.fromJson(_result.data!);
     return value;
   }
@@ -58,5 +65,22 @@ class _PrayerTimingsServiceClient implements PrayerTimingsServiceClient {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
