@@ -58,7 +58,11 @@ class CacheService {
    * Delete all keys matching pattern
    */
   async delPattern(pattern: string): Promise<void> {
-    const regex = new RegExp(pattern.replace('*', '.*'));
+    // Escape special regex characters, then replace \* with .*
+    const escapedPattern = pattern
+      .replace(/[.+?^${}()|[\]\\]/g, '\\$&')
+      .replace(/\\\*/g, '.*');
+    const regex = new RegExp('^' + escapedPattern + '$');
     const keysToDelete: string[] = [];
 
     for (const key of this.cache.keys()) {

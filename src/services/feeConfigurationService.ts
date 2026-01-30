@@ -108,7 +108,7 @@ class FeeConfigurationService {
     }
 
     // Validate input
-    this.validateUpdateData(data);
+    this.validateUpdateData(data, existing);
 
     // Check for date range overlaps if dates are being updated
     if (data.startDate !== undefined || data.endDate !== undefined) {
@@ -221,7 +221,7 @@ class FeeConfigurationService {
    * Validate update data
    * Business logic validation
    */
-  private validateUpdateData(data: UpdateFeeConfigDTO): void {
+  private validateUpdateData(data: UpdateFeeConfigDTO, existing?: FeeConfiguration): void {
     // Validate amount if provided
     if (data.amount !== undefined) {
       if (data.amount <= 0) {
@@ -229,7 +229,9 @@ class FeeConfigurationService {
       }
 
       // Validate percentage fee is between 0 and 100
-      if (data.feeType === 'percentage' && data.amount > 100) {
+      // Check both the new feeType and existing feeType if not changing
+      const feeType = data.feeType ?? existing?.feeType;
+      if (feeType === 'percentage' && data.amount > 100) {
         throw new Error('Percentage fee cannot exceed 100%');
       }
     }
@@ -279,13 +281,8 @@ class FeeConfigurationService {
    * Clears all cached fee configuration data
    */
   private async invalidateCache(id?: string): Promise<void> {
-    // Clear all cache for this prefix
+    // Clear all cache for this prefix (already includes specific ID)
     await cacheService.delPattern(`${this.CACHE_PREFIX}:*`);
-    
-    // Also clear specific ID if provided
-    if (id) {
-      await cacheService.del(`${this.CACHE_PREFIX}:${id}`);
-    }
   }
 }
 

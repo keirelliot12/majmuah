@@ -229,8 +229,10 @@ class DepositConfigurationService {
    */
   private validateUpdateData(data: UpdateDepositConfigDTO): void {
     // Validate vehicle type ID if provided
-    if (data.vehicleTypeId !== undefined && data.vehicleTypeId.trim() === '') {
-      throw new Error('Vehicle type ID cannot be empty');
+    if (data.vehicleTypeId !== undefined) {
+      if (data.vehicleTypeId === null || data.vehicleTypeId.trim() === '') {
+        throw new Error('Vehicle type ID cannot be empty');
+      }
     }
 
     // Validate amount if provided
@@ -266,18 +268,8 @@ class DepositConfigurationService {
    * Clears all cached deposit configuration data
    */
   private async invalidateCache(id?: string, vehicleTypeId?: string): Promise<void> {
-    // Clear all cache for this prefix
+    // Clear all cache for this prefix (already includes specific ID and vehicle type)
     await cacheService.delPattern(`${this.CACHE_PREFIX}:*`);
-    
-    // Also clear specific ID if provided
-    if (id) {
-      await cacheService.del(`${this.CACHE_PREFIX}:${id}`);
-    }
-
-    // Also clear vehicle type cache if provided
-    if (vehicleTypeId) {
-      await cacheService.del(`${this.CACHE_PREFIX}:vehicle_type:${vehicleTypeId}`);
-    }
   }
 }
 

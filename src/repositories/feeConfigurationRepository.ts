@@ -149,17 +149,12 @@ class FeeConfigurationRepository {
       const configStart = config.startDate;
       const configEnd = config.endDate;
 
-      // If either config has no end date, check for start date overlap
-      if (!endDate || !configEnd) {
-        return startDate <= (configEnd || new Date('9999-12-31'));
-      }
+      // Treat undefined end dates as infinity (far future date)
+      const newEnd = endDate || new Date('9999-12-31');
+      const existingEnd = configEnd || new Date('9999-12-31');
 
-      // Check if date ranges overlap
-      return (
-        (startDate >= configStart && startDate <= (configEnd || new Date('9999-12-31'))) ||
-        (endDate >= configStart && endDate <= (configEnd || new Date('9999-12-31'))) ||
-        (startDate <= configStart && endDate >= (configEnd || new Date('9999-12-31')))
-      );
+      // Two date ranges overlap if: startA <= endB AND startB <= endA
+      return startDate <= existingEnd && configStart <= newEnd;
     });
   }
 
@@ -190,7 +185,7 @@ class FeeConfigurationRepository {
    * Generate unique ID
    */
   private generateId(): string {
-    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
   }
 }
 
