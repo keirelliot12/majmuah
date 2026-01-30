@@ -22,6 +22,7 @@ import '../../presentation/notes/note_detail_screen.dart';
 import '../../presentation/search/search_result_screen.dart';
 import '../../presentation/search/smart_search_screen.dart';
 import '../../presentation/splash/splash_view.dart';
+import '../../presentation/settings/download_manager_screen.dart';
 import '../../domain/models/note/note_model.dart';
 
 class Routes {
@@ -43,6 +44,7 @@ class Routes {
   static const String noteDetailRoute = "/beranda/noteDetail";
   static const String searchResultRoute = "/beranda/search";
   static const String smartSearchRoute = "/beranda/smartSearch";
+  static const String downloadManagerRoute = "/settings/downloadManager";
 }
 
 class RoutesGenerator {
@@ -86,6 +88,8 @@ class RoutesGenerator {
         return MaterialPageRoute(builder: (_) => PillarsScreen());
       case Routes.browsenetRoute:
         return MaterialPageRoute(builder: (_) => BrowseYoutubeScreen());
+      case Routes.downloadManagerRoute:
+        return MaterialPageRoute(builder: (_) => const DownloadManagerScreen());
 
       // Beranda Feature Case
       case Routes.allCategoriesRoute:

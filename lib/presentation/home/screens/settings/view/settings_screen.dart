@@ -22,6 +22,16 @@ class SettingsScreen extends StatelessWidget {
         return ListView(
           children: [
             _settingIndexItem(
+              icon: Icons.download_for_offline_outlined,
+              settingName: "Kelola Unduhan",
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.pushNamed(context, Routes.downloadManagerRoute);
+              },
+              context: context,
+            ),
+            getSeparator(context),
+            _settingIndexItem(
               icon: Icons.language_outlined,
               settingName: AppStrings.changeAppLanguage.tr(),
               trailing: Text(

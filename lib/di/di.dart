@@ -42,6 +42,9 @@ import '../data/repository/notes_repository.dart';
 import '../presentation/home/cubit/beranda_category_cubit.dart';
 import '../presentation/home/cubit/beranda_material_cubit.dart';
 import '../presentation/home/cubit/beranda_notes_cubit.dart';
+import '../data/data_source/local/download_storage_manager.dart';
+import '../data/data_source/remote/asset_download_service.dart';
+import '../presentation/download/cubit/download_cubit.dart';
 
 final instance = GetIt.instance;
 
@@ -96,6 +99,22 @@ Future initAppModule() async {
       () => GlobalKey<ScaffoldState>());
 
   instance.registerFactory<SearchController>(() => SearchController());
+
+  await initDownloadModule();
+}
+
+Future<void> initDownloadModule() async {
+  if (!GetIt.I.isRegistered<DownloadStorageManager>()) {
+    instance.registerLazySingleton<DownloadStorageManager>(
+        () => DownloadStorageManager(instance<SharedPreferences>()));
+
+    Dio dio = await instance<DioFactory>().getDio();
+    instance.registerLazySingleton<AssetDownloadService>(
+        () => AssetDownloadService(dio, instance<DownloadStorageManager>()));
+
+    instance.registerFactory<DownloadCubit>(
+        () => DownloadCubit(instance<AssetDownloadService>(), instance<DownloadStorageManager>()));
+  }
 }
 
 void initQuranModule() {

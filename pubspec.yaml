@@ -37,6 +37,11 @@ dependencies:
   internet_connection_checker: ^3.0.1
   retrofit: 4.0.1
 
+  # --- DOWNLOAD & STORAGE ---
+  archive: ^3.6.1
+  crypto: ^3.0.1
+  path_provider: ^2.1.2
+
   # --- UTILITIES ---
   shared_preferences: ^2.5.4
   logger: ^1.3.0                   # (Logging dari dependency logging)
