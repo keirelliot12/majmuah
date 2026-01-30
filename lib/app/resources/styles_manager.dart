@@ -5,7 +5,7 @@ import 'font_manager.dart';
 
 TextStyle _getTextStyle({
   required double fontSize,
-  String fontFamily = FontConstants.elMessiriFontFamily,
+  String fontFamily = FontConstants.uthmanTNFontFamily,
   required FontWeight fontWeight,
   required Color color,
 }) {

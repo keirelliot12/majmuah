@@ -9,13 +9,13 @@ class InMemoryAppDao implements AppDao {
 
   @override
   Future<void> deleteAllCustomAdhkar(List<CustomAdhkarEntity> list) async {
-    final set = HashSet<String>.from(list.map((e) => e.dhikr ?? ''));
-    _store.removeWhere((e) => set.contains(e.dhikr ?? ''));
+    final set = HashSet<String>.from(list.map((e) => e.dhikr));
+    _store.removeWhere((e) => set.contains(e.dhikr));
   }
 
   @override
   Future<void> delDhikrByDhikrText(String dhikr) async {
-    _store.removeWhere((e) => (e.dhikr ?? '') == dhikr);
+    _store.removeWhere((e) => e.dhikr == dhikr);
   }
 
   @override
@@ -26,7 +26,7 @@ class InMemoryAppDao implements AppDao {
   @override
   Future<CustomAdhkarEntity?> getDhikrByDhikrText(String dhikr) async {
     try {
-      return _store.firstWhere((e) => (e.dhikr ?? '') == dhikr);
+      return _store.firstWhere((e) => e.dhikr == dhikr);
     } catch (_) {
       return null;
     }
@@ -39,7 +39,7 @@ class InMemoryAppDao implements AppDao {
 
   @override
   Future<void> updateDhikr(CustomAdhkarEntity dhikr) async {
-    await delDhikrByDhikrText(dhikr.dhikr ?? '');
+    await delDhikrByDhikrText(dhikr.dhikr);
     _store.add(dhikr);
   }
 }

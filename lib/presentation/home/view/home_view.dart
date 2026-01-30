@@ -14,6 +14,13 @@ import '../../../../../app/resources/resources.dart';
 import '../cubit/home_cubit.dart';
 import '../screens/quran/cubit/quran_cubit.dart';
 import '../viewmodel/home_viewmodel.dart';
+import '../widgets/home_header.dart';
+import '../widgets/prayer_countdown_card.dart';
+import '../widgets/search_bar_widget.dart';
+import '../widgets/menu_grid_widget.dart';
+import '../widgets/custom_bottom_nav_bar.dart';
+import '../widgets/last_read_card.dart';
+import '../widgets/wisdom_quote_card.dart';
 
 class HomeView extends StatelessWidget {
   final HomeViewModel _viewModel = instance<HomeViewModel>();
@@ -56,6 +63,8 @@ class HomeView extends StatelessWidget {
           var quranCubit = QuranCubit.get(context);
           List<QuranModel> quranList = quranCubit.quranData;
           int currentIndex = cubit.currentIndex;
+          bool isHomeScreen = currentIndex == Constants.homeIndex;
+
           return Scaffold(
             key: _scaffoldKey,
             floatingActionButton: isThereABookMarkedPage == true &&
@@ -99,39 +108,8 @@ class HomeView extends StatelessWidget {
                         ),
                       )
                     : Container(),
-            appBar: currentIndex == Constants.homeIndex
-                ? AppBar(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                    leading: IconButton(
-                      onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                      icon: Icon(
-                        Icons.menu,
-                        size: AppSize.s24.r,
-                        color: Colors.white,
-                      ),
-                    ),
-                    title: Text(
-                      _viewModel.titles[currentIndex],
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    centerTitle: true,
-                    actions: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.notifications_outlined,
-                          color: Colors.white,
-                          size: AppSize.s24.r,
-                        ),
-                        onPressed: () {
-                          // Handle notifications
-                        },
-                      ),
-                    ],
-                  )
+            appBar: isHomeScreen
+                ? null  // HomeHeader will be part of body for Beranda
                 : AppBar(
                     backgroundColor: Theme.of(context).primaryColor,
                     title: Text(
@@ -162,78 +140,86 @@ class HomeView extends StatelessWidget {
                         : [],
                   ),
             drawer: MyDrawer(),
-            bottomNavigationBar: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              selectedItemColor: const Color(0xFF90A88E), // Sage green
-              selectedIconTheme:
-                  IconThemeData(color: const Color(0xFF90A88E), size: AppSize.s24.r),
-              selectedLabelStyle: getSemiBoldStyle(fontSize: FontSize.s12),
-              unselectedLabelStyle: getRegularStyle(fontSize: FontSize.s10),
-              unselectedItemColor: Colors.grey,
-              unselectedIconTheme: IconThemeData(
-                  color: Colors.grey,
-                  size: AppSize.s20.r),
-              showSelectedLabels: true,
-              showUnselectedLabels: true,
-              enableFeedback: true,
-              currentIndex: _mapIndexTo5Items(currentIndex),
-              onTap: (int index) {
-                cubit.changeBotNavIndex(_mapIndexFrom5Items(index));
-              },
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
-                  activeIcon: Icon(Icons.home),
-                  label: AppStrings.beranda.tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    ImageAsset.quranIcon,
-                    width: AppSize.s20.r,
-                    height: AppSize.s20.r,
-                    colorFilter: ColorFilter.mode(
-                        _mapIndexTo5Items(currentIndex) == 1
-                            ? const Color(0xFF90A88E)
-                            : Colors.grey,
-                        BlendMode.srcIn),
+            bottomNavigationBar: isHomeScreen
+                ? CustomBottomNavBar(
+                    currentIndex: _mapIndexTo5Items(currentIndex),
+                    onTabChanged: (index) {
+                      cubit.changeBotNavIndex(_mapIndexFrom5Items(index));
+                    },
+                  )
+                : BottomNavigationBar(
+                    type: BottomNavigationBarType.fixed,
+                    selectedItemColor: const Color(0xFF90A88E), // Sage green
+                    selectedIconTheme: IconThemeData(
+                        color: const Color(0xFF90A88E), size: AppSize.s24.r),
+                    selectedLabelStyle:
+                        getSemiBoldStyle(fontSize: FontSize.s12),
+                    unselectedLabelStyle:
+                        getRegularStyle(fontSize: FontSize.s10),
+                    unselectedItemColor: Colors.grey,
+                    unselectedIconTheme: IconThemeData(
+                        color: Colors.grey, size: AppSize.s20.r),
+                    showSelectedLabels: true,
+                    showUnselectedLabels: true,
+                    enableFeedback: true,
+                    currentIndex: _mapIndexTo5Items(currentIndex),
+                    onTap: (int index) {
+                      cubit.changeBotNavIndex(_mapIndexFrom5Items(index));
+                    },
+                    items: [
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.home_outlined),
+                        activeIcon: Icon(Icons.home),
+                        label: AppStrings.beranda.tr(),
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(
+                          ImageAsset.quranIcon,
+                          width: AppSize.s20.r,
+                          height: AppSize.s20.r,
+                          colorFilter: ColorFilter.mode(
+                              _mapIndexTo5Items(currentIndex) == 1
+                                  ? const Color(0xFF90A88E)
+                                  : Colors.grey,
+                              BlendMode.srcIn),
+                        ),
+                        label: AppStrings.quran.tr(),
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(
+                          ImageAsset.prayerIcon,
+                          width: AppSize.s20.r,
+                          height: AppSize.s20.r,
+                          colorFilter: ColorFilter.mode(
+                              _mapIndexTo5Items(currentIndex) == 2
+                                  ? const Color(0xFF90A88E)
+                                  : Colors.grey,
+                              BlendMode.srcIn),
+                        ),
+                        label: AppStrings.prayerTimes.tr(),
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SvgPicture.asset(
+                          ImageAsset.adhkarIcon,
+                          width: AppSize.s20.r,
+                          height: AppSize.s20.r,
+                          colorFilter: ColorFilter.mode(
+                              _mapIndexTo5Items(currentIndex) == 3
+                                  ? const Color(0xFF90A88E)
+                                  : Colors.grey,
+                              BlendMode.srcIn),
+                        ),
+                        label: AppStrings.adhkar.tr(),
+                      ),
+                      BottomNavigationBarItem(
+                        icon: const Icon(Icons.settings_outlined),
+                        activeIcon: const Icon(Icons.settings),
+                        label: AppStrings.settings.tr(),
+                      ),
+                    ],
                   ),
-                  label: AppStrings.quran.tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    ImageAsset.prayerIcon,
-                    width: AppSize.s20.r,
-                    height: AppSize.s20.r,
-                    colorFilter: ColorFilter.mode(
-                        _mapIndexTo5Items(currentIndex) == 2
-                            ? const Color(0xFF90A88E)
-                            : Colors.grey,
-                        BlendMode.srcIn),
-                  ),
-                  label: AppStrings.prayerTimes.tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    ImageAsset.adhkarIcon,
-                    width: AppSize.s20.r,
-                    height: AppSize.s20.r,
-                    colorFilter: ColorFilter.mode(
-                        _mapIndexTo5Items(currentIndex) == 3
-                            ? const Color(0xFF90A88E)
-                            : Colors.grey,
-                        BlendMode.srcIn),
-                  ),
-                  label: AppStrings.adhkar.tr(),
-                ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.settings_outlined),
-                  activeIcon: const Icon(Icons.settings),
-                  label: AppStrings.settings.tr(),
-                ),
-              ],
-            ),
-            body: currentIndex == Constants.homeIndex
-                ? _viewModel.screens[currentIndex]
+            body: isHomeScreen
+                ? _buildBerandaScreen(context)
                 : Padding(
                     padding: EdgeInsets.symmetric(horizontal: AppPadding.p8.w),
                     child: _viewModel.screens[currentIndex],
@@ -242,5 +228,150 @@ class HomeView extends StatelessWidget {
         },
       ),
     );
+  }
+
+  /// Build Beranda/Home screen with new design
+  Widget _buildBerandaScreen(BuildContext context) {
+    return Stack(
+      children: [
+        // Full-screen gradient background
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                AppColors.lemonYellow,
+                AppColors.islamicTeal,
+              ],
+            ),
+          ),
+        ),
+
+        // Main content
+        SafeArea(
+          child: Column(
+            children: [
+              // Custom Header with location and date
+              const HomeHeader(),
+
+              // Scrollable content
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(bottom: AppPadding.p100.h),
+                  child: Column(
+                    children: [
+                      // Prayer countdown card with glassmorphism
+                      const PrayerCountdownCard(),
+
+                      SizedBox(height: AppSize.s8.h),
+
+                      // Search bar
+                      SearchBarWidget(
+                        onTap: () {
+                          showSearch(
+                            context: context,
+                            delegate: CustomSearch(),
+                          );
+                        },
+                      ),
+
+                      SizedBox(height: AppSize.s8.h),
+
+                      // Last read card
+                      LastReadCard(
+                        title: 'Ratib Al-Haddad',
+                        onTap: () => _handleMenuTap(context, 'Terakhir Dibaca'),
+                      ),
+
+                      SizedBox(height: AppSize.s16.h),
+
+                      // Menu grid (4x2)
+                      MenuGridWidget(
+                        menuItems: MenuGridWidget.createDefaultMenuItems(
+                          onAuradSholatTap: () => _handleMenuTap(context, 'Aurad Sholat'),
+                          onDoaTawasulTap: () => _handleMenuTap(context, 'Doa & Tawassul'),
+                          onRatibTap: () => _handleMenuTap(context, 'Ratib'),
+                          onKhutbahTap: () => _handleMenuTap(context, 'Khutbah'),
+                          onMaulidTap: () => _handleMenuTap(context, 'Maulid'),
+                          onTahlilZiarahTap: () => _handleMenuTap(context, 'Tahlil & Ziarah'),
+                          onNotesTap: () => _handleMenuTap(context, 'Notes'),
+                          onLainnyaTap: () => _handleMenuTap(context, 'Lainnya'),
+                        ),
+                      ),
+
+                      SizedBox(height: AppSize.s24.h),
+
+                      // Wisdom quote card with glassmorphism
+                      const WisdomQuoteCard(),
+
+                      SizedBox(height: AppSize.s24.h),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Handle menu item tap
+  void _handleMenuTap(BuildContext context, String menuName) {
+    switch (menuName) {
+      case 'Aurad Sholat':
+        Navigator.pushNamed(context, Routes.materialListRoute, arguments: {
+          'categoryName': 'Aurad Sholat',
+          'categoryFilterKey': 'Aurad Sholat',
+          'categoryColor': AppColors.emerald500,
+        });
+        break;
+      case 'Doa & Tawassul':
+        Navigator.pushNamed(context, Routes.materialListRoute, arguments: {
+          'categoryName': 'Doa & Tawassul',
+          'categoryFilterKey': 'Doa & Tawassul',
+          'categoryColor': AppColors.amber500,
+        });
+        break;
+      case 'Ratib':
+        Navigator.pushNamed(context, Routes.materialListRoute, arguments: {
+          'categoryName': 'Ratib',
+          'categoryFilterKey': 'Ratib',
+          'categoryColor': AppColors.indigo500,
+        });
+        break;
+      case 'Khutbah':
+        Navigator.pushNamed(context, Routes.materialListRoute, arguments: {
+          'categoryName': 'Khutbah',
+          'categoryFilterKey': 'Khutbah',
+          'categoryColor': AppColors.rose500,
+        });
+        break;
+      case 'Maulid':
+        Navigator.pushNamed(context, Routes.materialListRoute, arguments: {
+          'categoryName': 'Maulid',
+          'categoryFilterKey': 'Maulid',
+          'categoryColor': AppColors.orange500,
+        });
+        break;
+      case 'Tahlil & Ziarah':
+        Navigator.pushNamed(context, Routes.materialListRoute, arguments: {
+          'categoryName': 'Tahlil & Ziarah',
+          'categoryFilterKey': 'Tahlil & Ziarah',
+          'categoryColor': AppColors.teal600,
+        });
+        break;
+      case 'Notes':
+        Navigator.pushNamed(context, Routes.notesListRoute);
+        break;
+      case 'Lainnya':
+        Navigator.pushNamed(context, Routes.allCategoriesRoute);
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Navigasi ke $menuName - Belum tersedia')),
+        );
+    }
   }
 }

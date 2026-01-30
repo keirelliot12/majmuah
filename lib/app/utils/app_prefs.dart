@@ -47,7 +47,7 @@ class AppPreferences {
   ThemeMode getAppTheme() {
     String? themeMode = _preferences.getString(themeModeKey);
     if (themeMode != null && themeMode.isNotEmpty) {
-      if (themeMode == ThemeType.dark.getValue()) {
+      if (themeMode == 'dark') {
         return ThemeMode.dark;
       } else {
         return ThemeMode.light;
@@ -60,9 +60,9 @@ class AppPreferences {
   void changeAppTheme() {
     ThemeMode currentTheme = getAppTheme();
     if (currentTheme == ThemeMode.dark) {
-      _preferences.setString(themeModeKey, ThemeType.light.getValue());
+      _preferences.setString(themeModeKey, 'light');
     } else {
-      _preferences.setString(themeModeKey, ThemeType.dark.getValue());
+      _preferences.setString(themeModeKey, 'dark');
     }
   }
 

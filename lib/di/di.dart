@@ -33,6 +33,15 @@ import '../presentation/home/screens/quran/cubit/quran_cubit.dart';
 import '../presentation/home/viewmodel/home_viewmodel.dart';
 import '../app/utils/app_prefs.dart';
 import '../data/database/in_memory_database.dart';
+import '../data/data_source/local/notes_local_data_source.dart';
+import '../data/data_source/remote/category_data_source.dart';
+import '../data/data_source/remote/material_data_source.dart';
+import '../data/repository/category_repository.dart';
+import '../data/repository/material_content_repository.dart';
+import '../data/repository/notes_repository.dart';
+import '../presentation/home/cubit/beranda_category_cubit.dart';
+import '../presentation/home/cubit/beranda_material_cubit.dart';
+import '../presentation/home/cubit/beranda_notes_cubit.dart';
 
 final instance = GetIt.instance;
 
@@ -140,5 +149,35 @@ void initCustomAdhkarModule() {
   if (!GetIt.I.isRegistered<DelAllCustomAdhkarUseCase>()) {
     instance.registerFactory<DelAllCustomAdhkarUseCase>(
         () => DelAllCustomAdhkarUseCase());
+  }
+}
+
+/// Initialize Beranda Feature Module
+void initBerandaModule() {
+  if (!GetIt.I.isRegistered<CategoryDataSource>()) {
+    // Data Sources
+    instance.registerLazySingleton<CategoryDataSource>(
+        () => CategoryDataSource());
+    instance.registerLazySingleton<MaterialDataSource>(
+        () => MaterialDataSource());
+    instance.registerLazySingleton<NotesLocalDataSource>(
+        () => NotesLocalDataSource(instance<SharedPreferences>()));
+
+    // Repositories
+    instance.registerLazySingleton<CategoryRepository>(
+        () => CategoryRepository(instance<CategoryDataSource>()));
+    instance.registerLazySingleton<MaterialContentRepository>(
+        () => MaterialContentRepository(instance<MaterialDataSource>(),
+            instance<NotesLocalDataSource>()));
+    instance.registerLazySingleton<NotesRepository>(
+        () => NotesRepository(instance<NotesLocalDataSource>()));
+
+    // Cubits - Beranda Feature
+    instance.registerLazySingleton<BerandaCategoryCubit>(
+        () => BerandaCategoryCubit(instance<CategoryRepository>()));
+    instance.registerLazySingleton<BerandaMaterialCubit>(
+        () => BerandaMaterialCubit(instance<MaterialContentRepository>()));
+    instance.registerLazySingleton<BerandaNotesCubit>(
+        () => BerandaNotesCubit(instance<NotesRepository>()));
   }
 }

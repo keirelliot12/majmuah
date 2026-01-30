@@ -1,5 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -9,7 +7,6 @@ import 'package:location/location.dart' as location_package;
 import '../../../app/utils/app_prefs.dart';
 import '../../../app/utils/constants.dart';
 import '../../../di/di.dart';
-import '../../../../../app/resources/resources.dart';
 
 part 'home_state.dart';
 

@@ -1,7 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart' as location_package;
 
 import '../../../../../app/utils/constants.dart';
@@ -9,7 +8,6 @@ import '../../../../../di/di.dart';
 import '../../../../../data/network/network_info.dart';
 import '../../../../../domain/models/prayer_timings/prayer_timings_model.dart';
 import '../../../../../domain/usecase/get_prayer_timings_usecase.dart';
-import '../../../../../app/resources/resources.dart';
 
 part 'prayer_timings_state.dart';
 
