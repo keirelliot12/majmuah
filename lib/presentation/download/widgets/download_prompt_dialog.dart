@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import '../../../../app/resources/color_manager.dart';
-import '../../../../app/resources/values_manager.dart';
+import '../../../../app/resources/values.dart';
 
 class DownloadPromptDialog extends StatelessWidget {
   final String featureName;
@@ -27,7 +27,7 @@ class DownloadPromptDialog extends StatelessWidget {
         backgroundColor: Colors.white.withAlpha(180),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24.r),
-          side: Border.all(color: Colors.white.withAlpha(100), width: 1.5),
+          side: const BorderSide(color: Colors.white, width: 1.5),
         ),
         contentPadding: EdgeInsets.all(AppPadding.p24.r),
         content: Column(
@@ -51,7 +51,7 @@ class DownloadPromptDialog extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
-                color: ColorManager.primary,
+                color: ColorManager.lightPrimary,
               ),
             ),
             SizedBox(height: 12.h),
@@ -110,7 +110,7 @@ class DownloadPromptDialog extends StatelessWidget {
                       onDownload();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorManager.primary,
+                      backgroundColor: ColorManager.lightPrimary,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       padding: EdgeInsets.symmetric(vertical: 12.h),

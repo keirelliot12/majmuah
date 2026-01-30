@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import '../models/download/download_manifest.dart';
-import '../models/download/download_status.dart';
+import '../../../domain/models/download/download_manifest.dart';
+import '../../../domain/models/download/download_status.dart';
 
 abstract class DownloadState extends Equatable {
   const DownloadState();
@@ -16,17 +16,22 @@ class DownloadManifestLoading extends DownloadState {}
 class DownloadManifestLoaded extends DownloadState {
   final DownloadManifest manifest;
   final List<String> downloadedChunks;
+  final String? currentVersion;
 
   const DownloadManifestLoaded({
     required this.manifest,
     required this.downloadedChunks,
+    this.currentVersion,
   });
 
   bool get isQuranFullyDownloaded =>
       downloadedChunks.length >= manifest.quran.chunks.length;
 
+  bool get isUpdateAvailable =>
+      manifest.version != currentVersion;
+
   @override
-  List<Object?> get props => [manifest, downloadedChunks];
+  List<Object?> get props => [manifest, downloadedChunks, currentVersion];
 }
 
 class DownloadProgressState extends DownloadState {

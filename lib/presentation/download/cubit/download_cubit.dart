@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:developer' as developer;
 import '../../../../data/data_source/local/download_storage_manager.dart';
 import '../../../../data/data_source/remote/asset_download_service.dart';
 import 'download_state.dart';
@@ -14,13 +15,26 @@ class DownloadCubit extends Cubit<DownloadState> {
   Future<void> checkManifest() async {
     emit(DownloadManifestLoading());
     try {
+      developer.log('🔍 Checking manifest...');
       final manifest = await _downloadService.fetchManifest();
       final downloadedChunks = await _storageManager.getDownloadedChunks();
+      final currentVersion = await _storageManager.getCurrentManifestVersion();
+
+      developer.log('📊 Manifest Check Results:');
+      developer.log('  • Remote version: ${manifest.version}');
+      developer.log('  • Local version: $currentVersion');
+      developer.log('  • Downloaded chunks: ${downloadedChunks.length}');
+      developer.log('  • Update available: ${manifest.version != currentVersion}');
+
       emit(DownloadManifestLoaded(
         manifest: manifest,
         downloadedChunks: downloadedChunks,
+        currentVersion: currentVersion,
       ));
+
+      developer.log('✅ Manifest check complete');
     } catch (e) {
+      developer.log('❌ Error checking manifest: $e');
       emit(DownloadFailure("Gagal memuat informasi unduhan: $e"));
     }
   }
@@ -58,12 +72,29 @@ class DownloadCubit extends Cubit<DownloadState> {
           );
           completed++;
         }
+
+        // Save version after successful full download
+        if (state is DownloadManifestLoaded) {
+          final manifestState = state as DownloadManifestLoaded;
+          await _storageManager.saveManifestVersion(manifestState.manifest.version);
+        }
+
         emit(const DownloadSuccess("Al-Quran berhasil diunduh."));
         // Final check to update status
         checkManifest();
       } catch (e) {
         emit(DownloadFailure("Gagal mengunduh Al-Quran: $e"));
       }
+    }
+  }
+
+  Future<void> clearQuranData() async {
+    try {
+      await _storageManager.clearQuranData();
+      emit(const DownloadSuccess("Data Al-Quran berhasil dihapus."));
+      await checkManifest();
+    } catch (e) {
+      emit(DownloadFailure("Gagal menghapus data: $e"));
     }
   }
 }

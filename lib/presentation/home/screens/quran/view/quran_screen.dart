@@ -149,7 +149,7 @@ class QuranScreen extends StatelessWidget {
               ),
               child: Icon(
                 Icons.cloud_download_outlined,
-                size: AppSize.s80.sp,
+                size: AppSize.s90.sp,
                 color: ColorManager.gold,
               ),
             ),
@@ -182,7 +182,7 @@ class QuranScreen extends StatelessWidget {
               icon: const Icon(Icons.download),
               label: const Text('Download Sekarang'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: ColorManager.primary,
+                backgroundColor: ColorManager.lightPrimary,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: AppPadding.p24.w, vertical: AppPadding.p12.h),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.s12.r)),

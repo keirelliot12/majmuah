@@ -3,11 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import '../../app/resources/color_manager.dart';
-import '../../app/resources/values_manager.dart';
+import '../../app/resources/values.dart';
 import '../download/cubit/download_cubit.dart';
 import '../download/cubit/download_state.dart';
 import '../download/widgets/download_prompt_dialog.dart';
 import '../../di/di.dart';
+import 'widgets/sync_badge_widget.dart';
 
 class DownloadManagerScreen extends StatelessWidget {
   const DownloadManagerScreen({super.key});
@@ -26,6 +27,16 @@ class DownloadManagerScreen extends StatelessWidget {
             return ListView(
               padding: EdgeInsets.all(AppPadding.p16.r),
               children: [
+                // Sync Badge - notifikasi jika ada update
+                SyncBadgeWidget(
+                  onTap: () {
+                    // Implement sync action
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Fitur sinkronisasi sedang dikembangkan")),
+                    );
+                  },
+                ),
+                SizedBox(height: AppSize.s16.h),
                 _buildQuranDownloadCard(context, state),
                 SizedBox(height: AppSize.s16.h),
                 _buildSyncContentCard(context, state),
@@ -116,15 +127,66 @@ class DownloadManagerScreen extends StatelessWidget {
   }
 
   Widget _buildSyncContentCard(BuildContext context, DownloadState state) {
+    bool hasUpdate = false;
+    if (state is DownloadManifestLoaded) {
+      hasUpdate = state.isUpdateAvailable;
+    }
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.s16.r)),
       child: ListTile(
-        leading: Icon(Symbols.sync, color: Colors.blue, size: 28.sp),
+        leading: Stack(
+          children: [
+            Icon(Symbols.sync, color: Colors.blue, size: 28.sp),
+            if (hasUpdate)
+              Positioned(
+                right: 0,
+                top: 0,
+                child: Container(
+                  width: 10.w,
+                  height: 10.w,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 1),
+                  ),
+                ),
+              ),
+          ],
+        ),
         title: const Text("Pembaruan Konten", style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: const Text("Khutbah, Maulid, Kata Mutiara..."),
-        trailing: const Icon(Icons.chevron_right),
+        subtitle: Text(
+          hasUpdate
+              ? "✦ Konten baru tersedia"
+              : "Khutbah, Maulid, Kata Mutiara...",
+          style: TextStyle(
+            color: hasUpdate ? Colors.red : Colors.grey[600],
+            fontWeight: hasUpdate ? FontWeight.w600 : FontWeight.normal,
+          ),
+        ),
+        trailing: hasUpdate
+            ? Container(
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: Colors.red.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(6.r),
+                  border: Border.all(color: Colors.red, width: 1),
+                ),
+                child: Text(
+                  "Baru",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11.sp,
+                  ),
+                ),
+              )
+            : const Icon(Icons.chevron_right),
         onTap: () {
           // Implement sync logic
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Fitur sinkronisasi sedang dikembangkan")),
+          );
         },
       ),
     );
@@ -145,6 +207,9 @@ class DownloadManagerScreen extends StatelessWidget {
   }
 
   void _confirmDeleteQuran(BuildContext context) {
+    // Save reference to cubit before showing dialog
+    final cubit = context.read<DownloadCubit>();
+
     showDialog(
       context: context,
       builder: (diagContext) => AlertDialog(
@@ -154,8 +219,7 @@ class DownloadManagerScreen extends StatelessWidget {
           TextButton(onPressed: () => Navigator.pop(diagContext), child: const Text("Batal")),
           TextButton(
             onPressed: () {
-              // Note: Use parent context to access Cubit
-              // storage manager direct deletion usually better or via Cubit
+              cubit.clearQuranData();
               Navigator.pop(diagContext);
             },
             child: const Text("Hapus", style: TextStyle(color: Colors.red)),

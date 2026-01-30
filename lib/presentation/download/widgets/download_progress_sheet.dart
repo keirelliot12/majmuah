@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import '../../../../app/resources/color_manager.dart';
-import '../../../../app/resources/values_manager.dart';
+import '../../../../app/resources/values.dart';
 import '../../../domain/models/download/download_status.dart';
 
 class DownloadProgressSheet extends StatelessWidget {
@@ -20,8 +20,8 @@ class DownloadProgressSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false, // Prevent sheet from closing during download
+    return PopScope(
+      canPop: false, // Prevent sheet from closing during download
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
@@ -48,12 +48,12 @@ class DownloadProgressSheet extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(12.r),
                     decoration: BoxDecoration(
-                      color: ColorManager.primary.withAlpha(30),
+                      color: ColorManager.lightPrimary.withAlpha(30),
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Icon(
                       Symbols.downloading,
-                      color: ColorManager.primary,
+                      color: ColorManager.lightPrimary,
                       size: 24.sp,
                     ),
                   ),
@@ -84,7 +84,7 @@ class DownloadProgressSheet extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
-                      color: ColorManager.primary,
+                      color: ColorManager.lightPrimary,
                     ),
                   ),
                 ],
@@ -94,8 +94,8 @@ class DownloadProgressSheet extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.r),
                 child: LinearProgressIndicator(
                   value: progress.percentage / 100,
-                  backgroundColor: ColorManager.primary.withAlpha(30),
-                  valueColor: AlwaysStoppedAnimation<Color>(ColorManager.primary),
+                  backgroundColor: ColorManager.lightPrimary.withAlpha(30),
+                  valueColor: AlwaysStoppedAnimation<Color>(ColorManager.lightPrimary),
                   minHeight: 12.h,
                 ),
               ),

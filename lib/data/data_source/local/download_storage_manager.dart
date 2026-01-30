@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DownloadStorageManager {
   static const String _quranDirName = 'quran_pages';
   static const String _downloadStatusKey = 'download_status';
+  static const String _currentManifestVersionKey = 'current_manifest_version';
 
   final SharedPreferences _prefs;
 
@@ -65,5 +66,13 @@ class DownloadStorageManager {
       await quranDir.delete(recursive: true);
     }
     await _prefs.remove(_downloadStatusKey);
+  }
+
+  Future<String?> getCurrentManifestVersion() async {
+    return _prefs.getString(_currentManifestVersionKey);
+  }
+
+  Future<void> saveManifestVersion(String version) async {
+    await _prefs.setString(_currentManifestVersionKey, version);
   }
 }

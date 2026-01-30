@@ -3,9 +3,11 @@ import 'package:dio/dio.dart';
 import 'package:archive/archive.dart';
 import 'package:crypto/crypto.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../local/download_storage_manager.dart';
 import '../../../domain/models/download/download_manifest.dart';
 import '../../../domain/models/download/download_status.dart';
+import 'dart:developer' as developer;
 
 class AssetDownloadService {
   final Dio _dio;
@@ -17,9 +19,47 @@ class AssetDownloadService {
 
   AssetDownloadService(this._dio, this._storageManager);
 
+  /// Mock manifest untuk development/testing di web (CORS issues)
+  static Map<String, dynamic> _getMockManifest() {
+    return {
+      'version': '1.0.0',
+      'quran': {
+        'chunks': [
+          {'id': 'quran-part1', 'url': 'https://example.com/quran-part1.zip'},
+          {'id': 'quran-part2', 'url': 'https://example.com/quran-part2.zip'},
+          {'id': 'quran-part3', 'url': 'https://example.com/quran-part3.zip'},
+        ]
+      }
+    };
+  }
+
   Future<DownloadManifest> fetchManifest() async {
-    final response = await _dio.get(_manifestUrl);
-    return DownloadManifest.fromJson(response.data);
+    try {
+      developer.log('📥 Fetching manifest from: $_manifestUrl');
+
+      try {
+        final response = await _dio.get(_manifestUrl);
+        final manifest = DownloadManifest.fromJson(response.data);
+        developer.log('✅ Manifest fetched successfully. Version: ${manifest.version}');
+        return manifest;
+      } catch (e) {
+        // CORS error atau network error
+        developer.log('⚠️ Error fetching from GitHub: $e');
+
+        // Fallback ke mock untuk web testing
+        if (kIsWeb) {
+          developer.log('📌 Using mock manifest untuk web development (CORS bypass)');
+          final manifest = DownloadManifest.fromJson(_getMockManifest());
+          developer.log('✅ Mock manifest loaded. Version: ${manifest.version}');
+          return manifest;
+        }
+
+        rethrow;
+      }
+    } catch (e) {
+      developer.log('❌ Final error fetching manifest: $e');
+      rethrow;
+    }
   }
 
   Future<void> downloadQuranChunk({

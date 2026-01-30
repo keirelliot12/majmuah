@@ -12,6 +12,7 @@ import '../presentation/home/screens/adhkar/cubit/adhkar_cubit.dart';
 import '../presentation/home/screens/hadith/cubit/hadith_cubit.dart';
 import '../presentation/home/screens/prayer_times/cubit/prayer_timings_cubit.dart';
 import '../presentation/home/screens/quran/cubit/quran_cubit.dart';
+import '../presentation/download/cubit/download_cubit.dart';
 
 
 class MyApp extends StatefulWidget {
@@ -64,6 +65,8 @@ class _MyAppState extends State<MyApp> {
               BlocProvider(
                   create: (BuildContext context) =>
                       instance<CustomAdhkarCubit>()..getAllCustomAdhkar()),
+              BlocProvider(
+                  create: (BuildContext context) => instance<DownloadCubit>()..checkManifest()),
             ],
             child: BlocBuilder<HomeCubit, HomeState>(
               builder: (context, state) {
