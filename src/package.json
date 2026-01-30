@@ -1,0 +1,29 @@
+{
+  "name": "majmuah-backend",
+  "version": "1.0.0",
+  "description": "Backend service layer for Fee and Deposit Configuration management",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "ts-node src/tests.ts",
+    "examples": "ts-node src/examples.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": [
+    "fee-configuration",
+    "deposit-configuration",
+    "service-layer",
+    "caching",
+    "audit-trail"
+  ],
+  "author": "Majmuah Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
