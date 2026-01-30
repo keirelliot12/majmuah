@@ -1,16 +1,8 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:uuid/uuid.dart';
-
-part 'note_model.g.dart';
-
-@JsonSerializable()
 class NoteModel {
   final String id;
   final String title;
   final String content;
-  @JsonKey(name: 'created_at')
   final DateTime createdAt;
-  @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
 
   /// Optional category tag
@@ -20,7 +12,6 @@ class NoteModel {
   final bool isPinned;
 
   /// Optional color index (0-5) for note color
-  @JsonKey(name: 'color_index')
   final int? colorIndex;
 
   NoteModel({
@@ -32,7 +23,7 @@ class NoteModel {
     this.category,
     this.isPinned = false,
     this.colorIndex,
-  })  : id = id ?? const Uuid().v4(),
+  })  : id = id ?? DateTime.now().millisecondsSinceEpoch.toString(),
         createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
 
@@ -82,10 +73,33 @@ class NoteModel {
     }
   }
 
-  factory NoteModel.fromJson(Map<String, dynamic> json) =>
-      _$NoteModelFromJson(json);
+  factory NoteModel.fromJson(Map<String, dynamic> json) {
+    return NoteModel(
+      id: json['id'] as String?,
+      title: json['title'] as String? ?? '',
+      content: json['content'] as String? ?? '',
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : null,
+      category: json['category'] as String?,
+      isPinned: json['is_pinned'] as bool? ?? false,
+      colorIndex: json['color_index'] as int?,
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$NoteModelToJson(this);
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'content': content,
+        'created_at': createdAt.toIso8601String(),
+        'updated_at': updatedAt.toIso8601String(),
+        'category': category,
+        'is_pinned': isPinned,
+        'color_index': colorIndex,
+      };
 
   @override
   bool operator ==(Object other) =>

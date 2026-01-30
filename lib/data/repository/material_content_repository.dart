@@ -12,6 +12,15 @@ class MaterialContentRepository {
 
   MaterialContentRepository(this._dataSource, this._localDataSource);
 
+  /// Get all materials without filter
+  Future<List<MaterialModel>> getAllMaterials() async {
+    try {
+      return _cachedMaterials ?? await _loadAllMaterials();
+    } catch (e) {
+      throw Exception('Failed to get all materials: $e');
+    }
+  }
+
   /// Get materials by category
   Future<List<MaterialModel>> getMaterialsByCategory(String category) async {
     try {

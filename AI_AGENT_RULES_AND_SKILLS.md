@@ -627,3 +627,11 @@ After each feature:
 *Last Updated: January 29, 2026*
 *For: An-Nibros Project*
 *Version: 1.0*
+
+### ⛔ STRICT DEPENDENCY RULES (DO NOT IGNORE)
+
+1.  **NO UPDATES ALLOWED:** You are STRICTLY FORBIDDEN from modifying version numbers in `pubspec.yaml` unless explicitly instructed by the user.
+2.  **USE EXISTING TOOLS:** You must implement all requested features using *only* the currently installed versions of libraries listed in `pubspec.yaml`.
+3.  **COMPATIBILITY CHECK:** Before writing any code, check the installed version in `pubspec.yaml`. Ensure your syntax matches that specific version (e.g., do not use `Bloc` v9 syntax if v8 is installed).
+4.  **IF STUCK:** If a requested feature is *impossible* with the current library version, STOP. Do not hallucinate code. Tell the user: "Fitur ini butuh update library X ke versi Y. Apakah boleh saya update? Risikonya mungkin ada breaking change."
+5.  **PRIORITY:** Stability > New Features. Do not break the build to add a button.

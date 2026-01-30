@@ -1,7 +1,10 @@
 part of 'beranda_category_cubit.dart';
 
-abstract class BerandaCategoryState {
+abstract class BerandaCategoryState extends Equatable {
   const BerandaCategoryState();
+
+  @override
+  List<Object?> get props => [];
 }
 
 class BerandaCategoryInitial extends BerandaCategoryState {
@@ -18,14 +21,7 @@ class BerandaCategoryLoaded extends BerandaCategoryState {
   const BerandaCategoryLoaded(this.categories);
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is BerandaCategoryLoaded &&
-              runtimeType == other.runtimeType &&
-              categories == other.categories;
-
-  @override
-  int get hashCode => categories.hashCode;
+  List<Object?> get props => [categories];
 }
 
 class BerandaCategoryError extends BerandaCategoryState {
@@ -34,12 +30,5 @@ class BerandaCategoryError extends BerandaCategoryState {
   const BerandaCategoryError(this.message);
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is BerandaCategoryError &&
-              runtimeType == other.runtimeType &&
-              message == other.message;
-
-  @override
-  int get hashCode => message.hashCode;
+  List<Object?> get props => [message];
 }

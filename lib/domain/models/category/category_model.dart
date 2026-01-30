@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'category_model.g.dart';
-
-@JsonSerializable()
 class CategoryModel {
   final int id;
   final String title;
-  @JsonKey(name: 'icon_asset')
   final String iconAsset;
   final String route;
-  @JsonKey(name: 'filter_key')
   final String filterKey;
   
   /// Optional accent color for the icon
-  @JsonKey(includeFromJson: false, includeToJson: false)
   final Color? iconColor;
   
   /// Total items in this category
-  @JsonKey(includeFromJson: false, includeToJson: false)
   final int itemCount;
 
   CategoryModel({
@@ -52,10 +44,29 @@ class CategoryModel {
     );
   }
 
-  factory CategoryModel.fromJson(Map<String, dynamic> json) =>
-      _$CategoryModelFromJson(json);
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
+    return CategoryModel(
+      id: json['id'] as int? ?? 0,
+      title: json['title'] as String? ?? '',
+      iconAsset: json['icon_asset'] as String? ?? '',
+      route: json['route'] as String? ?? '',
+      filterKey: json['filter_key'] as String? ?? '',
+      iconColor: json['color_hex'] != null
+          ? Color(int.parse('FF${json['color_hex']}', radix: 16))
+          : null,
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$CategoryModelToJson(this);
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'icon_asset': iconAsset,
+        'route': route,
+        'filter_key': filterKey,
+        'color_hex': iconColor != null
+            ? iconColor!.value.toRadixString(16).substring(2).toUpperCase()
+            : null,
+      };
 
   @override
   bool operator ==(Object other) =>

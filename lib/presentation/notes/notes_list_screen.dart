@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../app/resources/resources.dart';
 import '../../di/di.dart';
 import '../home/cubit/beranda_notes_cubit.dart';
+import '../home/cubit/beranda_notes_state.dart';
 
 class NotesListScreen extends StatelessWidget {
   const NotesListScreen({Key? key}) : super(key: key);

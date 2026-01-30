@@ -175,7 +175,8 @@ void initBerandaModule() {
     // Cubits - Beranda Feature
     instance.registerLazySingleton<BerandaCategoryCubit>(
         () => BerandaCategoryCubit(instance<CategoryRepository>()));
-    instance.registerLazySingleton<BerandaMaterialCubit>(
+    // Use Factory for BerandaMaterialCubit so each screen gets a fresh instance
+    instance.registerFactory<BerandaMaterialCubit>(
         () => BerandaMaterialCubit(instance<MaterialContentRepository>()));
     instance.registerLazySingleton<BerandaNotesCubit>(
         () => BerandaNotesCubit(instance<NotesRepository>()));

@@ -41,16 +41,16 @@ class SettingsScreen extends StatelessWidget {
               icon: Icons.brightness_2_outlined,
               settingName: AppStrings.changeAppTheme.tr(),
               trailing: Switch(
-                overlayColor: MaterialStateColor.resolveWith((states) {
-                  if (states.contains(MaterialState.selected)) {
+                overlayColor: WidgetStateColor.resolveWith((states) {
+                  if (states.contains(WidgetState.selected)) {
                     return ColorManager.lightPrimary;
                   } else {
                     return ColorManager.gold;
                   }
                 }),
                 activeTrackColor: ColorManager.darkSecondary,
-                thumbIcon: MaterialStateProperty.resolveWith((states) {
-                  if (states.contains(MaterialState.selected)) {
+                thumbIcon: WidgetStateProperty.resolveWith((states) {
+                  if (states.contains(WidgetState.selected)) {
                     return const Icon(
                       Icons.brightness_2_outlined,
                       color: ColorManager.white,
@@ -63,8 +63,8 @@ class SettingsScreen extends StatelessWidget {
                   }
                 }),
                 inactiveTrackColor: ColorManager.lightBackground,
-                thumbColor: MaterialStateColor.resolveWith((states) {
-                  if (states.contains(MaterialState.selected)) {
+                thumbColor: WidgetStateColor.resolveWith((states) {
+                  if (states.contains(WidgetState.selected)) {
                     return ColorManager.lightPrimary;
                   } else {
                     return ColorManager.gold;

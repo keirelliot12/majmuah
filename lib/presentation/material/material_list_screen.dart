@@ -5,7 +5,7 @@ import '../../app/resources/resources.dart';
 import '../../di/di.dart';
 import '../../domain/models/material/material_model.dart';
 import '../home/cubit/beranda_material_cubit.dart';
-import 'material_detail_screen.dart';
+import '../home/cubit/beranda_material_state.dart';
 
 class MaterialListScreen extends StatelessWidget {
   final String categoryName;
@@ -22,7 +22,7 @@ class MaterialListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => instance<BerandaMaterialCubit>()..getMaterialsByCategory(categoryFilterKey),
+      create: (context) => instance<BerandaMaterialCubit>()..loadMaterialsByCategory(categoryFilterKey),
       child: Scaffold(
         backgroundColor: AppColors.offWhite,
         appBar: AppBar(
@@ -144,10 +144,10 @@ class _MaterialCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (material.arabicTitle != null) ...[
+                    if (material.arabicTitle.isNotEmpty) ...[
                       SizedBox(height: AppSize.s4.h),
                       Text(
-                        material.arabicTitle!,
+                        material.arabicTitle,
                         textAlign: TextAlign.right,
                         style: const TextStyle(
                           fontFamily: 'UthmanTN',

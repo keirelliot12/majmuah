@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islamic/app/resources/strings_manager.dart';
 import 'package:islamic/presentation/browseyoutube/view/browseyoutube_screen.dart';
 import 'package:islamic/presentation/pillars/view/pillars_screen.dart';
@@ -11,6 +12,7 @@ import '../../presentation/custom_adhkar/view/custom_dhikr_view.dart';
 import '../../presentation/dhikr_builder/view/dhikr_builder_view.dart';
 import '../../presentation/hadith_builder/view/hadith_builder_view.dart';
 import '../../presentation/home/view/home_view.dart';
+import '../../presentation/home/cubit/beranda_material_cubit.dart';
 import '../../presentation/surah_builder/view/surah_builder_view.dart';
 import '../../presentation/home/screens/all_categories/all_categories_screen.dart';
 import '../../presentation/material/material_list_screen.dart';
@@ -18,10 +20,12 @@ import '../../presentation/material/material_detail_screen.dart';
 import '../../presentation/notes/notes_list_screen.dart';
 import '../../presentation/notes/note_detail_screen.dart';
 import '../../presentation/search/search_result_screen.dart';
+import '../../presentation/search/smart_search_screen.dart';
+import '../../presentation/splash/splash_view.dart';
 import '../../domain/models/note/note_model.dart';
 
 class Routes {
-  static const String dashboardRoute = "/";
+  static const String splashRoute = "/";
   static const String homeRoute = "/home";
   static const String quranRoute = "/quran";
   static const String hadithRoute = "/hadith";
@@ -38,11 +42,14 @@ class Routes {
   static const String notesListRoute = "/beranda/notes";
   static const String noteDetailRoute = "/beranda/noteDetail";
   static const String searchResultRoute = "/beranda/search";
+  static const String smartSearchRoute = "/beranda/smartSearch";
 }
 
 class RoutesGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
     switch (settings.name) {
+      case Routes.splashRoute:
+        return MaterialPageRoute(builder: (_) => const SplashView());
       case Routes.homeRoute:
         initQuranModule();
         initHadithModule();
@@ -120,6 +127,14 @@ class RoutesGenerator {
         return MaterialPageRoute(
           builder: (_) => SearchResultScreen(
             query: args['query'],
+          ),
+        );
+      case Routes.smartSearchRoute:
+        initBerandaModule();
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => instance<BerandaMaterialCubit>(),
+            child: const SmartSearchScreen(),
           ),
         );
 

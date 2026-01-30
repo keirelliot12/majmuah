@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../app/resources/resources.dart';
 import '../../di/di.dart';
 import '../home/cubit/beranda_material_cubit.dart';
+import '../home/cubit/beranda_material_state.dart';
 
 class SearchResultScreen extends StatelessWidget {
   final String query;

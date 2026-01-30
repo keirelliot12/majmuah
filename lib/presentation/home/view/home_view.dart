@@ -8,10 +8,13 @@ import '../../../app/utils/constants.dart';
 import '../../../app/utils/custom_search.dart';
 import '../../../di/di.dart';
 import '../../../domain/models/quran/quran_model.dart';
+import '../../../domain/models/material/material_model.dart';
 import '../../components/mydrawer.dart';
-import '../../../../../app/resources/resources.dart';
+import '../../../app/resources/resources.dart';
 
 import '../cubit/home_cubit.dart';
+import '../cubit/beranda_material_cubit.dart';
+import '../cubit/beranda_material_state.dart';
 import '../screens/quran/cubit/quran_cubit.dart';
 import '../viewmodel/home_viewmodel.dart';
 import '../widgets/home_header.dart';
@@ -54,8 +57,11 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => instance<HomeCubit>()..isThereABookMarked(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => instance<HomeCubit>()..isThereABookMarked()),
+        BlocProvider(create: (context) => instance<BerandaMaterialCubit>()..getLastRead()),
+      ],
       child: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           var cubit = HomeCubit.get(context);
@@ -269,19 +275,42 @@ class HomeView extends StatelessWidget {
                       // Search bar
                       SearchBarWidget(
                         onTap: () {
-                          showSearch(
-                            context: context,
-                            delegate: CustomSearch(),
-                          );
+                          Navigator.pushNamed(context, Routes.smartSearchRoute);
                         },
                       ),
 
                       SizedBox(height: AppSize.s8.h),
 
-                      // Last read card
-                      LastReadCard(
-                        title: 'Ratib Al-Haddad',
-                        onTap: () => _handleMenuTap(context, 'Terakhir Dibaca'),
+                      // Last read card with real data
+                      BlocBuilder<BerandaMaterialCubit, BerandaMaterialState>(
+                        buildWhen: (previous, current) => current is BerandaLastReadLoaded,
+                        builder: (context, materialState) {
+                          String lastReadTitle = 'Ratib Al-Haddad';
+                          MaterialModel? lastReadMaterial;
+
+                          if (materialState is BerandaLastReadLoaded && materialState.lastRead != null) {
+                            lastReadTitle = materialState.lastRead!.title;
+                            lastReadMaterial = materialState.lastRead;
+                          }
+
+                          return LastReadCard(
+                            title: lastReadTitle,
+                            onTap: () {
+                              if (lastReadMaterial != null) {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.materialDetailRoute,
+                                  arguments: {
+                                    'material': lastReadMaterial,
+                                    'categoryColor': AppColors.blue500,
+                                  },
+                                );
+                              } else {
+                                _handleMenuTap(context, 'Terakhir Dibaca');
+                              }
+                            },
+                          );
+                        },
                       ),
 
                       SizedBox(height: AppSize.s16.h),
@@ -322,15 +351,15 @@ class HomeView extends StatelessWidget {
     switch (menuName) {
       case 'Aurad Sholat':
         Navigator.pushNamed(context, Routes.materialListRoute, arguments: {
-          'categoryName': 'Aurad Sholat',
-          'categoryFilterKey': 'Aurad Sholat',
+          'categoryName': 'Aurad Shalat',
+          'categoryFilterKey': 'Aurad Shalat',
           'categoryColor': AppColors.emerald500,
         });
         break;
       case 'Doa & Tawassul':
         Navigator.pushNamed(context, Routes.materialListRoute, arguments: {
-          'categoryName': 'Doa & Tawassul',
-          'categoryFilterKey': 'Doa & Tawassul',
+          'categoryName': 'Doa & Tawasul',
+          'categoryFilterKey': 'Doa & Tawasul',
           'categoryColor': AppColors.amber500,
         });
         break;

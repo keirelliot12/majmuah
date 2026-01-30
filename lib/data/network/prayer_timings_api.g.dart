@@ -6,12 +6,14 @@ part of 'prayer_timings_api.dart';
 // RetrofitGenerator
 // **************************************************************************
 
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
+
 class _PrayerTimingsServiceClient implements PrayerTimingsServiceClient {
   _PrayerTimingsServiceClient(
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= Constants.baseUrl;
+    baseUrl ??= 'https://api.aladhan.com/v1/timingsByCity/';
   }
 
   final Dio _dio;
@@ -25,18 +27,21 @@ class _PrayerTimingsServiceClient implements PrayerTimingsServiceClient {
     String country,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'city': city,
+      r'country': country,
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<PrayerTimingsResponse>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PrayerTimingsResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '${date}?city=${city}&country=${country}',
+              '${date}?city={city}&country={country}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -66,7 +71,7 @@ class _PrayerTimingsServiceClient implements PrayerTimingsServiceClient {
     String dioBaseUrl,
     String? baseUrl,
   ) {
-    if (baseUrl == null || baseUrl.isEmpty) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
       return dioBaseUrl;
     }
 

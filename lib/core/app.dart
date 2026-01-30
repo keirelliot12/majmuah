@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> {
                   theme: getApplicationLightTheme(),
                   themeMode: _preferences.getAppTheme(),
                   onGenerateRoute: RoutesGenerator.getRoute,
-                  initialRoute: Routes.homeRoute,
+                  initialRoute: Routes.splashRoute,
                 );
               },
             ),

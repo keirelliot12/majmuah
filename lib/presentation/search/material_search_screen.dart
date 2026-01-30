@@ -323,7 +323,7 @@ class _MaterialSearchScreenState extends State<MaterialSearchScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => MaterialDetailScreen(
-                        material: material,
+                        material: material.toMaterialModel(),
                         categoryColor: categoryColor,
                       ),
                     ),

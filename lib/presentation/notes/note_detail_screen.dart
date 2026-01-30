@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uuid/uuid.dart';
 import '../../app/resources/resources.dart';
 import '../../di/di.dart';
 import '../../domain/models/note/note_model.dart';
 import '../home/cubit/beranda_notes_cubit.dart';
+import '../home/cubit/beranda_notes_state.dart';
 
 class NoteDetailScreen extends StatefulWidget {
   final NoteModel? note;
@@ -114,11 +114,11 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     if (title.isEmpty && content.isEmpty) return;
 
     final note = NoteModel(
-      id: widget.note?.id ?? const Uuid().v4(),
+      id: widget.note?.id,
       title: title.isEmpty ? 'Hening' : title,
       content: content,
       isPinned: _isPinned,
-      createdAt: widget.note?.createdAt ?? DateTime.now(),
+      createdAt: widget.note?.createdAt,
       updatedAt: DateTime.now(),
     );
 

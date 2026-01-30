@@ -26,7 +26,7 @@ void main() async {
   runApp(
     EasyLocalization(
       supportedLocales: const [arabicLocale, englishLocale],
-      startLocale: arabicLocale,
+      startLocale: englishLocale,
       path: localisationPath,
       child: Phoenix(
         child: MyApp(),

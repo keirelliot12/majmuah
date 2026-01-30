@@ -7,19 +7,27 @@ part of 'database.dart';
 // **************************************************************************
 
 abstract class $AppDatabaseBuilderContract {
+  /// Adds migrations to the builder.
   $AppDatabaseBuilderContract addMigrations(List<Migration> migrations);
 
+  /// Adds a database [Callback] to the builder.
   $AppDatabaseBuilderContract addCallback(Callback callback);
 
+  /// Creates the database and initializes it.
   Future<AppDatabase> build();
 }
 
 // ignore: avoid_classes_with_only_static_members
 class $FloorAppDatabase {
-  static _$AppDatabaseBuilder databaseBuilder(String name) =>
+  /// Creates a database builder for a persistent database.
+  /// Once a database is built, you should keep a reference to it and re-use it.
+  static $AppDatabaseBuilderContract databaseBuilder(String name) =>
       _$AppDatabaseBuilder(name);
 
-  static _$AppDatabaseBuilder inMemoryDatabaseBuilder() =>
+  /// Creates a database builder for an in memory database.
+  /// Information stored in an in memory database disappears when the process is killed.
+  /// Once a database is built, you should keep a reference to it and re-use it.
+  static $AppDatabaseBuilderContract inMemoryDatabaseBuilder() =>
       _$AppDatabaseBuilder(null);
 }
 
@@ -33,13 +41,13 @@ class _$AppDatabaseBuilder implements $AppDatabaseBuilderContract {
   Callback? _callback;
 
   @override
-  _$AppDatabaseBuilder addMigrations(List<Migration> migrations) {
+  $AppDatabaseBuilderContract addMigrations(List<Migration> migrations) {
     _migrations.addAll(migrations);
     return this;
   }
 
   @override
-  _$AppDatabaseBuilder addCallback(Callback callback) {
+  $AppDatabaseBuilderContract addCallback(Callback callback) {
     _callback = callback;
     return this;
   }
@@ -131,7 +139,8 @@ class _$AppDao extends AppDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<CustomAdhkarEntity> _customAdhkarEntityInsertionAdapter;
+  final InsertionAdapter<CustomAdhkarEntity>
+      _customAdhkarEntityInsertionAdapter;
 
   final UpdateAdapter<CustomAdhkarEntity> _customAdhkarEntityUpdateAdapter;
 

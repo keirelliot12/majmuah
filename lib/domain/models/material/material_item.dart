@@ -1,3 +1,5 @@
+import 'material_model.dart';
+
 class MaterialItem {
   final String id;
   final String title;
@@ -38,4 +40,16 @@ class MaterialItem {
   }
 
   String get contentText => content.join('\n\n');
+
+  /// Convert to MaterialModel for compatibility
+  MaterialModel toMaterialModel() {
+    return MaterialModel(
+      id: id,
+      title: title,
+      arabicTitle: arabicTitle ?? '',
+      content: content,
+      category: category,
+      tags: tags,
+    );
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import '../../../../app/resources/resources.dart';
 import '../../../../di/di.dart';
 import '../../cubit/beranda_category_cubit.dart';
@@ -27,6 +28,9 @@ class AllCategoriesScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is BerandaCategoryLoaded) {
               final categories = state.categories;
+              // Total items = "Semua Materi" card + all categories
+              final totalItems = categories.length + 1;
+
               return GridView.builder(
                 padding: EdgeInsets.all(AppPadding.p16.w),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -35,20 +39,32 @@ class AllCategoriesScreen extends StatelessWidget {
                   crossAxisSpacing: 16.w,
                   childAspectRatio: 0.8,
                 ),
-                itemCount: categories.length,
+                itemCount: totalItems,
                 itemBuilder: (context, index) {
-                  final category = categories[index];
+                  // First item is "Semua Materi"
+                  if (index == 0) {
+                    return _buildAllMaterialsCard(context);
+                  }
+
+                  // Adjust index for categories (subtract 1 because of "Semua Materi")
+                  final category = categories[index - 1];
+                  final categoryColor = category.iconColor ?? AppColors.tealGreen;
+
                   return GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        Routes.materialListRoute,
-                        arguments: {
-                          'categoryName': category.title,
-                          'categoryFilterKey': category.filterKey,
-                          'categoryColor': AppColors.tealGreen, // Default color
-                        },
-                      );
+                      if (category.filterKey == 'Notes') {
+                        Navigator.pushNamed(context, Routes.notesListRoute);
+                      } else {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.materialListRoute,
+                          arguments: {
+                            'categoryName': category.title,
+                            'categoryFilterKey': category.filterKey,
+                            'categoryColor': categoryColor,
+                          },
+                        );
+                      }
                     },
                     child: Column(
                       children: [
@@ -65,13 +81,17 @@ class AllCategoriesScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          child: Image.asset(
-                            category.iconAsset,
-                            width: 40.w,
-                            height: 40.w,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Icon(Icons.category, size: 40.w, color: AppColors.tealGreen),
-                          ),
+                          child: category.iconAsset.endsWith('.png')
+                            ? Image.asset(
+                                category.iconAsset,
+                                width: 40.w,
+                                height: 40.w,
+                                color: categoryColor,
+                                colorBlendMode: BlendMode.srcIn,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Icon(Icons.category, size: 40.w, color: categoryColor),
+                              )
+                            : Icon(Icons.category, size: 40.w, color: categoryColor),
                         ),
                         SizedBox(height: 8.h),
                         Text(
@@ -96,6 +116,58 @@ class AllCategoriesScreen extends StatelessWidget {
             return const Center(child: Text('Tidak ada kategori'));
           },
         ),
+      ),
+    );
+  }
+
+  /// Build "Semua Materi" card that shows all materials without category filter
+  Widget _buildAllMaterialsCard(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          Routes.materialListRoute,
+          arguments: {
+            'categoryName': 'Semua Materi',
+            'categoryFilterKey': '', // Empty string means no filter
+            'categoryColor': AppColors.tealGreen,
+          },
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(12.w),
+            decoration: BoxDecoration(
+              color: AppColors.tealGreen,
+              borderRadius: BorderRadius.circular(16.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withAlpha(13),
+                  blurRadius: 10.r,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Icon(
+              Symbols.library_books,
+              size: 40.w,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            'Semua Materi',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.bold,
+              color: AppColors.darkTeal,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }

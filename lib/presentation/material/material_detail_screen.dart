@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../app/resources/resources.dart';
+import '../../di/di.dart';
 import '../../domain/models/material/material_model.dart';
+import '../home/cubit/beranda_material_cubit.dart';
 
-class MaterialDetailScreen extends StatelessWidget {
+class MaterialDetailScreen extends StatefulWidget {
   final MaterialModel material;
   final Color categoryColor;
 
@@ -15,15 +18,29 @@ class MaterialDetailScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<MaterialDetailScreen> createState() => _MaterialDetailScreenState();
+}
+
+class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Update last read when opened
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      instance<BerandaMaterialCubit>().setLastRead(widget.material.id);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.offWhite,
       appBar: AppBar(
         title: Text(
-          material.title,
+          widget.material.title,
           style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: categoryColor,
+        backgroundColor: widget.categoryColor,
         foregroundColor: Colors.white,
         elevation: 0,
         actions: [
@@ -42,7 +59,7 @@ class MaterialDetailScreen extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.all(AppPadding.p24.w),
               decoration: BoxDecoration(
-                color: categoryColor,
+                color: widget.categoryColor,
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(32.r),
                   bottomRight: Radius.circular(32.r),
@@ -51,7 +68,7 @@ class MaterialDetailScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    material.arabicTitle,
+                    widget.material.arabicTitle,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'UthmanTN',
@@ -62,7 +79,7 @@ class MaterialDetailScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 16.h),
                   Text(
-                    material.title,
+                    widget.material.title,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 18.sp,
@@ -80,7 +97,7 @@ class MaterialDetailScreen extends StatelessWidget {
               child: ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: material.content.length,
+                itemCount: widget.material.content.length,
                 separatorBuilder: (context, index) => SizedBox(height: 24.h),
                 itemBuilder: (context, index) {
                   return Container(
@@ -97,7 +114,7 @@ class MaterialDetailScreen extends StatelessWidget {
                       ],
                     ),
                     child: Text(
-                      material.content[index],
+                      widget.material.content[index],
                       style: TextStyle(
                         fontSize: 16.sp,
                         height: 1.6,
@@ -116,8 +133,8 @@ class MaterialDetailScreen extends StatelessWidget {
   }
 
   void _copyContent(BuildContext context) {
-    final fullContent = material.content.join('\n\n');
-    Clipboard.setData(ClipboardData(text: '${material.title}\n\n$fullContent'));
+    final fullContent = widget.material.content.join('\n\n');
+    Clipboard.setData(ClipboardData(text: '${widget.material.title}\n\n$fullContent'));
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Konten disalin ke clipboard')),
     );

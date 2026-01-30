@@ -1,27 +1,18 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'material_model.g.dart';
-
-@JsonSerializable()
 class MaterialModel {
   final String id;
   final String title;
-  @JsonKey(name: 'arabic_title')
   final String arabicTitle;
   final String category;
   final List<String> tags;
   final List<String> content;
 
   /// Optional translation of the material
-  @JsonKey(includeFromJson: false, includeToJson: false)
   final String? translation;
 
   /// Timestamp when this material was last opened
-  @JsonKey(includeFromJson: false, includeToJson: false)
   final DateTime? lastRead;
 
   /// Whether this material is bookmarked
-  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isBookmarked;
 
   MaterialModel({
@@ -70,10 +61,25 @@ class MaterialModel {
         : combined;
   }
 
-  factory MaterialModel.fromJson(Map<String, dynamic> json) =>
-      _$MaterialModelFromJson(json);
+  factory MaterialModel.fromJson(Map<String, dynamic> json) {
+    return MaterialModel(
+      id: json['id'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      arabicTitle: json['arabic_title'] as String? ?? '',
+      category: json['category'] as String? ?? '',
+      tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
+      content: (json['content'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$MaterialModelToJson(this);
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'arabic_title': arabicTitle,
+        'category': category,
+        'tags': tags,
+        'content': content,
+      };
 
   @override
   bool operator ==(Object other) =>

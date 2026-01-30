@@ -461,6 +461,8 @@ STOP
 
 **You've got this! 🚀**
 
+Project ini menggunakan dependency MODERN: flutter_bloc v8.1.6, intl v0.20.2, dan wakelock_plus. Gunakan syntax yang kompatibel dengan versi tersebut. JANGAN gunakan syntax lama (deprecated) dari intl v0.18 kebawah.
+
 ---
 
 *Quick Reference v1.0*

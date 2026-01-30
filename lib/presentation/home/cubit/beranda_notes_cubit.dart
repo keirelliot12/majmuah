@@ -1,66 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/repository/notes_repository.dart';
 import '../../../domain/models/note/note_model.dart';
-
-// ============================================================================
-// STATE CLASSES
-// ============================================================================
-
-abstract class BerandaNotesState {
-  const BerandaNotesState();
-}
-
-class BerandaNotesInitial extends BerandaNotesState {
-  const BerandaNotesInitial();
-}
-
-class BerandaNotesLoading extends BerandaNotesState {
-  const BerandaNotesLoading();
-}
-
-class BerandaNotesLoaded extends BerandaNotesState {
-  final List<NoteModel> notes;
-
-  const BerandaNotesLoaded(this.notes);
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is BerandaNotesLoaded &&
-          runtimeType == other.runtimeType &&
-          notes == other.notes;
-
-  @override
-  int get hashCode => notes.hashCode;
-}
-
-class BerandaNotesError extends BerandaNotesState {
-  final String message;
-
-  const BerandaNotesError(this.message);
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is BerandaNotesError &&
-          runtimeType == other.runtimeType &&
-          message == other.message;
-
-  @override
-  int get hashCode => message.hashCode;
-}
-
-class BerandaNoteCreated extends BerandaNotesState {
-  const BerandaNoteCreated();
-}
-
-class BerandaNoteUpdated extends BerandaNotesState {
-  const BerandaNoteUpdated();
-}
-
-class BerandaNoteDeleted extends BerandaNotesState {
-  const BerandaNoteDeleted();
-}
+import 'beranda_notes_state.dart';
 
 // ============================================================================
 // CUBIT CLASS
@@ -130,4 +71,3 @@ class BerandaNotesCubit extends Cubit<BerandaNotesState> {
     }
   }
 }
-

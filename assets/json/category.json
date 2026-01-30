@@ -33,35 +33,40 @@
       "title": "Ratib",
       "icon_asset": "assets/icons/ratib.png",
       "route": "/category",
-      "filter_key": "Ratib"
+      "filter_key": "Ratib",
+      "color_hex": "6366F1"
     },
     {
       "id": 6,
       "title": "Hizib",
       "icon_asset": "assets/icons/hizib.png",
       "route": "/category",
-      "filter_key": "Hizib"
+      "filter_key": "Hizib",
+      "color_hex": "0D9488"
     },
     {
       "id": 7,
       "title": "Maulid",
       "icon_asset": "assets/icons/maulid.png",
       "route": "/category",
-      "filter_key": "Maulid"
+      "filter_key": "Maulid",
+      "color_hex": "F97316"
     },
     {
       "id": 8,
       "title": "Qasidah",
       "icon_asset": "assets/icons/qasidah.png",
       "route": "/category",
-      "filter_key": "Qasidah"
+      "filter_key": "Qasidah",
+      "color_hex": "0891B2"
     },
     {
       "id": 9,
       "title": "Tahlil & Ziarah",
       "icon_asset": "assets/icons/tahlil_ziarah.png",
       "route": "/category",
-      "filter_key": "Tahlil & Ziarah"
+      "filter_key": "Tahlil & Ziarah",
+      "color_hex": "0D9488"
     },
     {
       "id": 10,
@@ -90,6 +95,14 @@
       "icon_asset": "assets/icons/notes.png",
       "route": "/category",
       "filter_key": "Notes"
+    },
+    {
+      "id": 14,
+      "title": "Khutbah",
+      "icon_asset": "assets/icons/khutbah.png",
+      "route": "/category",
+      "filter_key": "Khutbah",
+      "color_hex": "F43F5E"
     }
   ]
 }

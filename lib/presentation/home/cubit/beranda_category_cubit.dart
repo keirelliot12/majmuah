@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/repository/category_repository.dart';
 import '../../../domain/models/category/category_model.dart';

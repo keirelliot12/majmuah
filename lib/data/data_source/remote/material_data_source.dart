@@ -21,10 +21,17 @@ class MaterialDataSource {
   }
 
   /// Filter materials by category
+  /// If category is empty, returns all materials
   Future<List<MaterialModel>> getMaterialsByCategory(
     String category,
   ) async {
     final allMaterials = await loadMaterials();
+
+    // If category is empty, return all materials
+    if (category.isEmpty) {
+      return allMaterials;
+    }
+
     return allMaterials
         .where((material) =>
             material.category.toLowerCase() == category.toLowerCase())

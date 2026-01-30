@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -127,26 +128,26 @@ class MenuGridWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Icon card
+          // Icon card with glassmorphism
           AspectRatio(
             aspectRatio: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(16.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
-                    blurRadius: 20.r,
-                    offset: Offset(0, 4.r),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.r),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withAlpha(102), // ~40% white
+                    borderRadius: BorderRadius.circular(20.r),
+                    border: Border.all(color: Colors.white.withAlpha(51), width: 1),
                   ),
-                ],
-              ),
-              child: Center(
-                child: Icon(
-                  item.icon,
-                  size: 28.r,
-                  color: item.iconColor,
+                  child: Center(
+                    child: Icon(
+                      item.icon,
+                      size: 28.r,
+                      color: item.iconColor,
+                    ),
+                  ),
                 ),
               ),
             ),

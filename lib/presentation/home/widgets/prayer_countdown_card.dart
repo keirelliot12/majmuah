@@ -2,11 +2,14 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import 'package:islamic/app/resources/resources.dart';
+import 'package:islamic/domain/models/prayer_timings/prayer_timings_model.dart';
 import 'package:islamic/presentation/components/glass_container.dart';
+import 'package:islamic/presentation/home/screens/prayer_times/cubit/prayer_timings_cubit.dart';
 
 /// Displays a countdown card for the next prayer time with glassmorphism effect.
 ///
@@ -15,29 +18,21 @@ import 'package:islamic/presentation/components/glass_container.dart';
 /// - Glassmorphism background (white/40 with blur)
 /// - Live countdown timer that updates every second
 class PrayerCountdownCard extends StatefulWidget {
-  final String? prayerName;
-  final String? prayerTime;
-  final Duration? timeUntilPrayer;
-
-  const PrayerCountdownCard({
-    Key? key,
-    this.prayerName = 'Dzuhur',
-    this.prayerTime = '12:05',
-    this.timeUntilPrayer,
-  }) : super(key: key);
+  const PrayerCountdownCard({Key? key}) : super(key: key);
 
   @override
   State<PrayerCountdownCard> createState() => _PrayerCountdownCardState();
 }
 
 class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
-  late Timer _timer;
-  late Duration _remainingTime;
+  Timer? _timer;
+  String _prayerName = 'DZUHUR';
+  String _prayerTime = '12:05';
+  Duration _remainingTime = const Duration(hours: 2, minutes: 45, seconds: 12);
 
   @override
   void initState() {
     super.initState();
-    _remainingTime = widget.timeUntilPrayer ?? Duration(hours: 2, minutes: 45, seconds: 12);
     _startCountdown();
   }
 
@@ -48,11 +43,77 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
           if (_remainingTime.inSeconds > 0) {
             _remainingTime = Duration(seconds: _remainingTime.inSeconds - 1);
           } else {
-            _remainingTime = Duration(hours: 0, minutes: 0, seconds: 0);
+            // Refresh timings if countdown reaches zero
+            context.read<PrayerTimingsCubit>().getPrayerTimings();
           }
         });
       }
     });
+  }
+
+  void _updateTimings(TimingsModel? timings) {
+    if (timings == null) return;
+
+    final now = DateTime.now();
+    final prayerTimes = {
+      'Fajr': timings.fajr,
+      'Sunrise': timings.sunrise,
+      'Dhuhr': timings.dhuhr,
+      'Asr': timings.asr,
+      'Maghrib': timings.maghrib,
+      'Isha': timings.isha,
+    };
+
+    String nextName = 'Fajr';
+    String nextTimeStr = timings.fajr;
+    Duration nextDuration = const Duration(hours: 24);
+
+    for (var entry in prayerTimes.entries) {
+      try {
+        final timeStr = entry.value.replaceFirst(RegExp(r'\s.*'), '');
+        final parts = timeStr.split(':');
+        final prayerTime = DateTime(
+          now.year,
+          now.month,
+          now.day,
+          int.parse(parts[0]),
+          int.parse(parts[1]),
+        );
+
+        if (prayerTime.isAfter(now)) {
+          final diff = prayerTime.difference(now);
+          if (diff < nextDuration) {
+            nextDuration = diff;
+            nextName = entry.key;
+            nextTimeStr = entry.value;
+          }
+        }
+      } catch (e) {
+        // Handle parsing error if any
+      }
+    }
+
+    if (nextName == 'Fajr' && nextDuration == const Duration(hours: 24)) {
+      // All prayers passed, next is tomorrow's Fajr
+      try {
+        final timeStr = timings.fajr.replaceFirst(RegExp(r'\s.*'), '');
+        final parts = timeStr.split(':');
+        final tomorrowFajr = DateTime(
+          now.year,
+          now.month,
+          now.day + 1,
+          int.parse(parts[0]),
+          int.parse(parts[1]),
+        );
+        nextDuration = tomorrowFajr.difference(now);
+        nextName = 'Fajr';
+        nextTimeStr = timings.fajr;
+      } catch (e) {}
+    }
+
+    _prayerName = nextName.toUpperCase();
+    _prayerTime = nextTimeStr;
+    _remainingTime = nextDuration;
   }
 
   String _formatCountdown(Duration duration) {
@@ -64,114 +125,128 @@ class _PrayerCountdownCardState extends State<PrayerCountdownCard> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppPadding.p24.w,
-        vertical: AppPadding.p8.h,
-      ),
-      child: GlassContainer(
-        borderRadius: 24.r,
-        padding: EdgeInsets.all(AppPadding.p16.w),
-        blur: 20.0,
-        opacity: 0.4,
-        child: Row(
-          children: [
-            // Left: Prayer icon in teal container
-            Container(
-              width: 44.w,
-              height: 44.w,
-              decoration: BoxDecoration(
-                color: AppColors.islamicTeal,
-                borderRadius: BorderRadius.circular(16.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.islamicTeal.withAlpha(102), // 0.4 * 255
-                    blurRadius: 8.r,
-                    offset: Offset(0, 4.r),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Icon(
-                  Symbols.wb_twilight,
-                  color: Colors.white,
-                  size: 22.r,
-                ),
-              ),
-            ),
-            SizedBox(width: AppSize.s12.w),
+    return BlocBuilder<PrayerTimingsCubit, PrayerTimingsState>(
+      builder: (context, state) {
+        if (state is GetPrayerTimesSuccessState) {
+          _updateTimings(state.prayerTimingsModel.data?.timings);
+        } else {
+          // Fallback to cubit's internal model if state is not success yet
+          final cubit = context.read<PrayerTimingsCubit>();
+          if (cubit.prayerTimingsModel.data?.timings != null) {
+            _updateTimings(cubit.prayerTimingsModel.data?.timings);
+          }
+        }
 
-            // Center: Prayer name and time
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'BERIKUTNYA: ${widget.prayerName?.toUpperCase() ?? 'DZUHUR'}',
-                    style: TextStyle(
-                      fontSize: 10.sp,
-                      fontWeight: FontWeightsManager.bold,
-                      color: Colors.grey.shade700,
-                      letterSpacing: 1.5,
-                    ),
+        return Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 24.0.w,
+            vertical: 8.0.h,
+          ),
+          child: GlassContainer(
+            borderRadius: 24.r,
+            padding: EdgeInsets.all(16.0.w),
+            blur: 20.0,
+            opacity: 0.4,
+            child: Row(
+              children: [
+                // Left: Prayer icon in teal container
+                Container(
+                  width: 44.w,
+                  height: 44.w,
+                  decoration: BoxDecoration(
+                    color: AppColors.islamicTeal,
+                    borderRadius: BorderRadius.circular(16.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.islamicTeal.withAlpha(102),
+                        blurRadius: 8.r,
+                        offset: Offset(0, 4.r),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: AppSize.s4.h),
-                  Text(
-                    widget.prayerTime ?? '12:05',
-                    style: TextStyle(
-                      fontSize: 22.sp,
-                      fontWeight: FontWeightsManager.bold,
-                      color: Colors.grey.shade900,
+                  child: Center(
+                    child: Icon(
+                      Symbols.wb_twilight,
+                      color: Colors.white,
+                      size: 22.r,
                     ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Right: Countdown with divider
-            Container(
-              padding: EdgeInsets.only(left: AppPadding.p16.w),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: Colors.black.withAlpha(13), // 0.05 * 255
-                    width: 1,
                   ),
                 ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    'SISA WAKTU',
-                    style: TextStyle(
-                      fontSize: 10.sp,
-                      fontWeight: FontWeightsManager.bold,
-                      color: Colors.grey.shade700,
-                      letterSpacing: 0.5,
+                SizedBox(width: 12.0.w),
+
+                // Center: Prayer name and time
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'BERIKUTNYA: $_prayerName',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade700,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                      SizedBox(height: 4.0.h),
+                      Text(
+                        _prayerTime,
+                        style: TextStyle(
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade900,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Right: Countdown with divider
+                Container(
+                  padding: EdgeInsets.only(left: 16.0.w),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                        color: Colors.black.withAlpha(13),
+                        width: 1,
+                      ),
                     ),
                   ),
-                  SizedBox(height: AppSize.s4.h),
-                  Text(
-                    _formatCountdown(_remainingTime),
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeightsManager.bold,
-                      color: AppColors.islamicTeal,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'SISA WAKTU',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade700,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      SizedBox(height: 4.0.h),
+                      Text(
+                        _formatCountdown(_remainingTime),
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.islamicTeal,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
