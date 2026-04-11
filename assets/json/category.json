@@ -1,0 +1,108 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "title": "Al-Quran",
+      "icon_asset": "assets/icons/al_quran.png",
+      "route": "/category",
+      "filter_key": "Al-Quran"
+    },
+    {
+      "id": 2,
+      "title": "Aurad Shalat",
+      "icon_asset": "assets/icons/aurad_shalat.png",
+      "route": "/category",
+      "filter_key": "Aurad Shalat"
+    },
+    {
+      "id": 3,
+      "title": "Doa & Tawasul",
+      "icon_asset": "assets/icons/doa_tawasul.png",
+      "route": "/category",
+      "filter_key": "Doa & Tawasul"
+    },
+    {
+      "id": 4,
+      "title": "Sholawat",
+      "icon_asset": "assets/icons/sholawat.png",
+      "route": "/category",
+      "filter_key": "Sholawat"
+    },
+    {
+      "id": 5,
+      "title": "Ratib",
+      "icon_asset": "assets/icons/ratib.png",
+      "route": "/category",
+      "filter_key": "Ratib",
+      "color_hex": "6366F1"
+    },
+    {
+      "id": 6,
+      "title": "Hizib",
+      "icon_asset": "assets/icons/hizib.png",
+      "route": "/category",
+      "filter_key": "Hizib",
+      "color_hex": "0D9488"
+    },
+    {
+      "id": 7,
+      "title": "Maulid",
+      "icon_asset": "assets/icons/maulid.png",
+      "route": "/category",
+      "filter_key": "Maulid",
+      "color_hex": "F97316"
+    },
+    {
+      "id": 8,
+      "title": "Qasidah",
+      "icon_asset": "assets/icons/qasidah.png",
+      "route": "/category",
+      "filter_key": "Qasidah",
+      "color_hex": "0891B2"
+    },
+    {
+      "id": 9,
+      "title": "Tahlil & Ziarah",
+      "icon_asset": "assets/icons/tahlil_ziarah.png",
+      "route": "/category",
+      "filter_key": "Tahlil & Ziarah",
+      "color_hex": "0D9488"
+    },
+    {
+      "id": 10,
+      "title": "Manaqib & Istighosah",
+      "icon_asset": "assets/icons/manaqib_istighosah.png",
+      "route": "/category",
+      "filter_key": "Manaqib & Istighosah"
+    },
+    {
+      "id": 11,
+      "title": "Puji-pujian & Bilal",
+      "icon_asset": "assets/icons/puji_pujian_bilal.png",
+      "route": "/category",
+      "filter_key": "Puji-pujian & Bilal"
+    },
+    {
+      "id": 12,
+      "title": "Panduan Ibadah",
+      "icon_asset": "assets/icons/panduan_ibadah.png",
+      "route": "/category",
+      "filter_key": "Panduan Ibadah"
+    },
+    {
+      "id": 13,
+      "title": "Notes",
+      "icon_asset": "assets/icons/notes.png",
+      "route": "/category",
+      "filter_key": "Notes"
+    },
+    {
+      "id": 14,
+      "title": "Khutbah",
+      "icon_asset": "assets/icons/khutbah.png",
+      "route": "/category",
+      "filter_key": "Khutbah",
+      "color_hex": "F43F5E"
+    }
+  ]
+}

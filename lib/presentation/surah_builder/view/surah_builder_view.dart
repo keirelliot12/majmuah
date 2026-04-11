@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import '../../components/separator.dart';
 import '../../home/cubit/home_cubit.dart';
 import '../../home/screens/quran/cubit/quran_cubit.dart';
 import '../../../../../app/resources/resources.dart';
+import '../../../../data/data_source/local/download_storage_manager.dart';
+import '../../../../../di/di.dart';
 
 
 class SurahBuilderView extends StatelessWidget {
@@ -23,6 +26,8 @@ class SurahBuilderView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DownloadStorageManager storageManager = instance<DownloadStorageManager>();
+
     return WillPopScope(
       onWillPop: () async {
         isThereABookMarkedPage =
@@ -98,11 +103,28 @@ class SurahBuilderView extends StatelessWidget {
                         //Quran with Images
                         Expanded(
                           child: Center(
-                            child: Image.asset(
-                              "assets/images/quran/page${getQuranImageNumberFromPageNumber(quranPageNumber)}.png",
-                              color: darkMode ? Colors.white : null,
-                              colorBlendMode: BlendMode.srcIn,
-                              fit: BoxFit.fitWidth,
+                            child: FutureBuilder<String?>(
+                              future: storageManager.getQuranPagePath(quranPageNumber),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData && snapshot.data != null) {
+                                  return Image.file(
+                                    File(snapshot.data!),
+                                    color: darkMode ? Colors.white : null,
+                                    colorBlendMode: BlendMode.srcIn,
+                                    fit: BoxFit.fitWidth,
+                                  );
+                                }
+
+                                // Fallback if file not found (though QuranScreen checks this)
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.image_not_supported_outlined, size: 64.sp, color: Colors.grey),
+                                    SizedBox(height: 16.h),
+                                    const Text("Halaman tidak ditemukan di perangkat."),
+                                  ],
+                                );
+                              }
                             ),
                           ),
                         ),

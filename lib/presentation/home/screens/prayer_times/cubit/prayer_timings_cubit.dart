@@ -1,7 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:intl/intl.dart';
 import 'package:location/location.dart' as location_package;
 
 import '../../../../../app/utils/constants.dart';
@@ -9,7 +8,6 @@ import '../../../../../di/di.dart';
 import '../../../../../data/network/network_info.dart';
 import '../../../../../domain/models/prayer_timings/prayer_timings_model.dart';
 import '../../../../../domain/usecase/get_prayer_timings_usecase.dart';
-import '../../../../../app/resources/resources.dart';
 
 part 'prayer_timings_state.dart';
 
@@ -48,45 +46,68 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
     location_package.PermissionStatus permissionGranted;
     location_package.LocationData locationData;
 
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
+    try {
+      serviceEnabled = await location.serviceEnabled();
       if (!serviceEnabled) {
-        recordLocation =
-            (AppStrings.enableLocation.tr(), AppStrings.enableLocation.tr());
-        emit(GetLocationErrorState(AppStrings.enableLocation.tr()));
-        // return (AppStrings.enableLocation.tr(), AppStrings.enableLocation.tr());
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
+          // Use fallback location: Gresik, Indonesia
+          print('Location service disabled - Using fallback location (Gresik, Indonesia)');
+          recordLocation = ("Gresik", "Indonesia");
+          emit(GetLocationSuccessState());
+          return;
+        }
       }
-    }
 
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == location_package.PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != location_package.PermissionStatus.granted) {
-        emit(GetLocationErrorState(
-            AppStrings.giveLocationAccessPermission.tr()));
-        recordLocation = (
-          AppStrings.giveLocationAccessPermission.tr(),
-          AppStrings.giveLocationAccessPermission.tr()
-        );
+      // Try to check permission, but handle web platform gracefully
+      try {
+        permissionGranted = await location.hasPermission();
+        if (permissionGranted == location_package.PermissionStatus.denied) {
+          permissionGranted = await location.requestPermission();
+          if (permissionGranted != location_package.PermissionStatus.granted) {
+            // Use fallback location: Gresik, Indonesia
+            print('Location permission denied - Using fallback location (Gresik, Indonesia)');
+            recordLocation = ("Gresik", "Indonesia");
+            emit(GetLocationSuccessState());
+            return;
+          }
+        }
+      } catch (permissionError) {
+        // On web, permission check might fail, but we can still try to get location
+        print('Permission check not supported on this platform: $permissionError');
+        // Try to get location anyway, if it fails, outer catch will handle it
       }
-    }
 
-    locationData = await location.getLocation();
-
-    List<Placemark> placeMarks = await placemarkFromCoordinates(
-        locationData.latitude!, locationData.longitude!);
-
-    if (placeMarks.isNotEmpty) {
-      recordLocation = (
-        placeMarks[0].subAdministrativeArea.toString(),
-        placeMarks[0].country.toString()
-      );
+      locationData = await location.getLocation();
+    } catch (e) {
+      print('Error getting location: $e - Using fallback location (Gresik, Indonesia)');
+      // Use fallback location: Gresik, Indonesia
+      recordLocation = ("Gresik", "Indonesia");
       emit(GetLocationSuccessState());
-    } else {
-      recordLocation =
-          (AppStrings.noLocationFound.tr(), AppStrings.noLocationFound.tr());
-      emit(GetLocationErrorState(AppStrings.noLocationFound.tr()));
+      return;
+    }
+
+    try {
+      List<Placemark> placeMarks = await placemarkFromCoordinates(
+          locationData.latitude!, locationData.longitude!);
+
+      if (placeMarks.isNotEmpty) {
+        recordLocation = (
+          placeMarks[0].subAdministrativeArea.toString(),
+          placeMarks[0].country.toString()
+        );
+        emit(GetLocationSuccessState());
+      } else {
+        // Fallback to Gresik if reverse geocoding fails
+        print('No placemarks found - Using fallback location (Gresik, Indonesia)');
+        recordLocation = ("Gresik", "Indonesia");
+        emit(GetLocationSuccessState());
+      }
+    } catch (e) {
+      // Fallback to Gresik if geocoding fails
+      print('Error reverse geocoding: $e - Using fallback location (Gresik, Indonesia)');
+      recordLocation = ("Gresik", "Indonesia");
+      emit(GetLocationSuccessState());
     }
   }
 

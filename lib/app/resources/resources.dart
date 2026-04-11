@@ -7,3 +7,4 @@ export 'styles_manager.dart';
 export 'values.dart';
 export 'theme.dart';
 export 'routes_manager.dart';
+export 'glassmorphism_manager.dart';

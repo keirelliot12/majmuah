@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,6 +32,19 @@ import '../presentation/home/screens/prayer_times/cubit/prayer_timings_cubit.dar
 import '../presentation/home/screens/quran/cubit/quran_cubit.dart';
 import '../presentation/home/viewmodel/home_viewmodel.dart';
 import '../app/utils/app_prefs.dart';
+import '../data/database/in_memory_database.dart';
+import '../data/data_source/local/notes_local_data_source.dart';
+import '../data/data_source/remote/category_data_source.dart';
+import '../data/data_source/remote/material_data_source.dart';
+import '../data/repository/category_repository.dart';
+import '../data/repository/material_content_repository.dart';
+import '../data/repository/notes_repository.dart';
+import '../presentation/home/cubit/beranda_category_cubit.dart';
+import '../presentation/home/cubit/beranda_material_cubit.dart';
+import '../presentation/home/cubit/beranda_notes_cubit.dart';
+import '../data/data_source/local/download_storage_manager.dart';
+import '../data/data_source/remote/asset_download_service.dart';
+import '../presentation/download/cubit/download_cubit.dart';
 
 final instance = GetIt.instance;
 
@@ -42,7 +56,7 @@ Future initAppModule() async {
   instance.registerLazySingleton<AppPreferences>(() => AppPreferences());
 
   instance.registerLazySingleton<InternetConnectionChecker>(
-      () => InternetConnectionChecker());
+      () => InternetConnectionChecker.createInstance());
   instance.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl());
 
   instance.registerLazySingleton<DioFactory>(() => DioFactory());
@@ -56,9 +70,14 @@ Future initAppModule() async {
 
   instance.registerLazySingleton<LocalDataSource>(() => LocalDataSourceImpl());
 
-  final database =
-      await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-  instance.registerLazySingleton<AppDatabase>(() => database);
+  if (kIsWeb) {
+    final db = InMemoryAppDatabase();
+    instance.registerLazySingleton<AppDatabase>(() => db);
+  } else {
+    final database =
+        await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    instance.registerLazySingleton<AppDatabase>(() => database);
+  }
 
   instance.registerFactory<HomeCubit>(() => HomeCubit());
   instance.registerFactory<QuranCubit>(() => QuranCubit());
@@ -80,6 +99,22 @@ Future initAppModule() async {
       () => GlobalKey<ScaffoldState>());
 
   instance.registerFactory<SearchController>(() => SearchController());
+
+  await initDownloadModule();
+}
+
+Future<void> initDownloadModule() async {
+  if (!GetIt.I.isRegistered<DownloadStorageManager>()) {
+    instance.registerLazySingleton<DownloadStorageManager>(
+        () => DownloadStorageManager(instance<SharedPreferences>()));
+
+    Dio dio = await instance<DioFactory>().getDio();
+    instance.registerLazySingleton<AssetDownloadService>(
+        () => AssetDownloadService(dio, instance<DownloadStorageManager>()));
+
+    instance.registerFactory<DownloadCubit>(
+        () => DownloadCubit(instance<AssetDownloadService>(), instance<DownloadStorageManager>()));
+  }
 }
 
 void initQuranModule() {
@@ -133,5 +168,36 @@ void initCustomAdhkarModule() {
   if (!GetIt.I.isRegistered<DelAllCustomAdhkarUseCase>()) {
     instance.registerFactory<DelAllCustomAdhkarUseCase>(
         () => DelAllCustomAdhkarUseCase());
+  }
+}
+
+/// Initialize Beranda Feature Module
+void initBerandaModule() {
+  if (!GetIt.I.isRegistered<CategoryDataSource>()) {
+    // Data Sources
+    instance.registerLazySingleton<CategoryDataSource>(
+        () => CategoryDataSource());
+    instance.registerLazySingleton<MaterialDataSource>(
+        () => MaterialDataSource());
+    instance.registerLazySingleton<NotesLocalDataSource>(
+        () => NotesLocalDataSource(instance<SharedPreferences>()));
+
+    // Repositories
+    instance.registerLazySingleton<CategoryRepository>(
+        () => CategoryRepository(instance<CategoryDataSource>()));
+    instance.registerLazySingleton<MaterialContentRepository>(
+        () => MaterialContentRepository(instance<MaterialDataSource>(),
+            instance<NotesLocalDataSource>()));
+    instance.registerLazySingleton<NotesRepository>(
+        () => NotesRepository(instance<NotesLocalDataSource>()));
+
+    // Cubits - Beranda Feature
+    instance.registerLazySingleton<BerandaCategoryCubit>(
+        () => BerandaCategoryCubit(instance<CategoryRepository>()));
+    // Use Factory for BerandaMaterialCubit so each screen gets a fresh instance
+    instance.registerFactory<BerandaMaterialCubit>(
+        () => BerandaMaterialCubit(instance<MaterialContentRepository>()));
+    instance.registerLazySingleton<BerandaNotesCubit>(
+        () => BerandaNotesCubit(instance<NotesRepository>()));
   }
 }

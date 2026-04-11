@@ -27,7 +27,10 @@ class _PrayerTimingsServiceClient implements PrayerTimingsServiceClient {
     String country,
   ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'city': city,
+      r'country': country,
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -38,11 +41,15 @@ class _PrayerTimingsServiceClient implements PrayerTimingsServiceClient {
     )
             .compose(
               _dio.options,
-              '${date}?city=${city}&country=${country}',
+              '${date}?city={city}&country={country}',
               queryParameters: queryParameters,
               data: _data,
             )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
     final value = PrayerTimingsResponse.fromJson(_result.data!);
     return value;
   }
@@ -58,5 +65,22 @@ class _PrayerTimingsServiceClient implements PrayerTimingsServiceClient {
       }
     }
     return requestOptions;
+  }
+
+  String _combineBaseUrls(
+    String dioBaseUrl,
+    String? baseUrl,
+  ) {
+    if (baseUrl == null || baseUrl.trim().isEmpty) {
+      return dioBaseUrl;
+    }
+
+    final url = Uri.parse(baseUrl);
+
+    if (url.isAbsolute) {
+      return url.toString();
+    }
+
+    return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }

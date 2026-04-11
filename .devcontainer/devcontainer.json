@@ -1,0 +1,44 @@
+{
+  "name": "Islamic Flutter App",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dart-code.dart-code",
+        "dart-code.flutter",
+        "alexisvt.flutter-snippets",
+        "nash.awesome-flutter-snippets",
+        "usernamehw.errorlens",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "dart.flutterSdkPath": "/opt/flutter",
+        "dart.sdkPath": "/opt/flutter/bin/cache/dart-sdk",
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "remoteUser": "codespace",
+  "remoteEnv": {
+    "DISPLAY": ":99",
+    "LIBGL_ALWAYS_INDIRECT": "1",
+    "FLUTTER_BUILD_NUMBER": "1",
+    "FLUTTER_BUILD_NAME": "1.0.0"
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder}/.pub-cache,target=/home/codespace/.pub-cache,type=bind,consistency=cached"
+  ],
+  "forwardPorts": [],
+  "portsAttributes": {
+    "3000": {
+      "label": "Flutter Web",
+      "onAutoForward": "notify"
+    }
+  }
+}

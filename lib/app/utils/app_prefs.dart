@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:islamic/app/utils/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +10,7 @@ const String prefsLangKey = "LANG_KEY";
 const String themeModeKey = "THEME_MODE_KEY";
 const String bookMarkPageKey = "BOOK_MARK_PAGE_KEY";
 const String bookMarkPageBoolKey = "BOOK_MARK_PAGE_BOOL_KEY";
+const String searchHistoryKey = "SEARCH_HISTORY_KEY";
 
 class AppPreferences {
   final SharedPreferences _preferences = instance<SharedPreferences>();
@@ -22,16 +22,17 @@ class AppPreferences {
     if (language != null && language.isNotEmpty) {
       return language;
     } else {
-      return LanguageType.arabic.getValue();
+      // Default ke Indonesia (menggunakan en.json yang berisi terjemahan Indonesia)
+      return LanguageType.english.getValue();
     }
   }
 
   Future changeAppLanguage() async {
     String currentLanguage = await getAppLanguage();
-    if (currentLanguage == LanguageType.arabic.getValue()) {
-      _preferences.setString(prefsLangKey, LanguageType.english.getValue());
-    } else {
+    if (currentLanguage == LanguageType.english.getValue()) {
       _preferences.setString(prefsLangKey, LanguageType.arabic.getValue());
+    } else {
+      _preferences.setString(prefsLangKey, LanguageType.english.getValue());
     }
   }
 
@@ -47,7 +48,7 @@ class AppPreferences {
   ThemeMode getAppTheme() {
     String? themeMode = _preferences.getString(themeModeKey);
     if (themeMode != null && themeMode.isNotEmpty) {
-      if (themeMode == ThemeType.dark.getValue()) {
+      if (themeMode == 'dark') {
         return ThemeMode.dark;
       } else {
         return ThemeMode.light;
@@ -60,9 +61,9 @@ class AppPreferences {
   void changeAppTheme() {
     ThemeMode currentTheme = getAppTheme();
     if (currentTheme == ThemeMode.dark) {
-      _preferences.setString(themeModeKey, ThemeType.light.getValue());
+      _preferences.setString(themeModeKey, 'light');
     } else {
-      _preferences.setString(themeModeKey, ThemeType.dark.getValue());
+      _preferences.setString(themeModeKey, 'dark');
     }
   }
 
@@ -88,5 +89,31 @@ class AppPreferences {
 
   Future<bool> isThereABookMarked() async {
     return _preferences.getBool(bookMarkPageBoolKey).orFalse();
+  }
+
+  // --- Search History ---
+
+  List<String> getSearchHistory() {
+    return _preferences.getStringList(searchHistoryKey) ?? [];
+  }
+
+  Future<void> addSearchQuery(String query) async {
+    if (query.isEmpty) return;
+
+    List<String> history = getSearchHistory();
+    // Remove if already exists to move it to the front
+    history.remove(query);
+    history.insert(0, query);
+
+    // Limit to 10 latest searches
+    if (history.length > 10) {
+      history = history.sublist(0, 10);
+    }
+
+    await _preferences.setStringList(searchHistoryKey, history);
+  }
+
+  Future<void> clearSearchHistory() async {
+    await _preferences.remove(searchHistoryKey);
   }
 }

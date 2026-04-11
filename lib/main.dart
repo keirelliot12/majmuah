@@ -1,9 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:sqflite/sqflite.dart' as sqflite;
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 import 'app/resources/resources.dart';
 import 'core/app.dart';
@@ -12,15 +15,18 @@ import 'di/di.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (kIsWeb) {
+    sqflite.databaseFactory = databaseFactoryFfiWeb;
+  }
   await EasyLocalization.ensureInitialized();
   await initAppModule();
-  Wakelock.enable();
+  WakelockPlus.enable();
   Bloc.observer = MyBlocObserver();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   runApp(
     EasyLocalization(
       supportedLocales: const [arabicLocale, englishLocale],
-      startLocale: arabicLocale,
+      startLocale: englishLocale,
       path: localisationPath,
       child: Phoenix(
         child: MyApp(),

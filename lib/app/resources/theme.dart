@@ -1,351 +1,203 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:islamic/app/resources/styles_manager.dart';
-import 'package:islamic/app/resources/values.dart';
 
-
-import 'color_manager.dart';
 import 'font_manager.dart';
+import 'values.dart';
 
-enum ThemeType {
-  dark,
-  light,
+class AppColors {
+  // Primary gradient (Fajr)
+  static const Color lemonYellow = Color(0xFFF4F878);
+  static const Color lemonGreen = Color(0xFFB8CF70);
+  static const Color tealGreen = Color(0xFF00897B);
+  static const Color islamicTeal = Color(0xFF2F9E84);
+
+  // Accent / text
+  static const Color darkTeal = Color(0xFF00695C);
+  static const Color darkerTeal = Color(0xFF004D40);
+
+  // Surfaces
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color offWhite = Color(0xFFF7F7F2);
+
+  // Neutrals
+  static const Color gray = Color(0xFF9E9E9E);
+  static const Color black = Color(0xFF111111);
+
+  // Menu item colors (matching reference design)
+  static const Color emerald500 = Color(0xFF10B981);
+  static const Color amber500 = Color(0xFFF59E0B);
+  static const Color indigo500 = Color(0xFF6366F1);
+  static const Color rose500 = Color(0xFFF43F5E);
+  static const Color orange500 = Color(0xFFF97316);
+  static const Color teal600 = Color(0xFF0D9488);
+  static const Color cyan600 = Color(0xFF0891B2);
+  static const Color gray500 = Color(0xFF6B7280);
+  static const Color blue500 = Color(0xFF3B82F6);
 }
 
-const String dark = "dark";
-const String light = "light";
+const String kUiFontFamily = 'Poppins';
+const String kArabicFontFamilyPlaceholder = 'UthmanTN';
 
-ThemeMode currentThemeMode = ThemeMode.system;
-
-extension ThemeTypeExtension on ThemeType {
-  String getValue() {
-    switch (this) {
-      case ThemeType.dark:
-        return dark;
-      case ThemeType.light:
-        return light;
-    }
-  }
-}
-
-ThemeData getApplicationLightTheme() {
-  return ThemeData(
-    useMaterial3: true,
-    primaryColor: ColorManager.lightPrimary,
-    secondaryHeaderColor: ColorManager.white,
-    scaffoldBackgroundColor: ColorManager.lightBackground,
-    canvasColor: ColorManager.lightPrimary,
-    splashColor: ColorManager.gold,
-    disabledColor: ColorManager.lightGrey,
-    shadowColor: ColorManager.lightSecondary,
-    unselectedWidgetColor: ColorManager.lightGrey,
-
-    colorScheme: const ColorScheme(
-      background: ColorManager.lightBackground,
-      brightness: Brightness.light,
-      primary: ColorManager.lightPrimary,
-      onPrimary: ColorManager.lightSecondary,
-      secondary: ColorManager.lightSecondary,
-      onSecondary: ColorManager.lightPrimary,
-      error: ColorManager.error,
-      onError: ColorManager.lightPrimary,
-      onBackground: ColorManager.lightPrimary,
-      surface: ColorManager.lightPrimary,
-      onSurface: ColorManager.lightSecondary,
+final ThemeData lightTheme = ThemeData(
+  useMaterial3: true,
+  fontFamily: kUiFontFamily,
+  scaffoldBackgroundColor: AppColors.offWhite,
+  primaryColor: AppColors.tealGreen,
+  colorScheme: ColorScheme(
+    brightness: Brightness.light,
+    primary: AppColors.tealGreen,
+    onPrimary: AppColors.white,
+    secondary: AppColors.lemonGreen,
+    onSecondary: AppColors.darkerTeal,
+    error: Colors.red,
+    onError: AppColors.white,
+    surface: AppColors.offWhite,
+    onSurface: AppColors.darkerTeal,
+  ),
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    centerTitle: true,
+    iconTheme: const IconThemeData(color: AppColors.darkerTeal),
+    titleTextStyle: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontSize: FontSize.s18,
+      fontWeight: FontWeightsManager.semiBold,
+      color: AppColors.darkerTeal,
     ),
-    cardTheme: CardTheme(
-      color: ColorManager.white,
-      shadowColor: ColorManager.lightSecondary,
-      elevation: AppSize.s4.r,
+  ),
+  cardTheme: CardThemeData(
+    color: AppColors.white,
+    elevation: AppSize.s4.r,
+    shadowColor: Colors.black.withAlpha(25),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(AppSize.s16.r),
     ),
-    appBarTheme: AppBarTheme(
-      color: ColorManager.lightPrimary,
-      centerTitle: true,
-      elevation: AppSize.s4.r,
-      shadowColor: ColorManager.lightSecondary,
-      titleTextStyle: TextStyle(
-        fontFamily: FontConstants.meQuranFontFamily,
-        fontWeight: FontWeightsManager.medium,
-        color: ColorManager.gold,
-        wordSpacing: AppSize.s5.w,
-        letterSpacing: AppSize.s0_1.w,
-      ),
-      iconTheme: const IconThemeData(
-        color: ColorManager.white,
-      ),
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    filled: true,
+    fillColor: AppColors.white,
+    contentPadding: EdgeInsets.all(AppPadding.p16.w),
+    hintStyle: TextStyle(
+      fontFamily: kUiFontFamily,
+      color: AppColors.gray,
+      fontSize: FontSize.s14,
     ),
-
-    iconTheme: IconThemeData(color: ColorManager.black, size: AppSize.s24.r),
-
-    buttonTheme: const ButtonThemeData(
-      shape: StadiumBorder(),
-      buttonColor: ColorManager.lightPrimary,
-      disabledColor: ColorManager.lightGrey,
-      splashColor: ColorManager.gold,
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(AppSize.s12.r),
+      borderSide: BorderSide.none,
     ),
-
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: ColorManager.lightPrimary,
-        disabledBackgroundColor: ColorManager.lightGrey,
-        foregroundColor: ColorManager.gold,
-        disabledForegroundColor: ColorManager.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSize.s14.r),
-        ),
-        textStyle: getSemiBoldStyle(fontSize: FontSize.s14.r),
-      ),
+  ),
+  textTheme: TextTheme(
+    displayLarge: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s32,
+      fontWeight: FontWeightsManager.bold,
+      color: AppColors.darkerTeal,
     ),
-    textTheme: TextTheme(
-      displayLarge:
-          getBoldStyle(fontSize: FontSize.s32, color: ColorManager.gold),
-      displayMedium:
-          getBoldStyle(fontSize: FontSize.s28, color: ColorManager.gold),
-      displaySmall:
-          getBoldStyle(fontSize: FontSize.s24, color: ColorManager.gold),
-
-      //Headline
-      headlineLarge:
-          getSemiBoldStyle(fontSize: FontSize.s20, color: ColorManager.gold),
-      headlineMedium:
-          getSemiBoldStyle(fontSize: FontSize.s18, color: ColorManager.gold),
-      headlineSmall:
-          getSemiBoldStyle(fontSize: FontSize.s16, color: ColorManager.gold),
-
-      //Title
-      titleLarge:
-          getMediumStyle(fontSize: FontSize.s20, color: ColorManager.black),
-      titleMedium:
-          getMediumStyle(fontSize: FontSize.s18, color: ColorManager.black),
-      titleSmall:
-          getMediumStyle(fontSize: FontSize.s16, color: ColorManager.black),
-
-      //Body
-      bodyLarge:
-          getRegularStyle(fontSize: FontSize.s18, color: ColorManager.black),
-      bodyMedium:
-          getRegularStyle(fontSize: FontSize.s16, color: ColorManager.black),
-      bodySmall:
-          getRegularStyle(fontSize: FontSize.s14, color: ColorManager.black),
-
-      //label
-      //text button
-      labelLarge:
-          getRegularStyle(fontSize: FontSize.s14, color: ColorManager.gold),
-      //button label
-      labelMedium:
-          getRegularStyle(fontSize: FontSize.s12, color: ColorManager.gold),
-      //caption
-      labelSmall: getRegularStyle(
-        fontSize: FontSize.s10,
-        color: ColorManager.lightGrey,
-      ),
+    displayMedium: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s28,
+      fontWeight: FontWeightsManager.bold,
+      color: AppColors.darkerTeal,
     ),
-
-    //input decoration theme (text form field)
-    inputDecorationTheme: InputDecorationTheme(
-      contentPadding: EdgeInsets.all(AppPadding.p8.w),
-      hintStyle: getRegularStyle(
-        fontSize: FontSize.s12,
-        color: ColorManager.lightGrey,
-      ),
-      labelStyle: getMediumStyle(
-        fontSize: FontSize.s12,
-        color: ColorManager.lightGrey,
-      ),
-      errorStyle: getRegularStyle(
-        fontSize: FontSize.s10,
-        color: ColorManager.error,
-      ),
-
-      //enabled border style
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ColorManager.lightGrey,
-          width: AppSize.s1_5.r,
-        ),
-        borderRadius: BorderRadius.circular(AppSize.s8.r),
-      ),
-
-      //focused border style
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ColorManager.lightPrimary,
-          width: AppSize.s1_5.r,
-        ),
-        borderRadius: BorderRadius.circular(AppSize.s8.r),
-      ),
-
-      //error border style
-      focusedErrorBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ColorManager.error,
-          width: AppSize.s1_5.r,
-        ),
-        borderRadius: BorderRadius.circular(AppSize.s8.r),
-      ),
+    displaySmall: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s24,
+      fontWeight: FontWeightsManager.bold,
+      color: AppColors.darkerTeal,
     ),
-  );
-}
-
-ThemeData getApplicationLDarkTheme() {
-  return ThemeData(
-    useMaterial3: true,
-
-    //colors
-    primaryColor: ColorManager.darkPrimary,
-    secondaryHeaderColor: ColorManager.darkSecondary,
-    scaffoldBackgroundColor: ColorManager.darkBackground,
-    canvasColor: ColorManager.darkPrimary,
-    splashColor: ColorManager.gold,
-    disabledColor: ColorManager.darkGrey,
-    shadowColor: ColorManager.darkPrimary,
-    unselectedWidgetColor: ColorManager.darkGrey,
-
-    colorScheme: const ColorScheme(
-      background: ColorManager.darkBackground,
-      brightness: Brightness.dark,
-      primary: ColorManager.darkSecondary,
-      onPrimary: ColorManager.darkPrimary,
-      secondary: ColorManager.darkSecondary,
-      onSecondary: ColorManager.darkPrimary,
-      error: ColorManager.error,
-      onError: ColorManager.darkPrimary,
-      onBackground: ColorManager.darkSecondary,
-      surface: ColorManager.darkPrimary,
-      onSurface: ColorManager.darkSecondary,
+    headlineLarge: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s22,
+      fontWeight: FontWeightsManager.semiBold,
+      color: AppColors.darkerTeal,
     ),
-
-    //cardView theme
-    cardTheme: CardTheme(
-        color: ColorManager.white,
-        shadowColor: ColorManager.black,
-        elevation: AppSize.s4.r),
-
-    // appBarTheme
-    appBarTheme: AppBarTheme(
-      color: ColorManager.darkPrimary,
-      centerTitle: true,
-      elevation: AppSize.s4.r,
-      shadowColor: ColorManager.darkPrimary,
-      titleTextStyle: const TextStyle(
-        // fontSize: FontSize.s24,
-        fontFamily: FontConstants.meQuranFontFamily,
-        fontWeight: FontWeightsManager.medium,
-        color: ColorManager.gold,
-        // wordSpacing: 5,
-        // letterSpacing: 0.1,
-      ),
-      iconTheme: const IconThemeData(
-        color: ColorManager.white,
-      ),
+    headlineMedium: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s20,
+      fontWeight: FontWeightsManager.semiBold,
+      color: AppColors.darkerTeal,
     ),
-
-    iconTheme: IconThemeData(color: ColorManager.white, size: AppSize.s24.r),
-
-    //button theme
-    buttonTheme: const ButtonThemeData(
-      shape: StadiumBorder(),
-      buttonColor: ColorManager.darkPrimary,
-      disabledColor: ColorManager.darkGrey,
-      splashColor: ColorManager.darkSecondary,
+    headlineSmall: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s18,
+      fontWeight: FontWeightsManager.semiBold,
+      color: AppColors.darkerTeal,
     ),
-
-    //elevated button theme
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: ColorManager.darkSecondary,
-        disabledBackgroundColor: ColorManager.darkGrey,
-        foregroundColor: ColorManager.gold,
-        disabledForegroundColor: ColorManager.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSize.s14.r),
-        ),
-        textStyle: getSemiBoldStyle(fontSize: FontSize.s14.r),
-      ),
+    titleLarge: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s18,
+      fontWeight: FontWeightsManager.medium,
+      color: AppColors.darkTeal,
     ),
-
-    //text theme
-    textTheme: TextTheme(
-      //Display
-      displayLarge:
-          getBoldStyle(fontSize: FontSize.s32, color: ColorManager.gold),
-      displayMedium:
-          getBoldStyle(fontSize: FontSize.s28, color: ColorManager.gold),
-      displaySmall:
-          getBoldStyle(fontSize: FontSize.s24, color: ColorManager.gold),
-
-      //Headline
-      headlineLarge:
-          getSemiBoldStyle(fontSize: FontSize.s20, color: ColorManager.gold),
-      headlineMedium:
-          getSemiBoldStyle(fontSize: FontSize.s18, color: ColorManager.gold),
-      headlineSmall:
-          getSemiBoldStyle(fontSize: FontSize.s16, color: ColorManager.gold),
-
-      //Title
-      titleLarge: getMediumStyle(fontSize: FontSize.s20),
-      titleMedium: getMediumStyle(fontSize: FontSize.s18),
-      titleSmall: getMediumStyle(fontSize: FontSize.s16),
-
-      //Body
-      bodyLarge: getRegularStyle(fontSize: FontSize.s18),
-      bodyMedium: getRegularStyle(fontSize: FontSize.s16),
-      bodySmall: getRegularStyle(fontSize: FontSize.s14),
-
-      //label
-      labelLarge:
-          getRegularStyle(fontSize: FontSize.s14, color: ColorManager.gold),
-      //text button
-      labelMedium: getRegularStyle(fontSize: FontSize.s12),
-      //button label
-      labelSmall: getRegularStyle(
-          fontSize: FontSize.s10, color: ColorManager.darkGrey), //caption
+    titleMedium: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s16,
+      fontWeight: FontWeightsManager.medium,
+      color: AppColors.darkTeal,
     ),
-
-    //input decoration theme (text form field)
-    inputDecorationTheme: InputDecorationTheme(
-      contentPadding: EdgeInsets.all(AppPadding.p8.w),
-      hintStyle: getRegularStyle(
-        fontSize: FontSize.s14,
-        color: ColorManager.darkGrey,
-      ),
-      labelStyle: getMediumStyle(
-        fontSize: FontSize.s14,
-        color: ColorManager.darkGrey,
-      ),
-      errorStyle: getRegularStyle(
-        fontSize: FontSize.s12,
-        color: ColorManager.error,
-      ),
-
-      //enabled border style
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ColorManager.darkGrey,
-          width: AppSize.s1_5.r,
-        ),
-        borderRadius: BorderRadius.circular(AppSize.s8.r),
-      ),
-
-      //focused border style
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ColorManager.darkSecondary,
-          width: AppSize.s1_5.r,
-        ),
-        borderRadius: BorderRadius.circular(AppSize.s8.r),
-      ),
-
-      //error border style
-      focusedErrorBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ColorManager.error,
-          width: AppSize.s1_5.r,
-        ),
-        borderRadius: BorderRadius.circular(AppSize.s8.r),
-      ),
+    titleSmall: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s14,
+      fontWeight: FontWeightsManager.medium,
+      color: AppColors.darkTeal,
     ),
-  );
-}
+    bodyLarge: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s16,
+      fontWeight: FontWeightsManager.regular,
+      color: AppColors.darkerTeal,
+    ),
+    bodyMedium: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s14,
+      fontWeight: FontWeightsManager.regular,
+      color: AppColors.darkerTeal,
+    ),
+    bodySmall: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s12,
+      fontWeight: FontWeightsManager.regular,
+      color: AppColors.gray,
+    ),
+    labelLarge: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s14,
+      fontWeight: FontWeightsManager.medium,
+      color: AppColors.tealGreen,
+    ),
+    labelMedium: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s12,
+      fontWeight: FontWeightsManager.medium,
+      color: AppColors.tealGreen,
+    ),
+    labelSmall: TextStyle(
+      fontFamily: kUiFontFamily,
+      fontFamilyFallback: const [kArabicFontFamilyPlaceholder],
+      fontSize: FontSize.s10,
+      fontWeight: FontWeightsManager.regular,
+      color: AppColors.gray,
+    ),
+  ),
+);
+
+ThemeData getApplicationLightTheme() => lightTheme;
+
+ThemeData getApplicationLDarkTheme() => lightTheme;
+
