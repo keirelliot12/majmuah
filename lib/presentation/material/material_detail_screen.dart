@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../app/resources/resources.dart';
+import '../../app/utils/app_prefs.dart';
 import '../../di/di.dart';
 import '../../domain/models/material/material_model.dart';
 import '../home/cubit/beranda_material_cubit.dart';
+import 'widgets/reading_paragraph_card.dart';
 
 class MaterialDetailScreen extends StatefulWidget {
   final MaterialModel material;
@@ -22,9 +24,13 @@ class MaterialDetailScreen extends StatefulWidget {
 }
 
 class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
+  final AppPreferences _preferences = instance<AppPreferences>();
+  double _arabicFontScale = defaultArabicReadingFontScale;
+
   @override
   void initState() {
     super.initState();
+    _arabicFontScale = _preferences.getArabicReadingFontScale();
     // Update last read when opened
     WidgetsBinding.instance.addPostFrameCallback((_) {
       instance<BerandaMaterialCubit>().setLastRead(widget.material.id);
@@ -66,15 +72,19 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
                 ),
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    widget.material.arabicTitle,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'UthmanTN',
-                      fontSize: 32.sp,
-                      color: Colors.white,
-                      height: 1.5,
+                  Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: Text(
+                      widget.material.arabicTitle,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontFamily: 'UthmanTN',
+                        fontSize: 32.sp,
+                        color: Colors.white,
+                        height: 1.5,
+                      ),
                     ),
                   ),
                   SizedBox(height: 16.h),
@@ -91,6 +101,20 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
               ),
             ),
 
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                AppPadding.p24.w,
+                AppPadding.p20.h,
+                AppPadding.p24.w,
+                0,
+              ),
+              child: _FontScaleControl(
+                value: _arabicFontScale,
+                categoryColor: widget.categoryColor,
+                onChanged: _setArabicFontScale,
+              ),
+            ),
+
             // Content paragraphs
             Padding(
               padding: EdgeInsets.all(AppPadding.p24.w),
@@ -100,27 +124,10 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
                 itemCount: widget.material.content.length,
                 separatorBuilder: (context, index) => SizedBox(height: 24.h),
                 itemBuilder: (context, index) {
-                  return Container(
-                    padding: EdgeInsets.all(16.w),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(10),
-                          blurRadius: 10.r,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      widget.material.content[index],
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        height: 1.6,
-                        color: Colors.black87,
-                      ),
-                    ),
+                  return ReadingParagraphCard(
+                    text: widget.material.content[index],
+                    categoryColor: widget.categoryColor,
+                    fontScale: _arabicFontScale,
                   );
                 },
               ),
@@ -134,9 +141,71 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
 
   void _copyContent(BuildContext context) {
     final fullContent = widget.material.content.join('\n\n');
-    Clipboard.setData(ClipboardData(text: '${widget.material.title}\n\n$fullContent'));
+    Clipboard.setData(
+      ClipboardData(text: '${widget.material.title}\n\n$fullContent'),
+    );
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Konten disalin ke clipboard')),
+    );
+  }
+
+  Future<void> _setArabicFontScale(double value) async {
+    setState(() {
+      _arabicFontScale = value;
+    });
+
+    await _preferences.setArabicReadingFontScale(value);
+  }
+}
+
+class _FontScaleControl extends StatelessWidget {
+  final double value;
+  final Color categoryColor;
+  final ValueChanged<double> onChanged;
+
+  const _FontScaleControl({
+    required this.value,
+    required this.categoryColor,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: AppPadding.p16.w,
+        vertical: AppPadding.p12.h,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: categoryColor.withAlpha(31)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.format_size, color: categoryColor, size: 22.r),
+          SizedBox(width: 12.w),
+          Text(
+            'Ukuran Arab',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.darkerTeal,
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Slider(
+              value: value,
+              min: minArabicReadingFontScale,
+              max: maxArabicReadingFontScale,
+              divisions: 6,
+              activeColor: categoryColor,
+              label: '${(value * 100).round()}%',
+              onChanged: onChanged,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

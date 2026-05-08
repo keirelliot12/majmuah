@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:islamic/app/utils/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 import '../../di/di.dart';
 import '../resources/resources.dart';
 
@@ -11,6 +10,11 @@ const String themeModeKey = "THEME_MODE_KEY";
 const String bookMarkPageKey = "BOOK_MARK_PAGE_KEY";
 const String bookMarkPageBoolKey = "BOOK_MARK_PAGE_BOOL_KEY";
 const String searchHistoryKey = "SEARCH_HISTORY_KEY";
+const String arabicReadingFontScaleKey = "ARABIC_READING_FONT_SCALE_KEY";
+
+const double minArabicReadingFontScale = 0.8;
+const double maxArabicReadingFontScale = 1.4;
+const double defaultArabicReadingFontScale = 1.0;
 
 class AppPreferences {
   final SharedPreferences _preferences = instance<SharedPreferences>();
@@ -115,5 +119,26 @@ class AppPreferences {
 
   Future<void> clearSearchHistory() async {
     await _preferences.remove(searchHistoryKey);
+  }
+
+  double getArabicReadingFontScale() {
+    final storedScale = _preferences.getDouble(arabicReadingFontScaleKey) ??
+        defaultArabicReadingFontScale;
+
+    return storedScale
+        .clamp(minArabicReadingFontScale, maxArabicReadingFontScale)
+        .toDouble();
+  }
+
+  Future<void> setArabicReadingFontScale(double scale) async {
+    final clampedScale = scale.clamp(
+      minArabicReadingFontScale,
+      maxArabicReadingFontScale,
+    );
+
+    await _preferences.setDouble(
+      arabicReadingFontScaleKey,
+      clampedScale.toDouble(),
+    );
   }
 }
