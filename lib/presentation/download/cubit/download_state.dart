@@ -25,7 +25,8 @@ class DownloadManifestLoaded extends DownloadState {
   });
 
   bool get isQuranFullyDownloaded =>
-      downloadedChunks.length >= manifest.quran.chunks.length;
+      manifest.quran.chunks
+          .every((chunk) => downloadedChunks.contains(chunk.id));
 
   bool get isUpdateAvailable =>
       manifest.version != currentVersion;

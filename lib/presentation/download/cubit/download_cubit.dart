@@ -46,18 +46,23 @@ class DownloadCubit extends Cubit<DownloadState> {
 
     if (state is DownloadManifestLoaded) {
       final manifestState = state as DownloadManifestLoaded;
-      final chunksToDownload = manifestState.manifest.quran.chunks
+      final manifest = manifestState.manifest;
+      final chunksToDownload = manifest.quran.chunks
           .where((c) => !manifestState.downloadedChunks.contains(c.id))
           .toList();
 
       if (chunksToDownload.isEmpty) {
+        await _storageManager.saveManifestVersion(manifest.version);
         emit(const DownloadSuccess("Al-Quran sudah diunduh sepenuhnya."));
         return;
       }
 
       try {
-        int completed = manifestState.downloadedChunks.length;
-        int total = manifestState.manifest.quran.chunks.length;
+        final manifestChunkIds = manifest.quran.chunks.map((chunk) => chunk.id).toSet();
+        int completed = manifestState.downloadedChunks
+            .where((chunkId) => manifestChunkIds.contains(chunkId))
+            .length;
+        int total = manifest.quran.chunks.length;
 
         for (var chunk in chunksToDownload) {
           await _downloadService.downloadQuranChunk(
@@ -73,15 +78,10 @@ class DownloadCubit extends Cubit<DownloadState> {
           completed++;
         }
 
-        // Save version after successful full download
-        if (state is DownloadManifestLoaded) {
-          final manifestState = state as DownloadManifestLoaded;
-          await _storageManager.saveManifestVersion(manifestState.manifest.version);
-        }
+        // Save the original manifest version after every chunk completes.
+        await _storageManager.saveManifestVersion(manifest.version);
 
         emit(const DownloadSuccess("Al-Quran berhasil diunduh."));
-        // Final check to update status
-        checkManifest();
       } catch (e) {
         emit(DownloadFailure("Gagal mengunduh Al-Quran: $e"));
       }

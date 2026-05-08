@@ -8,7 +8,6 @@ import '../download/cubit/download_cubit.dart';
 import '../download/cubit/download_state.dart';
 import '../download/widgets/download_prompt_dialog.dart';
 import '../../di/di.dart';
-import 'widgets/sync_badge_widget.dart';
 
 class DownloadManagerScreen extends StatelessWidget {
   const DownloadManagerScreen({super.key});
@@ -27,21 +26,11 @@ class DownloadManagerScreen extends StatelessWidget {
             return ListView(
               padding: EdgeInsets.all(AppPadding.p16.r),
               children: [
-                // Sync Badge - notifikasi jika ada update
-                SyncBadgeWidget(
-                  onTap: () {
-                    // Implement sync action
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Fitur sinkronisasi sedang dikembangkan")),
-                    );
-                  },
-                ),
-                SizedBox(height: AppSize.s16.h),
                 _buildQuranDownloadCard(context, state),
                 SizedBox(height: AppSize.s16.h),
-                _buildSyncContentCard(context, state),
+                _buildSyncContentCard(),
                 SizedBox(height: AppSize.s16.h),
-                _buildCleanupCard(context),
+                _buildCleanupCard(),
               ],
             );
           },
@@ -54,15 +43,46 @@ class DownloadManagerScreen extends StatelessWidget {
     bool isDownloaded = false;
     double progress = 0;
     String statusText = "Memuat...";
+    Color? statusColor = Colors.grey[600];
+    bool isLoading = state is DownloadInitial || state is DownloadManifestLoading;
+    bool isDownloading = false;
+    bool hasFailure = false;
 
     if (state is DownloadManifestLoaded) {
       isDownloaded = state.isQuranFullyDownloaded;
-      int downloadedCount = state.downloadedChunks.length;
-      int totalChunks = state.manifest.quran.chunks.length;
-      progress = downloadedCount / totalChunks;
+      final manifestChunkIds =
+          state.manifest.quran.chunks.map((chunk) => chunk.id).toSet();
+      final downloadedCount = state.downloadedChunks
+          .where((chunkId) => manifestChunkIds.contains(chunkId))
+          .length;
+      final totalChunks = manifestChunkIds.length;
+      progress = totalChunks == 0
+          ? 0
+          : (downloadedCount / totalChunks).clamp(0.0, 1.0).toDouble();
       statusText = isDownloaded
           ? "Semua halaman sudah terunduh"
           : "$downloadedCount dari $totalChunks bagian terunduh";
+    } else if (state is DownloadProgressState) {
+      isDownloading = true;
+      final chunkProgress = (state.progress.percentage / 100).clamp(0.0, 1.0).toDouble();
+      progress = state.totalChunks == 0
+          ? 0
+          : (((state.currentChunk - 1) + chunkProgress) / state.totalChunks)
+              .clamp(0.0, 1.0)
+              .toDouble();
+      statusText =
+          "Mengunduh bagian ${state.currentChunk} dari ${state.totalChunks} (${state.progress.percentage.toInt()}%)";
+      statusColor = ColorManager.lightPrimary;
+    } else if (state is DownloadSuccess) {
+      isDownloaded = state.message.contains("berhasil diunduh") ||
+          state.message.contains("sudah diunduh");
+      progress = isDownloaded ? 1 : 0;
+      statusText = state.message;
+      statusColor = isDownloaded ? Colors.green : Colors.grey[600];
+    } else if (state is DownloadFailure) {
+      hasFailure = true;
+      statusText = state.message;
+      statusColor = Colors.red;
     }
 
     return Card(
@@ -83,13 +103,14 @@ class DownloadManagerScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 16.h),
-            if (!isDownloaded) LinearProgressIndicator(value: progress),
+            if (!isDownloaded || isDownloading)
+              LinearProgressIndicator(value: isLoading ? null : progress),
             SizedBox(height: 8.h),
-            Text(statusText, style: TextStyle(color: Colors.grey[600], fontSize: 13)),
+            Text(statusText, style: TextStyle(color: statusColor, fontSize: 13)),
             SizedBox(height: 16.h),
             Row(
               children: [
-                if (!isDownloaded)
+                if (!isDownloaded && !isDownloading)
                   Expanded(
                     child: ElevatedButton.icon(
                       onPressed: () {
@@ -106,7 +127,15 @@ class DownloadManagerScreen extends StatelessWidget {
                         );
                       },
                       icon: const Icon(Symbols.download),
-                      label: const Text("Unduh"),
+                      label: Text(hasFailure ? "Coba Lagi" : "Unduh"),
+                    ),
+                  ),
+                if (isDownloading)
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: null,
+                      icon: const Icon(Symbols.downloading),
+                      label: const Text("Mengunduh..."),
                     ),
                   ),
                 if (isDownloaded)
@@ -126,88 +155,36 @@ class DownloadManagerScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSyncContentCard(BuildContext context, DownloadState state) {
-    bool hasUpdate = false;
-    if (state is DownloadManifestLoaded) {
-      hasUpdate = state.isUpdateAvailable;
-    }
-
+  Widget _buildSyncContentCard() {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.s16.r)),
       child: ListTile(
-        leading: Stack(
-          children: [
-            Icon(Symbols.sync, color: Colors.blue, size: 28.sp),
-            if (hasUpdate)
-              Positioned(
-                right: 0,
-                top: 0,
-                child: Container(
-                  width: 10.w,
-                  height: 10.w,
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 1),
-                  ),
-                ),
-              ),
-          ],
-        ),
+        enabled: false,
+        leading: Icon(Icons.sync_disabled, color: Colors.grey, size: 28.sp),
         title: const Text("Pembaruan Konten", style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(
-          hasUpdate
-              ? "✦ Konten baru tersedia"
-              : "Khutbah, Maulid, Kata Mutiara...",
-          style: TextStyle(
-            color: hasUpdate ? Colors.red : Colors.grey[600],
-            fontWeight: hasUpdate ? FontWeight.w600 : FontWeight.normal,
-          ),
+          "Sinkronisasi konten belum tersedia di rilis ini",
+          style: TextStyle(color: Colors.grey[600]),
         ),
-        trailing: hasUpdate
-            ? Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                decoration: BoxDecoration(
-                  color: Colors.red.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(6.r),
-                  border: Border.all(color: Colors.red, width: 1),
-                ),
-                child: Text(
-                  "Baru",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 11.sp,
-                  ),
-                ),
-              )
-            : const Icon(Icons.chevron_right),
-        onTap: () {
-          // Implement sync logic
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Fitur sinkronisasi sedang dikembangkan")),
-          );
-        },
+        trailing: const Icon(Icons.lock_outline, color: Colors.grey),
       ),
     );
   }
 
-  Widget _buildCleanupCard(BuildContext context) {
+  Widget _buildCleanupCard() {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.s16.r)),
       child: ListTile(
-        leading: Icon(Symbols.cleaning_services, color: Colors.orange, size: 28.sp),
+        enabled: false,
+        leading: Icon(Symbols.cleaning_services, color: Colors.grey, size: 28.sp),
         title: const Text("Bersihkan Cache", style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: const Text("Hapus file sementara aplikasi"),
-        onTap: () {
-          // Implement cache cleaning
-        },
+        subtitle: const Text("Pembersihan cache belum tersedia di rilis ini"),
+        trailing: const Icon(Icons.lock_outline, color: Colors.grey),
       ),
     );
   }
 
   void _confirmDeleteQuran(BuildContext context) {
-    // Save reference to cubit before showing dialog
     final cubit = context.read<DownloadCubit>();
 
     showDialog(

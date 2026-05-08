@@ -20,15 +20,6 @@ class DownloadStorageManager {
     return quranDir;
   }
 
-  Future<bool> isQuranFullyDownloaded() async {
-    final status = _prefs.getStringList(_downloadStatusKey) ?? [];
-    // Currently we have 3 parts
-    return status.length >= 3 &&
-           status.contains('part1') &&
-           status.contains('part2') &&
-           status.contains('part3');
-  }
-
   Future<List<String>> getDownloadedChunks() async {
     return _prefs.getStringList(_downloadStatusKey) ?? [];
   }
