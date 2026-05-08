@@ -5,6 +5,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../../../../app/resources/resources.dart';
 import '../../../../di/di.dart';
 import '../../cubit/beranda_category_cubit.dart';
+import '../../helpers/category_visuals.dart';
 
 class AllCategoriesScreen extends StatelessWidget {
   const AllCategoriesScreen({Key? key}) : super(key: key);
@@ -48,7 +49,10 @@ class AllCategoriesScreen extends StatelessWidget {
 
                   // Adjust index for categories (subtract 1 because of "Semua Materi")
                   final category = categories[index - 1];
-                  final categoryColor = category.iconColor ?? AppColors.tealGreen;
+                  final categoryVisual = CategoryVisuals.forCategory(
+                    category.filterKey.isNotEmpty ? category.filterKey : category.title,
+                    fallbackColor: category.iconColor,
+                  );
 
                   return GestureDetector(
                     onTap: () {
@@ -61,7 +65,7 @@ class AllCategoriesScreen extends StatelessWidget {
                           arguments: {
                             'categoryName': category.title,
                             'categoryFilterKey': category.filterKey,
-                            'categoryColor': categoryColor,
+                            'categoryColor': categoryVisual.color,
                           },
                         );
                       }
@@ -81,17 +85,11 @@ class AllCategoriesScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          child: category.iconAsset.endsWith('.png')
-                            ? Image.asset(
-                                category.iconAsset,
-                                width: 40.w,
-                                height: 40.w,
-                                color: categoryColor,
-                                colorBlendMode: BlendMode.srcIn,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    Icon(Icons.category, size: 40.w, color: categoryColor),
-                              )
-                            : Icon(Icons.category, size: 40.w, color: categoryColor),
+                          child: Icon(
+                            categoryVisual.icon,
+                            size: 40.w,
+                            color: categoryVisual.color,
+                          ),
                         ),
                         SizedBox(height: 8.h),
                         Text(

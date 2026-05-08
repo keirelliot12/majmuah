@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:material_symbols_icons/symbols.dart';
 
-import '../../../../../app/resources/resources.dart';
+import '../../../app/resources/resources.dart';
+import '../helpers/category_visuals.dart';
 
 /// Model for menu items
 class MenuItemModel {
@@ -48,56 +48,54 @@ class MenuGridWidget extends StatelessWidget {
   }) {
     return [
       // Row 1
-      MenuItemModel(
+      _createMenuItem(
         title: 'Aurad Sholat',
-        icon: Symbols.mosque,
-        iconColor: AppColors.emerald500,
         onTap: onAuradSholatTap,
       ),
-      MenuItemModel(
+      _createMenuItem(
         title: 'Doa & Tawassul',
-        icon: Symbols.front_hand,
-        iconColor: AppColors.amber500,
         onTap: onDoaTawasulTap,
       ),
-      MenuItemModel(
+      _createMenuItem(
         title: 'Ratib',
-        icon: Symbols.auto_stories,
-        iconColor: AppColors.indigo500,
         onTap: onRatibTap,
       ),
-      MenuItemModel(
+      _createMenuItem(
         title: 'Khutbah',
-        icon: Symbols.record_voice_over,
-        iconColor: AppColors.rose500,
         onTap: onKhutbahTap,
       ),
       // Row 2
-      MenuItemModel(
+      _createMenuItem(
         title: 'Maulid',
-        icon: Symbols.auto_awesome,
-        iconColor: AppColors.orange500,
         onTap: onMaulidTap,
       ),
-      MenuItemModel(
+      _createMenuItem(
         title: 'Tahlil & Ziarah',
-        icon: Symbols.history_edu,
-        iconColor: AppColors.teal600,
         onTap: onTahlilZiarahTap,
       ),
-      MenuItemModel(
+      _createMenuItem(
         title: 'Notes',
-        icon: Symbols.edit_note,
-        iconColor: AppColors.cyan600,
         onTap: onNotesTap,
       ),
-      MenuItemModel(
+      _createMenuItem(
         title: 'Lainnya',
-        icon: Symbols.grid_view,
-        iconColor: AppColors.gray500,
         onTap: onLainnyaTap,
       ),
     ];
+  }
+
+  static MenuItemModel _createMenuItem({
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    final visual = CategoryVisuals.forCategory(title);
+
+    return MenuItemModel(
+      title: title,
+      icon: visual.icon,
+      iconColor: visual.color,
+      onTap: onTap,
+    );
   }
 
   @override
@@ -111,7 +109,7 @@ class MenuGridWidget extends StatelessWidget {
           crossAxisCount: 4,
           mainAxisSpacing: 12.w,
           crossAxisSpacing: 12.w,
-          childAspectRatio: 0.75,
+          childAspectRatio: 0.68,
         ),
         itemCount: menuItems.length,
         itemBuilder: (context, index) {
@@ -152,7 +150,7 @@ class MenuGridWidget extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 6.h),
           // Label with drop shadow for visibility
           Text(
             item.title,
