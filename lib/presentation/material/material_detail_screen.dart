@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../app/resources/resources.dart';
 import '../../app/utils/app_prefs.dart';
@@ -49,12 +47,6 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
         backgroundColor: widget.categoryColor,
         foregroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.copy),
-            onPressed: () => _copyContent(context),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -136,16 +128,6 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
           ],
         ),
       ),
-    );
-  }
-
-  void _copyContent(BuildContext context) {
-    final fullContent = widget.material.content.join('\n\n');
-    Clipboard.setData(
-      ClipboardData(text: '${widget.material.title}\n\n$fullContent'),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Konten disalin ke clipboard')),
     );
   }
 
