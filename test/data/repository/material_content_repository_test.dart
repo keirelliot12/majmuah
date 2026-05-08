@@ -59,6 +59,42 @@ void main() {
       expect(results, isNotEmpty);
     });
 
+    test('should search materials by category and Arabic text', () async {
+      // Arrange
+      final searchRepository = MaterialContentRepository(
+        _FakeMaterialDataSource([
+          MaterialModel(
+            id: 'panduan_wudhu',
+            title: 'Wudhu',
+            arabicTitle: '\u0627\u0644\u0648\u0636\u0648\u0621',
+            category: 'Panduan Ibadah',
+            tags: const ['bersuci'],
+            content: const ['Tata cara bersuci'],
+          ),
+          MaterialModel(
+            id: 'doa_fajar',
+            title: 'Doa Fajar',
+            arabicTitle: '\u062f\u0639\u0627\u0621 \u0627\u0644\u0641\u062c\u0631',
+            category: 'Doa & Tawasul',
+            tags: const ['doa'],
+            content: const ['Bacaan setelah fajar'],
+          ),
+        ]),
+        localDataSource,
+      );
+
+      // Act
+      final categoryResults = await searchRepository.searchMaterials('panduan');
+      final arabicResults =
+          await searchRepository.searchMaterials('\u0627\u0644\u0641\u062c\u0631');
+
+      // Assert
+      expect(categoryResults.map((material) => material.id),
+          contains('panduan_wudhu'));
+      expect(arabicResults.map((material) => material.id),
+          contains('doa_fajar'));
+    });
+
     test('should track last read material', () async {
       // Arrange
       const materialId = 'test_material_id';
@@ -101,4 +137,13 @@ void main() {
       expect(bookmarked, isNotEmpty);
     });
   });
+}
+
+class _FakeMaterialDataSource extends MaterialDataSource {
+  _FakeMaterialDataSource(this.materials);
+
+  final List<MaterialModel> materials;
+
+  @override
+  Future<List<MaterialModel>> loadMaterials() async => materials;
 }

@@ -36,11 +36,13 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
   }
 
   void _onSearchChanged(String query) {
+    setState(() {});
     if (_debounce?.isActive ?? false) _debounce!.cancel();
+    final trimmedQuery = query.trim();
+    if (trimmedQuery.isEmpty) return;
+
     _debounce = Timer(const Duration(milliseconds: 300), () {
-      if (query.isNotEmpty) {
-        context.read<BerandaMaterialCubit>().searchMaterials(query);
-      }
+      context.read<BerandaMaterialCubit>().searchMaterials(trimmedQuery);
     });
   }
 
@@ -89,7 +91,7 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
         children: [
           _buildHeader(),
           Expanded(
-            child: _searchController.text.isEmpty
+            child: _searchController.text.trim().isEmpty
               ? _buildHistoryPlaceholder()
               : _buildSearchResults(),
           ),

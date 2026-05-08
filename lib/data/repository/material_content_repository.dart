@@ -58,6 +58,7 @@ class MaterialContentRepository {
       return allMaterials
           .where((material) =>
               material.title.toLowerCase().contains(lowerQuery) ||
+              material.category.toLowerCase().contains(lowerQuery) ||
               material.arabicTitle.contains(query) ||
               material.tags.any((tag) =>
                   tag.toLowerCase().contains(lowerQuery)) ||
