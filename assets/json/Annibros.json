@@ -1866,5 +1866,71 @@
     "content": [
       "اَللّٰهُمَّ يَادَائِمَ الْفَضْلِ عَلَى الْبَرِيَّةِ يَابَاسِطَ الْيَدَيْنِ بِالْعَطِيَّةِ يَاصَاحِبَ الْمَوَاهِبِ السَّنِيَّةِ صَلِّ وَسَلِّمْ عَلٰى سَيِّدِنَا مُحَمَّدٍ خَيْرِ الْوَرٰى سَجِيَّةِ وَأَرِنَا طَلْقَةَ الْبَهِيَّةِ وَاغْفِرْ لَنَا يَاذَا الْعُلٰى فٍيْ هٰذِهِ الْعَشِيَّةِ۞"
     ]
+  },
+  {
+    "id": "kbihu_nur_multazam_profil",
+    "title": "Profil",
+    "arabic_title": "",
+    "category": "KBIHU Nur Multazam",
+    "tags": ["kbihu", "nur multazam", "profil"],
+    "content": [
+      "Profil KBIHU Nur Multazam.",
+      "Bagian ini memuat pengenalan KBIHU Nur Multazam, layanan bimbingan jamaah, dan informasi kelembagaan."
+    ]
+  },
+  {
+    "id": "kbihu_nur_multazam_manasik_haji",
+    "title": "Manasik Haji",
+    "arabic_title": "",
+    "category": "KBIHU Nur Multazam",
+    "tags": ["kbihu", "nur multazam", "manasik", "haji"],
+    "content": [
+      "Manasik Haji.",
+      "Panduan ringkas untuk jamaah dalam memahami tahapan, adab, dan persiapan ibadah haji bersama KBIHU Nur Multazam."
+    ]
+  },
+  {
+    "id": "kbihu_nur_multazam_manasik_umroh",
+    "title": "Manasik Umroh",
+    "arabic_title": "",
+    "category": "KBIHU Nur Multazam",
+    "tags": ["kbihu", "nur multazam", "manasik", "umroh"],
+    "content": [
+      "Manasik Umroh.",
+      "Panduan ringkas untuk jamaah dalam memahami tahapan, adab, dan persiapan ibadah umroh bersama KBIHU Nur Multazam."
+    ]
+  },
+  {
+    "id": "kbihu_nur_multazam_tempat_sejarah",
+    "title": "Tempat Sejarah",
+    "arabic_title": "",
+    "category": "KBIHU Nur Multazam",
+    "tags": ["kbihu", "nur multazam", "tempat sejarah"],
+    "content": [
+      "Tempat Sejarah.",
+      "Catatan pengenalan tempat-tempat bersejarah yang relevan dengan perjalanan ibadah dan ziarah jamaah."
+    ]
+  },
+  {
+    "id": "kbihu_nur_multazam_doa",
+    "title": "Do'a",
+    "arabic_title": "",
+    "category": "KBIHU Nur Multazam",
+    "tags": ["kbihu", "nur multazam", "do'a"],
+    "content": [
+      "Do'a.",
+      "Kumpulan panduan do'a untuk mendampingi perjalanan dan ibadah jamaah KBIHU Nur Multazam."
+    ]
+  },
+  {
+    "id": "kbihu_nur_multazam_dialog_dan_hikmah",
+    "title": "Dialog dan Hikmah",
+    "arabic_title": "",
+    "category": "KBIHU Nur Multazam",
+    "tags": ["kbihu", "nur multazam", "dialog", "hikmah"],
+    "content": [
+      "Dialog dan Hikmah.",
+      "Ruang bacaan untuk dialog, nasihat, dan hikmah perjalanan ibadah bersama KBIHU Nur Multazam."
+    ]
   }
 ]

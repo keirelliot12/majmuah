@@ -90,6 +90,41 @@ class CategoryVisuals {
           icon: Symbols.record_voice_over,
           color: AppColors.rose500,
         );
+      case 'kbihu nur multazam':
+        return const CategoryVisual(
+          icon: Icons.account_balance_rounded,
+          color: AppColors.blue500,
+        );
+      case 'profil':
+        return const CategoryVisual(
+          icon: Icons.badge_outlined,
+          color: AppColors.blue500,
+        );
+      case 'manasik haji':
+        return const CategoryVisual(
+          icon: Icons.account_balance_outlined,
+          color: AppColors.tealGreen,
+        );
+      case 'manasik umroh':
+        return const CategoryVisual(
+          icon: Icons.route_outlined,
+          color: AppColors.emerald500,
+        );
+      case 'tempat sejarah':
+        return const CategoryVisual(
+          icon: Icons.history_edu_outlined,
+          color: AppColors.amber500,
+        );
+      case "do'a":
+        return const CategoryVisual(
+          icon: Icons.volunteer_activism_outlined,
+          color: AppColors.rose500,
+        );
+      case 'dialog dan hikmah':
+        return const CategoryVisual(
+          icon: Icons.forum_outlined,
+          color: AppColors.indigo500,
+        );
       case 'lainnya':
         return const CategoryVisual(
           icon: Symbols.grid_view,

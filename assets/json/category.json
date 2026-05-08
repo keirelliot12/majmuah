@@ -103,6 +103,14 @@
       "route": "/category",
       "filter_key": "Khutbah",
       "color_hex": "F43F5E"
+    },
+    {
+      "id": 15,
+      "title": "KBIHU Nur Multazam",
+      "icon_asset": "assets/icons/kbihu_nur_multazam.png",
+      "route": "/category",
+      "filter_key": "KBIHU Nur Multazam",
+      "color_hex": "3B82F6"
     }
   ]
 }

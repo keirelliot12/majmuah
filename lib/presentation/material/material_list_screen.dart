@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../app/resources/resources.dart';
 import '../../di/di.dart';
 import '../../domain/models/material/material_model.dart';
+import '../home/helpers/category_visuals.dart';
 import '../home/cubit/beranda_material_cubit.dart';
 import '../home/cubit/beranda_material_state.dart';
 
@@ -110,6 +111,14 @@ class _MaterialCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final itemVisual = material.category == 'KBIHU Nur Multazam'
+        ? CategoryVisuals.forCategory(
+            material.title,
+            fallbackColor: categoryColor,
+          )
+        : null;
+    final itemColor = itemVisual?.color ?? categoryColor;
+
     return Card(
       margin: EdgeInsets.only(bottom: AppPadding.p12.h),
       elevation: 2,
@@ -125,10 +134,14 @@ class _MaterialCard extends StatelessWidget {
                 width: 50.w,
                 height: 50.h,
                 decoration: BoxDecoration(
-                  color: categoryColor.withAlpha(51),
+                  color: itemColor.withAlpha(51),
                   borderRadius: BorderRadius.circular(AppSize.s8.r),
                 ),
-                child: Icon(Icons.article_outlined, color: categoryColor, size: AppSize.s24.r),
+                child: Icon(
+                  itemVisual?.icon ?? Icons.article_outlined,
+                  color: itemColor,
+                  size: AppSize.s24.r,
+                ),
               ),
               SizedBox(width: AppPadding.p16.w),
               Expanded(
