@@ -26,29 +26,36 @@ class SearchBarWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 24.0.w,
-          vertical: 8.0.h,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 22.0.w, vertical: 7.0.h),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(50.r), // More rounded like reference
+          borderRadius: BorderRadius.circular(18.r),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: 24.0.w,
-                vertical: 14.0.h,
+                horizontal: 16.0.w,
+                vertical: 13.0.h,
               ),
               decoration: BoxDecoration(
-                color: Colors.white.withAlpha(102), // ~40% white
-                borderRadius: BorderRadius.circular(50.r),
-                border: Border.all(color: Colors.white.withAlpha(51), width: 1),
+                color: AppColors.white.withAlpha(242),
+                borderRadius: BorderRadius.circular(18.r),
+                border: Border.all(
+                  color: AppColors.darkTeal.withAlpha(16),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.darkerTeal.withAlpha(16),
+                    blurRadius: 14.r,
+                    offset: Offset(0, 6.r),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
                   Icon(
                     Symbols.search,
-                    color: Colors.grey.shade600,
+                    color: AppColors.darkTeal.withAlpha(178),
                     size: 22.0.r,
                   ),
                   SizedBox(width: 12.0.w),
@@ -56,10 +63,10 @@ class SearchBarWidget extends StatelessWidget {
                     child: Text(
                       hintText,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey.shade600,
-                            fontSize: FontSize.s14,
-                            fontWeight: FontWeightsManager.medium,
-                          ),
+                        color: AppColors.darkerTeal.withAlpha(166),
+                        fontSize: FontSize.s14,
+                        fontWeight: FontWeightsManager.medium,
+                      ),
                     ),
                   ),
                 ],

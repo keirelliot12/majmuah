@@ -4,20 +4,17 @@ import 'package:flutter/material.dart';
 
 import '../../../../../app/resources/resources.dart';
 import '../screens/adhkar/view/adhkar_screen.dart';
-import '../screens/hadith/view/hadith_screen.dart';
 import '../screens/prayer_times/view/prayer_timings_screen.dart';
 import '../screens/quran/view/quran_screen.dart';
 import '../screens/settings/view/settings_screen.dart';
-import '../view/home_view.dart';
 
 class HomeViewModel {
   HomeViewModel();
 
   List<Widget> screens = [
     // Beranda screen is now built by HomeView._buildBerandaScreen(), not a separate screen widget
-    SizedBox.shrink(),  // Placeholder - not used, body is built dynamically
+    SizedBox.shrink(), // Placeholder - not used, body is built dynamically
     const QuranScreen(),
-    const HadithScreen(),
     const PrayerTimingsScreen(),
     const AdhkarScreen(),
     const SettingsScreen(),
@@ -26,7 +23,6 @@ class HomeViewModel {
   List<String> titles = [
     AppStrings.home.tr(),
     AppStrings.quran.tr(),
-    AppStrings.nawawi.tr(),
     AppStrings.prayerTimes.tr(),
     AppStrings.adhkarDoaa.tr(),
     AppStrings.settings.tr(),

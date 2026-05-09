@@ -1,4 +1,3 @@
-
 import '../../domain/models/quran/quran_search_model.dart';
 
 sealed class Constants {
@@ -6,10 +5,9 @@ sealed class Constants {
   static const int zero = 0;
   static const int homeIndex = 0;
   static const int quranIndex = 1;
-  static const int hadithIndex = 2;
-  static const int prayerTimingsIndex = 3;
-  static const int adhkarIndex = 4;
-  static const int settingsIndex = 5;
+  static const int prayerTimingsIndex = 2;
+  static const int adhkarIndex = 3;
+  static const int settingsIndex = 4;
   static const int prayerNumbers = 6;
   static const int nextPageDuration = 500;
   static const String baseUrl = "https://api.aladhan.com/v1/timingsByCity/";
@@ -149,5 +147,5 @@ Map<int, String> surahsNames = {
   111: "المسد",
   112: "الإخلاص",
   113: "الفلق",
-  114: "الناس"
+  114: "الناس",
 };

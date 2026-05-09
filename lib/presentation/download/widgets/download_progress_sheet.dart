@@ -2,8 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import '../../../../app/resources/color_manager.dart';
-import '../../../../app/resources/values.dart';
+import '../../../../app/resources/resources.dart';
 import '../../../domain/models/download/download_status.dart';
 
 class DownloadProgressSheet extends StatelessWidget {
@@ -27,9 +26,9 @@ class DownloadProgressSheet extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(AppPadding.p24.r),
           decoration: BoxDecoration(
-            color: Colors.white.withAlpha(200),
-            borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
-            border: Border.all(color: Colors.white.withAlpha(100), width: 1.5),
+            color: AppColors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
+            border: Border.all(color: AppColors.tealGreen.withAlpha(20), width: 1),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -38,7 +37,7 @@ class DownloadProgressSheet extends StatelessWidget {
                 width: 40.w,
                 height: 4.h,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: AppColors.darkTeal.withAlpha(45),
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
@@ -48,12 +47,12 @@ class DownloadProgressSheet extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(12.r),
                     decoration: BoxDecoration(
-                      color: ColorManager.lightPrimary.withAlpha(30),
-                      borderRadius: BorderRadius.circular(12.r),
+                      color: AppColors.lemonYellow.withAlpha(55),
+                      borderRadius: BorderRadius.circular(14.r),
                     ),
                     child: Icon(
                       Symbols.downloading,
-                      color: ColorManager.lightPrimary,
+                      color: AppColors.tealGreen,
                       size: 24.sp,
                     ),
                   ),
@@ -66,14 +65,15 @@ class DownloadProgressSheet extends StatelessWidget {
                           "Mengunduh Al-Quran",
                           style: TextStyle(
                             fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.darkerTeal,
                           ),
                         ),
                         Text(
                           "Bagian $currentChunk dari $totalChunks",
                           style: TextStyle(
                             fontSize: 12.sp,
-                            color: Colors.black54,
+                            color: AppColors.darkerTeal.withAlpha(145),
                           ),
                         ),
                       ],
@@ -83,8 +83,8 @@ class DownloadProgressSheet extends StatelessWidget {
                     "${progress.percentage.toInt()}%",
                     style: TextStyle(
                       fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: ColorManager.lightPrimary,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.tealGreen,
                     ),
                   ),
                 ],
@@ -94,8 +94,8 @@ class DownloadProgressSheet extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.r),
                 child: LinearProgressIndicator(
                   value: progress.percentage / 100,
-                  backgroundColor: ColorManager.lightPrimary.withAlpha(30),
-                  valueColor: AlwaysStoppedAnimation<Color>(ColorManager.lightPrimary),
+                  backgroundColor: AppColors.tealGreen.withAlpha(24),
+                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.tealGreen),
                   minHeight: 12.h,
                 ),
               ),
@@ -105,11 +105,11 @@ class DownloadProgressSheet extends StatelessWidget {
                 children: [
                   Text(
                     _formatBytes(progress.bytesReceived),
-                    style: TextStyle(fontSize: 12.sp, color: Colors.black54),
+                    style: TextStyle(fontSize: 12.sp, color: AppColors.darkerTeal.withAlpha(145)),
                   ),
                   Text(
                     _formatBytes(progress.totalBytes),
-                    style: TextStyle(fontSize: 12.sp, color: Colors.black54),
+                    style: TextStyle(fontSize: 12.sp, color: AppColors.darkerTeal.withAlpha(145)),
                   ),
                 ],
               ),
@@ -119,7 +119,7 @@ class DownloadProgressSheet extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11.sp,
                   fontStyle: FontStyle.italic,
-                  color: Colors.grey[500],
+                  color: AppColors.darkerTeal.withAlpha(120),
                 ),
               ),
               SizedBox(height: 16.h),

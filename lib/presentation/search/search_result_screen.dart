@@ -18,7 +18,7 @@ class SearchResultScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.offWhite,
         appBar: AppBar(
-          title: Text('Cari: $query'),
+          title: Text('Hasil pencarian'),
           centerTitle: true,
           backgroundColor: AppColors.white,
           foregroundColor: AppColors.darkTeal,
@@ -35,16 +35,59 @@ class SearchResultScreen extends StatelessWidget {
               }
               return ListView.builder(
                 padding: EdgeInsets.all(AppPadding.p16.w),
-                itemCount: materials.length,
+                itemCount: materials.length + 1,
                 itemBuilder: (context, index) {
-                  final material = materials[index];
-                  return Card(
+                  if (index == 0) {
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 14.h),
+                      child: Text(
+                        'Menampilkan hasil untuk "$query"',
+                        style: TextStyle(
+                          color: AppColors.darkerTeal.withAlpha(150),
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    );
+                  }
+
+                  final material = materials[index - 1];
+                  return Container(
                     margin: EdgeInsets.only(bottom: 12.h),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(16.r),
+                      border: Border.all(color: AppColors.darkTeal.withAlpha(14)),
+                    ),
                     child: ListTile(
-                      title: Text(material.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text(material.category, style: TextStyle(color: AppColors.tealGreen, fontSize: 12.sp)),
-                      trailing: const Icon(Icons.chevron_right),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                      leading: Container(
+                        width: 42.r,
+                        height: 42.r,
+                        decoration: BoxDecoration(
+                          color: AppColors.tealGreen.withAlpha(18),
+                          borderRadius: BorderRadius.circular(14.r),
+                        ),
+                        child: const Icon(Icons.auto_stories_outlined, color: AppColors.tealGreen),
+                      ),
+                      title: Text(
+                        material.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.darkerTeal,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(
+                        material.category,
+                        style: TextStyle(
+                          color: AppColors.darkTeal.withAlpha(150),
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      trailing: Icon(Icons.chevron_right, color: AppColors.darkerTeal.withAlpha(120)),
                       onTap: () {
                         Navigator.pushNamed(
                           context,
@@ -69,13 +112,37 @@ class SearchResultScreen extends StatelessWidget {
 
   Widget _buildEmptyState() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.search_off, size: 80.r, color: Colors.grey[300]),
-          SizedBox(height: 16.h),
-          const Text('Hasil tidak ditemukan', style: TextStyle(color: Colors.grey)),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 32.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 88.r,
+              height: 88.r,
+              decoration: BoxDecoration(
+                color: AppColors.lemonYellow.withAlpha(55),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.search_off, size: 42.r, color: AppColors.tealGreen),
+            ),
+            SizedBox(height: 16.h),
+            const Text(
+              'Belum ada hasil',
+              style: TextStyle(
+                color: AppColors.darkerTeal,
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(height: 6.h),
+            Text(
+              'Coba kata kunci lain atau periksa kembali ejaan pencarian.',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: AppColors.darkerTeal.withAlpha(140), fontSize: 12.sp),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +7,7 @@ import 'package:islamic/app/resources/resources.dart';
 import 'package:islamic/app/utils/constants.dart';
 import 'package:islamic/presentation/home/cubit/home_cubit.dart';
 import 'package:islamic/presentation/home/screens/prayer_times/cubit/prayer_timings_cubit.dart';
+import '../../components/app_brand_logo.dart';
 
 /// Displays the header section of the home page with location, date, and notification bell.
 ///
@@ -21,10 +21,7 @@ class HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 24.0.w,
-        vertical: 16.0.h,
-      ),
+      padding: EdgeInsets.fromLTRB(22.0.w, 14.0.h, 22.0.w, 10.0.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,18 +45,18 @@ class HomeHeader extends StatelessWidget {
                     children: [
                       Icon(
                         Symbols.location_on,
-                        color: Colors.grey.shade800,
+                        color: AppColors.lemonYellow.withAlpha(230),
                         size: 16.0.r,
                       ),
                       SizedBox(width: 4.0.w),
                       Text(
                         locationText,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.grey.shade800,
-                              fontWeight: FontWeightsManager.bold,
-                              fontSize: 12.0.sp,
-                              letterSpacing: 0.5,
-                            ),
+                          color: AppColors.white.withAlpha(238),
+                          fontWeight: FontWeightsManager.bold,
+                          fontSize: 12.0.sp,
+                          letterSpacing: 0,
+                        ),
                       ),
                     ],
                   );
@@ -67,72 +64,74 @@ class HomeHeader extends StatelessWidget {
               ),
               SizedBox(height: 4.0.h),
 
-              // Date from PrayerTimingsCubit
               BlocBuilder<PrayerTimingsCubit, PrayerTimingsState>(
                 builder: (context, state) {
                   final cubit = PrayerTimingsCubit.get(context);
-                  final timings = cubit.prayerTimingsModel.data;
+                  final date = cubit.prayerTimingsModel.data?.date;
+                  final hijri = date?.hijri;
+                  final hijriText = hijri == null
+                      ? 'Kalender Hijriyah memuat...'
+                      : '${hijri.day} ${hijri.month?.en ?? ''} ${hijri.year} H';
+                  final gregorianText = _formatGregorianDate();
 
-                  String dayName = '';
-                  String hijriDate = '';
-
-                  if (timings != null && timings.date != null) {
-                    final hijri = timings.date!.hijri;
-                    if (hijri != null) {
-                      dayName = hijri.weekday?.en ?? '';
-                      hijriDate = '${hijri.day} ${hijri.month?.en} ${hijri.year} H';
-                    }
-                  }
-
-                  // Fallback to local system date if API data not available
-                  if (dayName.isEmpty || hijriDate.isEmpty) {
-                    final now = DateTime.now();
-                    final List<String> dayNames = [
-                      'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Ahad'
-                    ];
-                    final List<String> monthNames = [
-                      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-                    ];
-                    dayName = dayNames[now.weekday - 1];
-                    hijriDate = '${now.day} ${monthNames[now.month - 1]} ${now.year}';
-                  }
-
-                  return Text(
-                    '$dayName, $hijriDate',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey.shade700,
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        hijriText,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.limeGold.withAlpha(230),
+                          fontWeight: FontWeightsManager.bold,
+                          fontSize: 12.0.sp,
+                        ),
+                      ),
+                      SizedBox(height: 2.h),
+                      Text(
+                        gregorianText,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.white.withAlpha(194),
                           fontWeight: FontWeightsManager.medium,
                           fontSize: 12.0.sp,
                         ),
+                      ),
+                    ],
                   );
                 },
               ),
             ],
           ),
 
-          // Right: Notification Bell with glassmorphism
-          ClipRRect(
-            borderRadius: BorderRadius.circular(50.r),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                padding: EdgeInsets.all(12.0.w),
-                decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(102),
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withAlpha(51), width: 1),
-                ),
-                child: Icon(
-                  Symbols.notifications,
-                  color: Colors.grey.shade800,
-                  size: 24.0.r,
-                ),
-              ),
-            ),
-          ),
+          const AppBrandLogo(size: 48),
         ],
       ),
     );
+  }
+
+  String _formatGregorianDate() {
+    final now = DateTime.now();
+    const dayNames = [
+      'Senin',
+      'Selasa',
+      'Rabu',
+      'Kamis',
+      'Jumat',
+      'Sabtu',
+      'Ahad',
+    ];
+    const monthNames = [
+      'Januari',
+      'Februari',
+      'Maret',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Agustus',
+      'September',
+      'Oktober',
+      'November',
+      'Desember',
+    ];
+    return '${dayNames[now.weekday - 1]}, ${now.day} ${monthNames[now.month - 1]} ${now.year}';
   }
 }

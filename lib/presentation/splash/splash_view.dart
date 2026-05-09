@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:material_symbols_icons/symbols.dart';
 import '../../app/resources/resources.dart';
+import '../components/app_brand_logo.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
@@ -39,7 +39,6 @@ class _SplashViewState extends State<SplashView> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Gradient
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -48,38 +47,12 @@ class _SplashViewState extends State<SplashView> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color(0xFFFEF9C3),
-                  Color(0xFFFDE047),
-                  Color(0xFF0D9488),
-                  Color(0xFF134E4A),
+                  AppColors.background,
+                  AppColors.surfaceMuted,
+                  AppColors.emerald,
+                  AppColors.deepEmerald,
                 ],
-                stops: [0.0, 0.15, 0.7, 1.0],
-              ),
-            ),
-          ),
-
-          // Decorative blur elements
-          Positioned(
-            top: -50.h,
-            right: -50.w,
-            child: Container(
-              width: 250.r,
-              height: 250.r,
-              decoration: BoxDecoration(
-                color: Colors.white.withAlpha(25),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 50.h,
-            left: -50.w,
-            child: Container(
-              width: 180.r,
-              height: 180.r,
-              decoration: BoxDecoration(
-                color: const Color(0xFF134E4A).withAlpha(50),
-                shape: BoxShape.circle,
+                stops: [0.0, 0.34, 0.78, 1.0],
               ),
             ),
           ),
@@ -93,41 +66,29 @@ class _SplashViewState extends State<SplashView> {
                 children: [
                   const SizedBox(), // Placeholder for top space
 
-                  // Logo and Title
                   Column(
                     children: [
-                      // Configurable Logo (easily change to Image.asset)
+                      const AppBrandLogo(size: 116),
+                      SizedBox(height: 18.h),
                       Container(
-                        padding: EdgeInsets.only(bottom: 16.h),
-                        child: Icon(
-                          Symbols.mosque,
-                          size: 100.r,
-                          color: const Color(0xFF064E3B),
-                          fill: 1.0,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 18.w,
+                          vertical: 8.h,
                         ),
-                        // To use an image instead, replace Icon above with:
-                        // child: Image.asset(ImageAsset.launcherIcon, width: 100.r, height: 100.r),
-                      ),
-
-                      Text(
-                        'AN-NIBROS',
-                        style: TextStyle(
-                          fontSize: 36.sp,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: -1,
-                          color: const Color(0xFF064E3B),
+                        decoration: BoxDecoration(
+                          color: AppColors.white.withAlpha(225),
+                          borderRadius: BorderRadius.circular(18.r),
+                          border: Border.all(
+                            color: AppColors.limeGold.withAlpha(120),
+                          ),
                         ),
-                      ),
-
-                      SizedBox(height: 4.h),
-
-                      Text(
-                        'SPIRITUAL COMPANION',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 2,
-                          color: const Color(0xFF064E3B).withAlpha(180),
+                        child: Text(
+                          'Amaliyah & Aurad Salafus Sholeh',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.deepEmerald,
+                          ),
                         ),
                       ),
                     ],
@@ -143,7 +104,9 @@ class _SplashViewState extends State<SplashView> {
                           height: 24.r,
                           child: const CircularProgressIndicator(
                             strokeWidth: 3,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.limeGold,
+                            ),
                           ),
                         ),
                         SizedBox(height: 24.h),

@@ -20,67 +20,34 @@ class MenuItemModel {
   });
 }
 
-/// Displays a 4x2 grid of menu items for the home screen.
-///
-/// Features:
-/// - 8 menu items in a 4-column grid (2 rows)
-/// - White card styling with iOS shadow
-/// - Material Symbols icons
-/// - White text labels with drop shadow for visibility
+/// Displays a compact 4x2 grid of menu items for the home screen.
 class MenuGridWidget extends StatelessWidget {
   final List<MenuItemModel> menuItems;
 
-  const MenuGridWidget({
-    Key? key,
-    required this.menuItems,
-  }) : super(key: key);
+  const MenuGridWidget({Key? key, required this.menuItems}) : super(key: key);
 
   /// Creates default menu items matching the reference design
   static List<MenuItemModel> createDefaultMenuItems({
-    required VoidCallback onAuradSholatTap,
-    required VoidCallback onDoaTawasulTap,
-    required VoidCallback onRatibTap,
-    required VoidCallback onKhutbahTap,
+    required VoidCallback onAuradDoaTap,
+    required VoidCallback onHizibRatibTap,
+    required VoidCallback onPujiBilalTap,
+    required VoidCallback onAmalanHijriyahTap,
     required VoidCallback onMaulidTap,
     required VoidCallback onTahlilZiarahTap,
-    required VoidCallback onNotesTap,
+    required VoidCallback onKbihuTap,
     required VoidCallback onLainnyaTap,
   }) {
     return [
       // Row 1
-      _createMenuItem(
-        title: 'Aurad Sholat',
-        onTap: onAuradSholatTap,
-      ),
-      _createMenuItem(
-        title: 'Doa & Tawassul',
-        onTap: onDoaTawasulTap,
-      ),
-      _createMenuItem(
-        title: 'Ratib',
-        onTap: onRatibTap,
-      ),
-      _createMenuItem(
-        title: 'Khutbah',
-        onTap: onKhutbahTap,
-      ),
+      _createMenuItem(title: "Aurad & Doa'", onTap: onAuradDoaTap),
+      _createMenuItem(title: 'Hizib & Ratib', onTap: onHizibRatibTap),
+      _createMenuItem(title: 'Puji & Bilal', onTap: onPujiBilalTap),
+      _createMenuItem(title: 'Amalan Hijriyah', onTap: onAmalanHijriyahTap),
       // Row 2
-      _createMenuItem(
-        title: 'Maulid',
-        onTap: onMaulidTap,
-      ),
-      _createMenuItem(
-        title: 'Tahlil & Ziarah',
-        onTap: onTahlilZiarahTap,
-      ),
-      _createMenuItem(
-        title: 'Notes',
-        onTap: onNotesTap,
-      ),
-      _createMenuItem(
-        title: 'Lainnya',
-        onTap: onLainnyaTap,
-      ),
+      _createMenuItem(title: 'Maulid', onTap: onMaulidTap),
+      _createMenuItem(title: 'Tahlil & Ziarah', onTap: onTahlilZiarahTap),
+      _createMenuItem(title: 'KBIHU', onTap: onKbihuTap),
+      _createMenuItem(title: 'Lainnya', onTap: onLainnyaTap),
     ];
   }
 
@@ -101,15 +68,15 @@ class MenuGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppPadding.p24.w),
+      padding: EdgeInsets.symmetric(horizontal: 22.w),
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
-          mainAxisSpacing: 12.w,
-          crossAxisSpacing: 12.w,
-          childAspectRatio: 0.68,
+          mainAxisSpacing: 10.w,
+          crossAxisSpacing: 10.w,
+          childAspectRatio: 0.72,
         ),
         itemCount: menuItems.length,
         itemBuilder: (context, index) {
@@ -126,24 +93,37 @@ class MenuGridWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Icon card with glassmorphism
           AspectRatio(
             aspectRatio: 1,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.r),
+              borderRadius: BorderRadius.circular(18.r),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white.withAlpha(102), // ~40% white
-                    borderRadius: BorderRadius.circular(20.r),
-                    border: Border.all(color: Colors.white.withAlpha(51), width: 1),
+                    color: AppColors.white.withAlpha(246),
+                    borderRadius: BorderRadius.circular(18.r),
+                    border: Border.all(
+                      color: AppColors.darkTeal.withAlpha(14),
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.darkerTeal.withAlpha(12),
+                        blurRadius: 12.r,
+                        offset: Offset(0, 5.r),
+                      ),
+                    ],
                   ),
                   child: Center(
-                    child: Icon(
-                      item.icon,
-                      size: 28.r,
-                      color: item.iconColor,
+                    child: Container(
+                      width: 36.w,
+                      height: 36.w,
+                      decoration: BoxDecoration(
+                        color: item.iconColor.withAlpha(24),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(item.icon, size: 22.r, color: item.iconColor),
                     ),
                   ),
                 ),
@@ -151,7 +131,6 @@ class MenuGridWidget extends StatelessWidget {
             ),
           ),
           SizedBox(height: 6.h),
-          // Label with drop shadow for visibility
           Text(
             item.title,
             textAlign: TextAlign.center,
@@ -160,14 +139,7 @@ class MenuGridWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 10.sp,
               fontWeight: FontWeightsManager.bold,
-              color: Colors.white,
-              shadows: [
-                Shadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 4,
-                  offset: const Offset(0, 1),
-                ),
-              ],
+              color: AppColors.darkerTeal,
             ),
           ),
         ],

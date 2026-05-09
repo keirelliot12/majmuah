@@ -22,17 +22,17 @@ void main() {
 
     test('should load materials by category', () async {
       // Act
-      final materials = await repository.getMaterialsByCategory('Doa & Tawasul');
+      final materials = await repository.getMaterialsByCategory("Aurad & Doa'");
 
       // Assert
       expect(materials, isNotEmpty);
       expect(materials.first, isA<MaterialModel>());
-      expect(materials.first.category, equals('Doa & Tawasul'));
+      expect(materials.first.category, equals("Aurad & Doa'"));
     });
 
     test('should get material by id', () async {
       // Arrange
-      final materials = await repository.getMaterialsByCategory('Doa & Tawasul');
+      final materials = await repository.getMaterialsByCategory("Aurad & Doa'");
       final firstId = materials.first.id;
 
       // Act
@@ -67,15 +67,16 @@ void main() {
             id: 'panduan_wudhu',
             title: 'Wudhu',
             arabicTitle: '\u0627\u0644\u0648\u0636\u0648\u0621',
-            category: 'Panduan Ibadah',
+            category: 'Kaifiyah',
             tags: const ['bersuci'],
             content: const ['Tata cara bersuci'],
           ),
           MaterialModel(
             id: 'doa_fajar',
             title: 'Doa Fajar',
-            arabicTitle: '\u062f\u0639\u0627\u0621 \u0627\u0644\u0641\u062c\u0631',
-            category: 'Doa & Tawasul',
+            arabicTitle:
+                '\u062f\u0639\u0627\u0621 \u0627\u0644\u0641\u062c\u0631',
+            category: "Aurad & Doa'",
             tags: const ['doa'],
             content: const ['Bacaan setelah fajar'],
           ),
@@ -85,14 +86,19 @@ void main() {
 
       // Act
       final categoryResults = await searchRepository.searchMaterials('panduan');
-      final arabicResults =
-          await searchRepository.searchMaterials('\u0627\u0644\u0641\u062c\u0631');
+      final arabicResults = await searchRepository.searchMaterials(
+        '\u0627\u0644\u0641\u062c\u0631',
+      );
 
       // Assert
-      expect(categoryResults.map((material) => material.id),
-          contains('panduan_wudhu'));
-      expect(arabicResults.map((material) => material.id),
-          contains('doa_fajar'));
+      expect(
+        categoryResults.map((material) => material.id),
+        contains('panduan_wudhu'),
+      );
+      expect(
+        arabicResults.map((material) => material.id),
+        contains('doa_fajar'),
+      );
     });
 
     test('should track last read material', () async {
@@ -125,7 +131,7 @@ void main() {
 
     test('should get bookmarked materials', () async {
       // Arrange
-      final materials = await repository.getMaterialsByCategory('Doa & Tawasul');
+      final materials = await repository.getMaterialsByCategory("Aurad & Doa'");
       if (materials.isNotEmpty) {
         await repository.toggleBookmark(materials.first.id);
       }

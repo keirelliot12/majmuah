@@ -10,6 +10,8 @@ import '../../helpers/category_visuals.dart';
 class AllCategoriesScreen extends StatelessWidget {
   const AllCategoriesScreen({Key? key}) : super(key: key);
 
+  static final RegExp _badPlaceholderPattern = RegExp(r'^\?{3,}$');
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -19,7 +21,7 @@ class AllCategoriesScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Semua Kategori'),
           centerTitle: true,
-          backgroundColor: AppColors.white,
+          backgroundColor: AppColors.offWhite,
           elevation: 0,
           foregroundColor: AppColors.darkTeal,
         ),
@@ -32,81 +34,68 @@ class AllCategoriesScreen extends StatelessWidget {
               // Total items = "Semua Materi" card + all categories
               final totalItems = categories.length + 1;
 
-              return GridView.builder(
-                padding: EdgeInsets.all(AppPadding.p16.w),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 16.h,
-                  crossAxisSpacing: 16.w,
-                  childAspectRatio: 0.8,
-                ),
-                itemCount: totalItems,
-                itemBuilder: (context, index) {
-                  // First item is "Semua Materi"
-                  if (index == 0) {
-                    return _buildAllMaterialsCard(context);
-                  }
+              return CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 8.h),
+                    sliver: SliverToBoxAdapter(
+                      child: Text(
+                        'Pilih tema bacaan',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              color: AppColors.darkerTeal,
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 24.h),
+                    sliver: SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 14.h,
+                        crossAxisSpacing: 12.w,
+                        childAspectRatio: 0.82,
+                      ),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        // First item is "Semua Materi"
+                        if (index == 0) {
+                          return _buildAllMaterialsCard(context);
+                        }
 
-                  // Adjust index for categories (subtract 1 because of "Semua Materi")
-                  final category = categories[index - 1];
-                  final categoryVisual = CategoryVisuals.forCategory(
-                    category.filterKey.isNotEmpty ? category.filterKey : category.title,
-                    fallbackColor: category.iconColor,
-                  );
+                        // Adjust index for categories (subtract 1 because of "Semua Materi")
+                        final category = categories[index - 1];
+                        final categoryVisual = CategoryVisuals.forCategory(
+                          category.filterKey.isNotEmpty
+                              ? category.filterKey
+                              : category.title,
+                          fallbackColor: category.iconColor,
+                        );
 
-                  return GestureDetector(
-                    onTap: () {
-                      if (category.filterKey == 'Notes') {
-                        Navigator.pushNamed(context, Routes.notesListRoute);
-                      } else {
-                        Navigator.pushNamed(
-                          context,
-                          Routes.materialListRoute,
-                          arguments: {
-                            'categoryName': category.title,
-                            'categoryFilterKey': category.filterKey,
-                            'categoryColor': categoryVisual.color,
+                        return _CategoryTile(
+                          title: _cleanUiText(category.title, 'Kategori'),
+                          icon: categoryVisual.icon,
+                          color: categoryVisual.color,
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.materialListRoute,
+                              arguments: {
+                                'categoryName': _cleanUiText(
+                                  category.title,
+                                  'Kategori',
+                                ),
+                                'categoryFilterKey': category.filterKey,
+                                'categoryColor': categoryVisual.color,
+                              },
+                            );
                           },
                         );
-                      }
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(12.w),
-                          decoration: BoxDecoration(
-                            color: AppColors.white,
-                            borderRadius: BorderRadius.circular(16.r),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withAlpha(13),
-                                blurRadius: 10.r,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            categoryVisual.icon,
-                            size: 40.w,
-                            color: categoryVisual.color,
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Text(
-                          category.title,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.darkTeal,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                      }, childCount: totalItems),
                     ),
-                  );
-                },
+                  ),
+                ],
               );
             } else if (state is BerandaCategoryError) {
               return Center(child: Text('Error: ${state.message}'));
@@ -120,7 +109,10 @@ class AllCategoriesScreen extends StatelessWidget {
 
   /// Build "Semua Materi" card that shows all materials without category filter
   Widget _buildAllMaterialsCard(BuildContext context) {
-    return GestureDetector(
+    return _CategoryTile(
+      title: 'Semua Materi',
+      icon: Symbols.library_books,
+      color: AppColors.tealGreen,
       onTap: () {
         Navigator.pushNamed(
           context,
@@ -132,40 +124,70 @@ class AllCategoriesScreen extends StatelessWidget {
           },
         );
       },
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(12.w),
-            decoration: BoxDecoration(
-              color: AppColors.tealGreen,
-              borderRadius: BorderRadius.circular(16.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(13),
-                  blurRadius: 10.r,
-                  offset: const Offset(0, 4),
+    );
+  }
+
+  static String _cleanUiText(String value, String fallback) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty || _badPlaceholderPattern.hasMatch(trimmed)) {
+      return fallback;
+    }
+    return trimmed;
+  }
+}
+
+class _CategoryTile extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _CategoryTile({
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18.r),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 6.h),
+          child: Column(
+            children: [
+              Container(
+                width: 62.w,
+                height: 62.w,
+                decoration: BoxDecoration(
+                  color: color.withAlpha(24),
+                  borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(color: color.withAlpha(35)),
                 ),
-              ],
-            ),
-            child: Icon(
-              Symbols.library_books,
-              size: 40.w,
-              color: Colors.white,
-            ),
+                child: Icon(icon, size: 32.r, color: color),
+              ),
+              SizedBox(height: 10.h),
+              Flexible(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    height: 1.25,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.darkerTeal,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 8.h),
-          Text(
-            'Semua Materi',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.darkTeal,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
+        ),
       ),
     );
   }

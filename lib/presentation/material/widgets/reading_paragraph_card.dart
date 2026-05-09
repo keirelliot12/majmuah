@@ -7,6 +7,8 @@ class ReadingParagraphCard extends StatelessWidget {
   final String text;
   final Color categoryColor;
   final double fontScale;
+  final String arabicFontFamily;
+  final bool nightMode;
 
   static final RegExp _arabicTextPattern = RegExp(
     r'[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]',
@@ -17,6 +19,8 @@ class ReadingParagraphCard extends StatelessWidget {
     required this.text,
     required this.categoryColor,
     required this.fontScale,
+    this.arabicFontFamily = FontConstants.uthmanTNFontFamily,
+    this.nightMode = false,
   }) : super(key: key);
 
   @override
@@ -24,50 +28,55 @@ class ReadingParagraphCard extends StatelessWidget {
     final hasArabicText = _arabicTextPattern.hasMatch(text);
     final textTheme = Theme.of(context).textTheme;
 
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: AppPadding.p20.w,
-        vertical: AppPadding.p24.h,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(color: categoryColor.withAlpha(31)),
-        boxShadow: [
-          BoxShadow(
-            color: categoryColor.withAlpha(18),
-            blurRadius: 18.r,
-            offset: Offset(0, 8.h),
-          ),
-          BoxShadow(
-            color: Colors.black.withAlpha(10),
-            blurRadius: 10.r,
-            offset: Offset(0, 3.h),
-          ),
-        ],
-      ),
-      child: Text(
-        text,
-        textAlign: hasArabicText ? TextAlign.right : TextAlign.start,
-        textDirection: hasArabicText ? TextDirection.rtl : null,
-        style: hasArabicText
-            ? TextStyle(
-                fontFamily: 'UthmanTN',
-                fontSize: 20.sp * fontScale,
-                height: 2,
-                color: AppColors.darkerTeal,
-              )
-            : textTheme.bodyLarge?.copyWith(
-                  fontSize: 16.sp,
-                  height: 1.7,
-                  color: AppColors.darkerTeal,
-                ) ??
-                TextStyle(
-                  fontSize: 16.sp,
-                  height: 1.7,
-                  color: AppColors.darkerTeal,
+    if (text.trim().isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Directionality(
+      textDirection: hasArabicText ? TextDirection.rtl : TextDirection.ltr,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsetsDirectional.only(
+          start: hasArabicText ? 0 : 14.w,
+          end: hasArabicText ? 0 : 2.w,
+          top: 2.h,
+          bottom: 2.h,
+        ),
+        decoration: hasArabicText
+            ? null
+            : BoxDecoration(
+                border: BorderDirectional(
+                  start: BorderSide(
+                    color: categoryColor.withAlpha(56),
+                    width: 2.w,
+                  ),
                 ),
+              ),
+        child: Text(
+          text.trim(),
+          textAlign: hasArabicText ? TextAlign.right : TextAlign.start,
+          style: hasArabicText
+              ? TextStyle(
+                  fontFamily: arabicFontFamily,
+                  fontSize: 21.sp * fontScale,
+                  height: 2.05,
+                  color: nightMode ? AppColors.surface : AppColors.deepEmerald,
+                )
+              : textTheme.bodyLarge?.copyWith(
+                      fontSize: 16.sp,
+                      height: 1.78,
+                      color: nightMode
+                          ? AppColors.surface.withAlpha(230)
+                          : AppColors.deepEmerald.withAlpha(232),
+                    ) ??
+                    TextStyle(
+                      fontSize: 16.sp,
+                      height: 1.78,
+                      color: nightMode
+                          ? AppColors.surface.withAlpha(230)
+                          : AppColors.deepEmerald.withAlpha(232),
+                    ),
+        ),
       ),
     );
   }

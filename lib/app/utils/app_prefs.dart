@@ -11,10 +11,13 @@ const String bookMarkPageKey = "BOOK_MARK_PAGE_KEY";
 const String bookMarkPageBoolKey = "BOOK_MARK_PAGE_BOOL_KEY";
 const String searchHistoryKey = "SEARCH_HISTORY_KEY";
 const String arabicReadingFontScaleKey = "ARABIC_READING_FONT_SCALE_KEY";
+const String arabicReadingFontFamilyKey = "ARABIC_READING_FONT_FAMILY_KEY";
+const String readingNightModeKey = "READING_NIGHT_MODE_KEY";
 
 const double minArabicReadingFontScale = 0.8;
 const double maxArabicReadingFontScale = 1.4;
 const double defaultArabicReadingFontScale = 1.0;
+const String defaultArabicReadingFontFamily = FontConstants.uthmanTNFontFamily;
 
 class AppPreferences {
   final SharedPreferences _preferences = instance<SharedPreferences>();
@@ -122,7 +125,8 @@ class AppPreferences {
   }
 
   double getArabicReadingFontScale() {
-    final storedScale = _preferences.getDouble(arabicReadingFontScaleKey) ??
+    final storedScale =
+        _preferences.getDouble(arabicReadingFontScaleKey) ??
         defaultArabicReadingFontScale;
 
     return storedScale
@@ -140,5 +144,27 @@ class AppPreferences {
       arabicReadingFontScaleKey,
       clampedScale.toDouble(),
     );
+  }
+
+  String getArabicReadingFontFamily() {
+    final storedFamily = _preferences.getString(arabicReadingFontFamilyKey);
+    if (storedFamily == FontConstants.hafsFontFamily ||
+        storedFamily == FontConstants.meQuranFontFamily ||
+        storedFamily == FontConstants.uthmanTNFontFamily) {
+      return storedFamily!;
+    }
+    return defaultArabicReadingFontFamily;
+  }
+
+  Future<void> setArabicReadingFontFamily(String fontFamily) async {
+    await _preferences.setString(arabicReadingFontFamilyKey, fontFamily);
+  }
+
+  bool getReadingNightMode() {
+    return _preferences.getBool(readingNightModeKey) ?? false;
+  }
+
+  Future<void> setReadingNightMode(bool enabled) async {
+    await _preferences.setBool(readingNightModeKey, enabled);
   }
 }

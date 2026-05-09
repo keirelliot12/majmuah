@@ -24,6 +24,9 @@ class PrayerTimingsScreen extends StatelessWidget {
         PrayerTimingsCubit cubit = PrayerTimingsCubit.get(context);
         PrayerTimingsModel prayerTimingsModel = cubit.prayerTimingsModel;
         bool isConnected = cubit.isConnected;
+        final bool isLoading =
+            state is GetPrayerTimesLoadingState ||
+            state is GetLocationLoadingState;
 
         //Get Current App Locale
         final currentLocale = context.locale;
@@ -40,15 +43,14 @@ class PrayerTimingsScreen extends StatelessWidget {
                 AppStrings.gettingLocation.tr(),
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-              SizedBox(
-                height: AppSize.s5.h,
-              ),
+              SizedBox(height: AppSize.s5.h),
               Center(
                 child: SizedBox(
-                    width: (MediaQuery.of(context).size.width * 0.55),
-                    child: const LinearProgressIndicator(
-                      color: ColorManager.gold,
-                    )),
+                  width: (MediaQuery.of(context).size.width * 0.55),
+                  child: const LinearProgressIndicator(
+                    color: ColorManager.gold,
+                  ),
+                ),
               ),
             ],
           );
@@ -90,7 +92,18 @@ class PrayerTimingsScreen extends StatelessWidget {
                   child: Text(
                     prayerTimingsModel.data!.date!.gregorian!.date,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).unselectedWidgetColor),
+                      color: Theme.of(context).unselectedWidgetColor,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: AppSize.s8.h),
+                  child: OutlinedButton.icon(
+                    onPressed: isLoading
+                        ? null
+                        : cubit.refreshPrayerTimingsWithCurrentLocation,
+                    icon: const Icon(Icons.my_location),
+                    label: const Text("Update Lokasi"),
                   ),
                 ),
                 Center(
@@ -99,15 +112,18 @@ class PrayerTimingsScreen extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          for (var index = 0;
-                              index < Constants.prayerNumbers;
-                              index++)
+                          for (
+                            var index = 0;
+                            index < Constants.prayerNumbers;
+                            index++
+                          )
                             _prayerIndexItem(
-                                isEnglish: isEnglish,
-                                context: context,
-                                timings: timings,
-                                prayerTimingsModel: prayerTimingsModel,
-                                index: index)
+                              isEnglish: isEnglish,
+                              context: context,
+                              timings: timings,
+                              prayerTimingsModel: prayerTimingsModel,
+                              index: index,
+                            ),
                         ],
                       ),
                     ],
@@ -119,24 +135,37 @@ class PrayerTimingsScreen extends StatelessWidget {
         } else {
           if (!isConnected) {
             return Center(
-                child: Text(
-              AppStrings.noInternetConnection.tr(),
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(height: AppSize.s1_3.h),
-            ));
+              child: Text(
+                AppStrings.noInternetConnection.tr(),
+                textAlign: TextAlign.center,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(height: AppSize.s1_3.h),
+              ),
+            );
           } else {
             return Center(
-                child: Text(
-              AppStrings.noLocationFound.tr(),
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(height: AppSize.s1_3.h),
-            ));
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    AppStrings.noLocationFound.tr(),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(height: AppSize.s1_3.h),
+                  ),
+                  SizedBox(height: AppSize.s8.h),
+                  OutlinedButton.icon(
+                    onPressed: isLoading
+                        ? null
+                        : cubit.refreshPrayerTimingsWithCurrentLocation,
+                    icon: const Icon(Icons.my_location),
+                    label: const Text("Update Lokasi"),
+                  ),
+                ],
+              ),
+            );
           }
         }
       },
@@ -164,32 +193,27 @@ class PrayerTimingsScreen extends StatelessWidget {
                       ? AppStrings.englishPrayerNames[index]
                       : AppStrings.arabicPrayerNames[index],
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontFamily: FontConstants.elMessiriFontFamily,
-                      ),
+                    fontFamily: FontConstants.elMessiriFontFamily,
+                  ),
                 ),
-                SizedBox(
-                  height: AppSize.s5.h,
-                ),
+                SizedBox(height: AppSize.s5.h),
                 Text(
                   isEnglish
                       ? AppStrings.arabicPrayerNames[index]
                       : AppStrings.englishPrayerNames[index],
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontFamily: FontConstants.elMessiriFontFamily,
-                        color: Theme.of(context).unselectedWidgetColor,
-                      ),
+                    fontFamily: FontConstants.elMessiriFontFamily,
+                    color: Theme.of(context).unselectedWidgetColor,
+                  ),
                 ),
               ],
             ),
-            SizedBox(
-              width: AppSize.s35.w,
-            ),
+            SizedBox(width: AppSize.s35.w),
             Text(
               timings[index],
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontFamily: FontConstants.uthmanTNFontFamily),
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontFamily: FontConstants.uthmanTNFontFamily,
+              ),
             ),
           ],
         ),

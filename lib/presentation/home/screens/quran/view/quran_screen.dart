@@ -16,24 +16,51 @@ import '../../../../download/widgets/download_prompt_dialog.dart';
 import '../../../../download/widgets/download_progress_sheet.dart';
 import '../../../../../di/di.dart';
 
-class QuranScreen extends StatelessWidget {
+class QuranScreen extends StatefulWidget {
   const QuranScreen({Key? key}) : super(key: key);
+
+  @override
+  State<QuranScreen> createState() => _QuranScreenState();
+}
+
+class _QuranScreenState extends State<QuranScreen> {
+  bool _hasShownInitialDownloadPrompt = false;
+  bool _isQuranDownloaded = false;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => instance<DownloadCubit>()..checkManifest()),
+        BlocProvider(
+          create: (context) => instance<DownloadCubit>()..checkManifest(),
+        ),
       ],
       child: BlocListener<DownloadCubit, DownloadState>(
         listener: (context, state) {
-          if (state is DownloadSuccess) {
+          if (state is DownloadManifestLoaded) {
+            _isQuranDownloaded = state.isQuranFullyDownloaded;
+
+            if (!_isQuranDownloaded && !_hasShownInitialDownloadPrompt) {
+              _hasShownInitialDownloadPrompt = true;
+              _showDownloadPrompt(context);
+            }
+          } else if (state is DownloadSuccess) {
+            if (state.message.contains("diunduh")) {
+              _isQuranDownloaded = true;
+            }
+
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: Colors.green),
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+              ),
             );
           } else if (state is DownloadFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
             );
           } else if (state is DownloadProgressState) {
             _showProgressSheet(context, state);
@@ -41,7 +68,7 @@ class QuranScreen extends StatelessWidget {
         },
         child: BlocBuilder<DownloadCubit, DownloadState>(
           builder: (context, downloadState) {
-            bool isDownloaded = false;
+            bool isDownloaded = _isQuranDownloaded;
             if (downloadState is DownloadManifestLoaded) {
               isDownloaded = downloadState.isQuranFullyDownloaded;
             }
@@ -53,11 +80,8 @@ class QuranScreen extends StatelessWidget {
 
                 final currentLocale = context.locale;
                 bool isEnglish =
-                    currentLocale.languageCode == LanguageType.english.getValue();
-
-                if (!isDownloaded && downloadState is DownloadManifestLoaded) {
-                  return _buildDownloadPromptView(context, downloadState);
-                }
+                    currentLocale.languageCode ==
+                    LanguageType.english.getValue();
 
                 return ConditionalBuilder(
                   condition: quranList.isNotEmpty,
@@ -68,36 +92,48 @@ class QuranScreen extends StatelessWidget {
                           style: ListTileStyle.list,
                           leading: Text(
                             AppStrings.number.tr(),
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                fontFamily: FontConstants.uthmanTNFontFamily),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  fontFamily: FontConstants.uthmanTNFontFamily,
+                                ),
                           ),
                           title: Padding(
-                            padding: EdgeInsets.symmetric(vertical: AppPadding.p5.h),
+                            padding: EdgeInsets.symmetric(
+                              vertical: AppPadding.p5.h,
+                            ),
                             child: Text(
                               AppStrings.surahName.tr(),
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                  fontFamily: FontConstants.uthmanTNFontFamily),
+                              style: Theme.of(context).textTheme.titleSmall
+                                  ?.copyWith(
+                                    fontFamily:
+                                        FontConstants.uthmanTNFontFamily,
+                                  ),
                             ),
                           ),
                           trailing: Text(
                             AppStrings.pageNumber.tr(),
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                fontFamily: FontConstants.uthmanTNFontFamily),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  fontFamily: FontConstants.uthmanTNFontFamily,
+                                ),
                           ),
                         ),
                         Expanded(
                           child: ListView.separated(
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: (context, index) => _surahsIndexItem(
-                                surahId: (index + 1).toString().tr(),
-                                surahName: quranList[index].name,
-                                englishSurahName: quranList[index].englishName,
-                                pageNo: quranList[index].ayahs[0].page,
-                                quranList: quranList,
-                                isEnglish: isEnglish,
-                                context: context),
-                            separatorBuilder: (context, index) => getSeparator(context),
+                              surahId: (index + 1).toString().tr(),
+                              surahName: quranList[index].name,
+                              englishSurahName: quranList[index].englishName,
+                              pageNo: quranList[index].ayahs[0].page,
+                              quranList: quranList,
+                              isEnglish: isEnglish,
+                              isDownloaded: isDownloaded,
+                              context: context,
+                            ),
+                            separatorBuilder: (context, index) =>
+                                getSeparator(context),
                             itemCount: quranList.length,
                           ),
                         ),
@@ -106,14 +142,31 @@ class QuranScreen extends StatelessWidget {
                   },
                   fallback: (BuildContext context) {
                     return const Center(
-                        child: CircularProgressIndicator(color: ColorManager.gold));
+                      child: CircularProgressIndicator(
+                        color: ColorManager.gold,
+                      ),
+                    );
                   },
                 );
-
               },
             );
           },
         ),
+      ),
+    );
+  }
+
+  void _showDownloadPrompt(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => DownloadPromptDialog(
+        featureName: "Al-Quran",
+        description:
+            "Anda akan mengunduh data mushaf Al-Quran. Pastikan koneksi internet stabil.",
+        totalSize: "120 MB",
+        onDownload: () {
+          DownloadCubit.get(context).startQuranDownload();
+        },
       ),
     );
   }
@@ -134,74 +187,16 @@ class QuranScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDownloadPromptView(BuildContext context, DownloadManifestLoaded state) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(AppPadding.p24.r),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(AppPadding.p20.r),
-              decoration: BoxDecoration(
-                color: ColorManager.gold.withAlpha(30),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.cloud_download_outlined,
-                size: AppSize.s90.sp,
-                color: ColorManager.gold,
-              ),
-            ),
-            SizedBox(height: AppSize.s24.h),
-            Text(
-              'Mushaf Belum Diunduh',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            SizedBox(height: AppSize.s12.h),
-            Text(
-              'Agar dapat membaca Al-Quran secara offline, Anda perlu mengunduh data mushaf terlebih dahulu.',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            SizedBox(height: AppSize.s32.h),
-            ElevatedButton.icon(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (_) => DownloadPromptDialog(
-                    featureName: "Al-Quran",
-                    description: "Anda akan mengunduh data mushaf Al-Quran. Pastikan koneksi internet stabil.",
-                    totalSize: "120 MB",
-                    onDownload: () {
-                      DownloadCubit.get(context).startQuranDownload();
-                    },
-                  ),
-                );
-              },
-              icon: const Icon(Icons.download),
-              label: const Text('Download Sekarang'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: ColorManager.lightPrimary,
-                foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: AppPadding.p24.w, vertical: AppPadding.p12.h),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.s12.r)),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _surahsIndexItem(
-      {required String surahId,
-      required String surahName,
-      required String englishSurahName,
-      required int pageNo,
-      required List<QuranModel> quranList,
-      required bool isEnglish,
-      required BuildContext context}) {
+  Widget _surahsIndexItem({
+    required String surahId,
+    required String surahName,
+    required String englishSurahName,
+    required int pageNo,
+    required List<QuranModel> quranList,
+    required bool isEnglish,
+    required bool isDownloaded,
+    required BuildContext context,
+  }) {
     return Padding(
       padding: EdgeInsets.only(bottom: AppPadding.p5.h),
       child: ListTile(
@@ -210,10 +205,9 @@ class QuranScreen extends StatelessWidget {
           padding: EdgeInsets.only(top: AppPadding.p5.h),
           child: Text(
             surahId,
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(fontFamily: FontConstants.uthmanTNFontFamily),
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              fontFamily: FontConstants.uthmanTNFontFamily,
+            ),
           ),
         ),
         title: Padding(
@@ -221,9 +215,10 @@ class QuranScreen extends StatelessWidget {
           child: Text(
             isEnglish ? englishSurahName : surahName,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontFamily: FontConstants.meQuranFontFamily,
-                wordSpacing: AppSize.s5.w,
-                letterSpacing: AppSize.s0_1.w),
+              fontFamily: FontConstants.meQuranFontFamily,
+              wordSpacing: AppSize.s5.w,
+              letterSpacing: AppSize.s0_1.w,
+            ),
           ),
         ),
         subtitle: Padding(
@@ -231,27 +226,29 @@ class QuranScreen extends StatelessWidget {
           child: Text(
             isEnglish ? surahName : englishSurahName,
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontFamily: FontConstants.meQuranFontFamily,
-                color: Theme.of(context).unselectedWidgetColor,
-                wordSpacing: AppSize.s5.w,
-                letterSpacing: AppSize.s0_1.w),
+              fontFamily: FontConstants.meQuranFontFamily,
+              color: Theme.of(context).unselectedWidgetColor,
+              wordSpacing: AppSize.s5.w,
+              letterSpacing: AppSize.s0_1.w,
+            ),
           ),
         ),
         trailing: Text(
           pageNo.toString().tr(),
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(fontFamily: FontConstants.uthmanTNFontFamily),
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            fontFamily: FontConstants.uthmanTNFontFamily,
+          ),
         ),
         onTap: () {
+          if (!isDownloaded) {
+            _showDownloadPrompt(context);
+            return;
+          }
+
           Navigator.pushNamed(
             context,
             Routes.quranRoute,
-            arguments: {
-              'quranList': quranList,
-              'pageNo': pageNo,
-            },
+            arguments: {'quranList': quranList, 'pageNo': pageNo},
           );
         },
       ),

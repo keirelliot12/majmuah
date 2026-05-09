@@ -16,44 +16,47 @@ class LastReadCard extends StatelessWidget {
   final String title;
   final VoidCallback? onTap;
 
-  const LastReadCard({
-    Key? key,
-    this.title = 'Ratib Al-Haddad',
-    this.onTap,
-  }) : super(key: key);
+  const LastReadCard({Key? key, this.title = 'Ratib Al-Haddad', this.onTap})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 24.0.w,
-          vertical: 8.0.h,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 22.0.w, vertical: 7.0.h),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(24.r),
+          borderRadius: BorderRadius.circular(22.r),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
             child: Container(
               padding: EdgeInsets.all(16.0.w),
               decoration: BoxDecoration(
-                color: Colors.white.withAlpha(102), // ~40% white
-                borderRadius: BorderRadius.circular(24.r),
-                border: Border.all(color: Colors.white.withAlpha(51), width: 1),
+                color: AppColors.white.withAlpha(244),
+                borderRadius: BorderRadius.circular(22.r),
+                border: Border.all(
+                  color: AppColors.darkTeal.withAlpha(16),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.darkerTeal.withAlpha(14),
+                    blurRadius: 14.r,
+                    offset: Offset(0, 6.r),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
-                  // Left: Book icon with blue background
                   Container(
                     padding: EdgeInsets.all(10.w),
                     decoration: BoxDecoration(
-                      color: AppColors.blue500.withAlpha(26), // blue with low alpha
+                      color: AppColors.lemonYellow.withAlpha(92),
                       borderRadius: BorderRadius.circular(16.r),
                     ),
                     child: Icon(
                       Symbols.menu_book,
-                      color: AppColors.blue500,
+                      color: AppColors.darkTeal,
                       size: 24.r,
                     ),
                   ),
@@ -69,8 +72,8 @@ class LastReadCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 10.sp,
                             fontWeight: FontWeightsManager.bold,
-                            color: Colors.grey.shade700,
-                            letterSpacing: 0.5,
+                            color: AppColors.darkTeal.withAlpha(166),
+                            letterSpacing: 0,
                           ),
                         ),
                         SizedBox(height: AppSize.s4.h),
@@ -79,7 +82,7 @@ class LastReadCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeightsManager.bold,
-                            color: Colors.grey.shade900,
+                            color: AppColors.darkerTeal,
                           ),
                         ),
                       ],
@@ -89,7 +92,7 @@ class LastReadCard extends StatelessWidget {
                   // Right: Chevron
                   Icon(
                     Symbols.chevron_right,
-                    color: Colors.grey.shade400,
+                    color: ColorManager.gold.withAlpha(178),
                     size: 24.r,
                   ),
                 ],

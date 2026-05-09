@@ -7,10 +7,7 @@ class CategoryVisual {
   final IconData icon;
   final Color color;
 
-  const CategoryVisual({
-    required this.icon,
-    required this.color,
-  });
+  const CategoryVisual({required this.icon, required this.color});
 }
 
 class CategoryVisuals {
@@ -25,6 +22,7 @@ class CategoryVisuals {
         );
       case 'aurad shalat':
       case 'aurad sholat':
+      case 'aurad doa':
         return const CategoryVisual(
           icon: Symbols.mosque,
           color: AppColors.emerald500,
@@ -34,6 +32,22 @@ class CategoryVisuals {
         return const CategoryVisual(
           icon: Symbols.front_hand,
           color: AppColors.amber500,
+        );
+      case 'hizib ratib':
+        return const CategoryVisual(
+          icon: Symbols.auto_stories,
+          color: AppColors.indigo500,
+        );
+      case 'puji bilal':
+      case 'puji pujian bilal':
+        return const CategoryVisual(
+          icon: Symbols.record_voice_over,
+          color: AppColors.amber500,
+        );
+      case 'amalan hijriyah':
+        return const CategoryVisual(
+          icon: Icons.calendar_month_rounded,
+          color: AppColors.teal600,
         );
       case 'sholawat':
         return const CategoryVisual(
@@ -56,6 +70,7 @@ class CategoryVisuals {
           color: AppColors.orange500,
         );
       case 'qasidah':
+      case 'qosidah pilihan':
         return const CategoryVisual(
           icon: Icons.music_note_rounded,
           color: AppColors.cyan600,
@@ -70,12 +85,8 @@ class CategoryVisuals {
           icon: Icons.volunteer_activism_rounded,
           color: AppColors.blue500,
         );
-      case 'puji pujian bilal':
-        return const CategoryVisual(
-          icon: Symbols.record_voice_over,
-          color: AppColors.amber500,
-        );
       case 'panduan ibadah':
+      case 'kaifiyah':
         return const CategoryVisual(
           icon: Symbols.local_library,
           color: AppColors.tealGreen,
@@ -91,6 +102,7 @@ class CategoryVisuals {
           color: AppColors.rose500,
         );
       case 'kbihu nur multazam':
+      case 'kbihu':
         return const CategoryVisual(
           icon: Icons.account_balance_rounded,
           color: AppColors.blue500,
@@ -142,6 +154,7 @@ class CategoryVisuals {
     return value
         .toLowerCase()
         .replaceAll('&', ' ')
+        .replaceAll("'", '')
         .replaceAll('-', ' ')
         .replaceAll(RegExp(r'\s+'), ' ')
         .trim();

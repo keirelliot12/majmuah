@@ -13,6 +13,8 @@ class MaterialListScreen extends StatelessWidget {
   final String categoryFilterKey;
   final Color categoryColor;
 
+  static final RegExp _badPlaceholderPattern = RegExp(r'^\?{3,}$');
+
   const MaterialListScreen({
     Key? key,
     required this.categoryName,
@@ -23,13 +25,15 @@ class MaterialListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => instance<BerandaMaterialCubit>()..loadMaterialsByCategory(categoryFilterKey),
+      create: (context) =>
+          instance<BerandaMaterialCubit>()
+            ..loadMaterialsByCategory(categoryFilterKey),
       child: Scaffold(
         backgroundColor: AppColors.offWhite,
         appBar: AppBar(
-          title: Text(categoryName),
-          backgroundColor: categoryColor,
-          foregroundColor: Colors.white,
+          title: Text(_cleanUiText(categoryName, 'Materi')),
+          backgroundColor: AppColors.offWhite,
+          foregroundColor: AppColors.darkerTeal,
           elevation: 0,
         ),
         body: BlocBuilder<BerandaMaterialCubit, BerandaMaterialState>(
@@ -57,55 +61,155 @@ class MaterialListScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.library_books_outlined, size: 80.r, color: Colors.grey[300]),
+          Icon(
+            Icons.library_books_outlined,
+            size: 70.r,
+            color: categoryColor.withAlpha(76),
+          ),
           SizedBox(height: AppSize.s16.h),
           Text(
             'Belum ada materi',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.grey[600]),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: AppColors.darkerTeal,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           SizedBox(height: AppSize.s8.h),
-          Text(
-            'Materi untuk kategori ini akan segera tersedia',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey[400]),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 40.w),
+            child: Text(
+              'Materi untuk kategori ini akan segera tersedia',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColors.gray,
+                height: 1.5,
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMaterialsList(BuildContext context, List<MaterialModel> materials) {
-    return ListView.builder(
-      padding: EdgeInsets.all(AppPadding.p16.w),
-      itemCount: materials.length,
+  Widget _buildMaterialsList(
+    BuildContext context,
+    List<MaterialModel> materials,
+  ) {
+    return ListView.separated(
+      padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 28.h),
+      itemCount: materials.length + 1,
+      separatorBuilder: (context, index) => SizedBox(height: 2.h),
       itemBuilder: (context, index) {
-        final material = materials[index];
-        return _MaterialCard(
+        if (index == 0) {
+          return _ListIntro(
+            title: _cleanUiText(categoryName, 'Materi'),
+            count: materials.length,
+            color: categoryColor,
+          );
+        }
+
+        final material = materials[index - 1];
+        return _MaterialRow(
           material: material,
           categoryColor: categoryColor,
+          cleanUiText: _cleanUiText,
           onTap: () {
             Navigator.pushNamed(
               context,
               Routes.materialDetailRoute,
-              arguments: {
-                'material': material,
-                'categoryColor': categoryColor,
-              },
+              arguments: {'material': material, 'categoryColor': categoryColor},
             );
           },
         );
       },
     );
   }
+
+  static String _cleanUiText(String value, String fallback) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty || _badPlaceholderPattern.hasMatch(trimmed)) {
+      return fallback;
+    }
+    return trimmed;
+  }
 }
 
-class _MaterialCard extends StatelessWidget {
+class _ListIntro extends StatelessWidget {
+  final String title;
+  final int count;
+  final Color color;
+
+  const _ListIntro({
+    required this.title,
+    required this.count,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 18.h),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 18.h),
+        decoration: BoxDecoration(
+          color: color.withAlpha(18),
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(color: color.withAlpha(28)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 42.w,
+              height: 42.w,
+              decoration: BoxDecoration(
+                color: color.withAlpha(32),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.menu_book_rounded, color: color, size: 22.r),
+            ),
+            SizedBox(width: 14.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.darkerTeal,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 3.h),
+                  Text(
+                    '$count materi tersedia',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.gray500,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MaterialRow extends StatelessWidget {
   final MaterialModel material;
   final Color categoryColor;
+  final String Function(String value, String fallback) cleanUiText;
   final VoidCallback onTap;
 
-  const _MaterialCard({
+  const _MaterialRow({
     required this.material,
     required this.categoryColor,
+    required this.cleanUiText,
     required this.onTap,
   });
 
@@ -118,61 +222,67 @@ class _MaterialCard extends StatelessWidget {
           )
         : null;
     final itemColor = itemVisual?.color ?? categoryColor;
+    final title = cleanUiText(material.title, 'Materi');
+    final arabicTitle = cleanUiText(material.arabicTitle, '');
 
-    return Card(
-      margin: EdgeInsets.only(bottom: AppPadding.p12.h),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.s12.r)),
+    return Material(
+      color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSize.s12.r),
+        borderRadius: BorderRadius.circular(18.r),
         child: Padding(
-          padding: EdgeInsets.all(AppPadding.p16.w),
+          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 13.h),
           child: Row(
             children: [
               Container(
-                width: 50.w,
-                height: 50.h,
+                width: 46.w,
+                height: 46.w,
                 decoration: BoxDecoration(
-                  color: itemColor.withAlpha(51),
-                  borderRadius: BorderRadius.circular(AppSize.s8.r),
+                  color: itemColor.withAlpha(24),
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
                 child: Icon(
                   itemVisual?.icon ?? Icons.article_outlined,
                   color: itemColor,
-                  size: AppSize.s24.r,
+                  size: 23.r,
                 ),
               ),
-              SizedBox(width: AppPadding.p16.w),
+              SizedBox(width: 14.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      material.title,
+                      title,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                          ),
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.darkerTeal,
+                        height: 1.35,
+                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (material.arabicTitle.isNotEmpty) ...[
-                      SizedBox(height: AppSize.s4.h),
-                      Text(
-                        material.arabicTitle,
-                        textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          fontFamily: 'UthmanTN',
-                          fontSize: 18,
-                          color: AppColors.tealGreen,
+                    if (arabicTitle.isNotEmpty) ...[
+                      SizedBox(height: 5.h),
+                      Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Text(
+                          arabicTitle,
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontFamily: 'UthmanTN',
+                            fontSize: 18.sp,
+                            height: 1.5,
+                            color: itemColor,
+                          ),
                         ),
                       ),
                     ],
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right, color: Colors.grey),
+              SizedBox(width: 10.w),
+              Icon(Icons.chevron_right_rounded, color: itemColor, size: 22.r),
             ],
           ),
         ),

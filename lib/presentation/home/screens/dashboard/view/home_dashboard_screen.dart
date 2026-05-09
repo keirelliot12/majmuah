@@ -40,10 +40,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  AppColors.lemonYellow,
-                  AppColors.tealGreen,
-                ],
+                colors: [AppColors.lemonYellow, AppColors.tealGreen],
               ),
             ),
           ),
@@ -71,7 +68,11 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
                           onTap: () {
                             // TODO: Navigate to search screen
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Search screen not implemented yet')),
+                              const SnackBar(
+                                content: Text(
+                                  'Search screen not implemented yet',
+                                ),
+                              ),
                             );
                           },
                         ),
@@ -81,13 +82,18 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
                         // Menu grid
                         MenuGridWidget(
                           menuItems: MenuGridWidget.createDefaultMenuItems(
-                            onAuradSholatTap: () => _handleMenuTap('Aurad Shalat'),
-                            onDoaTawasulTap: () => _handleMenuTap('Doa & Tawasul'),
-                            onRatibTap: () => _handleMenuTap('Ratib'),
-                            onKhutbahTap: () => _handleMenuTap('Khutbah'),
+                            onAuradDoaTap: () => _handleMenuTap("Aurad & Doa'"),
+                            onHizibRatibTap: () =>
+                                _handleMenuTap('Hizib & Ratib'),
+                            onPujiBilalTap: () =>
+                                _handleMenuTap('Puji-pujian & Bilal'),
+                            onAmalanHijriyahTap: () =>
+                                _handleMenuTap('Amalan Hijriyah'),
                             onMaulidTap: () => _handleMenuTap('Maulid'),
-                            onTahlilZiarahTap: () => _handleMenuTap('Tahlil & Ziarah'),
-                            onNotesTap: () => _handleMenuTap('Notes'),
+                            onTahlilZiarahTap: () =>
+                                _handleMenuTap('Tahlil & Ziarah'),
+                            onKbihuTap: () =>
+                                _handleMenuTap('KBIHU Nur Multazam'),
                             onLainnyaTap: () => _handleMenuTap('Lainnya'),
                           ),
                         ),
@@ -133,15 +139,15 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
     switch (index) {
       case 0:
         // Navigate to Quran
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Navigasi ke Quran')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Navigasi ke Quran')));
         break;
       case 1:
         // Navigate to Adzkar
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Navigasi ke Adzkar')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Navigasi ke Adzkar')));
         break;
       case 2:
         // Already on Beranda
@@ -154,9 +160,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen> {
         break;
       case 4:
         // Navigate to Settings
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Navigasi ke Pengaturan')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Navigasi ke Pengaturan')));
         break;
     }
   }

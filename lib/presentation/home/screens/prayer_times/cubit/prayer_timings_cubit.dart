@@ -12,6 +12,8 @@ import '../../../../../domain/usecase/get_prayer_timings_usecase.dart';
 part 'prayer_timings_state.dart';
 
 class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
+  static const (String, String) _defaultLocation = ("Gresik", "Indonesia");
+
   final GetPrayerTimingsUseCase _getPrayerTimingsUseCase =
       instance<GetPrayerTimingsUseCase>();
   final NetworkInfo networkInfo = instance<NetworkInfo>();
@@ -24,18 +26,23 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
 
   Future<void> isNetworkConnected() async {
     emit(GetConnectionLoadingState());
-    await networkInfo.isConnected.then((value) {
-      isConnected = value;
-      emit(GetConnectionSuccessState());
-    }).catchError((error) {
-      emit(GetConnectionErrorState(error.toString()));
-    });
+    await networkInfo.isConnected
+        .then((value) {
+          isConnected = value;
+          emit(GetConnectionSuccessState());
+        })
+        .catchError((error) {
+          emit(GetConnectionErrorState(error.toString()));
+        });
   }
 
   location_package.Location location = location_package.Location();
 
-  PrayerTimingsModel prayerTimingsModel =
-      const PrayerTimingsModel(code: 0, status: "", data: null);
+  PrayerTimingsModel prayerTimingsModel = const PrayerTimingsModel(
+    code: 0,
+    status: "",
+    data: null,
+  );
 
   // (String, String) recordLocation = ("", "");
 
@@ -51,10 +58,7 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
       if (!serviceEnabled) {
         serviceEnabled = await location.requestService();
         if (!serviceEnabled) {
-          // Use fallback location: Gresik, Indonesia
-          print('Location service disabled - Using fallback location (Gresik, Indonesia)');
-          recordLocation = ("Gresik", "Indonesia");
-          emit(GetLocationSuccessState());
+          _useDefaultLocation();
           return;
         }
       }
@@ -65,74 +69,84 @@ class PrayerTimingsCubit extends Cubit<PrayerTimingsState> {
         if (permissionGranted == location_package.PermissionStatus.denied) {
           permissionGranted = await location.requestPermission();
           if (permissionGranted != location_package.PermissionStatus.granted) {
-            // Use fallback location: Gresik, Indonesia
-            print('Location permission denied - Using fallback location (Gresik, Indonesia)');
-            recordLocation = ("Gresik", "Indonesia");
-            emit(GetLocationSuccessState());
+            _useDefaultLocation();
             return;
           }
+        } else if (permissionGranted ==
+            location_package.PermissionStatus.deniedForever) {
+          _useDefaultLocation();
+          return;
         }
-      } catch (permissionError) {
+      } catch (_) {
         // On web, permission check might fail, but we can still try to get location
-        print('Permission check not supported on this platform: $permissionError');
         // Try to get location anyway, if it fails, outer catch will handle it
       }
 
       locationData = await location.getLocation();
     } catch (e) {
-      print('Error getting location: $e - Using fallback location (Gresik, Indonesia)');
-      // Use fallback location: Gresik, Indonesia
-      recordLocation = ("Gresik", "Indonesia");
-      emit(GetLocationSuccessState());
+      _useDefaultLocation();
       return;
     }
 
     try {
       List<Placemark> placeMarks = await placemarkFromCoordinates(
-          locationData.latitude!, locationData.longitude!);
+        locationData.latitude!,
+        locationData.longitude!,
+      );
 
       if (placeMarks.isNotEmpty) {
         recordLocation = (
           placeMarks[0].subAdministrativeArea.toString(),
-          placeMarks[0].country.toString()
+          placeMarks[0].country.toString(),
         );
         emit(GetLocationSuccessState());
       } else {
-        // Fallback to Gresik if reverse geocoding fails
-        print('No placemarks found - Using fallback location (Gresik, Indonesia)');
-        recordLocation = ("Gresik", "Indonesia");
-        emit(GetLocationSuccessState());
+        _useDefaultLocation();
       }
     } catch (e) {
-      // Fallback to Gresik if geocoding fails
-      print('Error reverse geocoding: $e - Using fallback location (Gresik, Indonesia)');
-      recordLocation = ("Gresik", "Indonesia");
-      emit(GetLocationSuccessState());
+      _useDefaultLocation();
     }
   }
 
-  Future<void> getPrayerTimings() async {
+  void _useDefaultLocation() {
+    recordLocation = _defaultLocation;
+    emit(GetLocationSuccessState());
+  }
+
+  Future<void> refreshPrayerTimingsWithCurrentLocation() async {
+    recordLocation = ("", "");
+    await getPrayerTimings(refreshLocation: true);
+  }
+
+  Future<void> getPrayerTimings({bool refreshLocation = false}) async {
     emit(GetPrayerTimesLoadingState());
-    if (recordLocation.$1 == "" || recordLocation.$2 == "") {
+    if (refreshLocation || recordLocation.$1 == "" || recordLocation.$2 == "") {
       await getLocation();
     }
     DateTime dateNow = DateTime.now();
     var formatter = DateFormat("dd-MM-yyy");
     String formattedDate = formatter.format(dateNow);
-    final result =
-        await _getPrayerTimingsUseCase(GetPrayerTimingsUseCaseUseCaseInput(
-      date: formattedDate,
-      city: recordLocation.$1,
-      country: recordLocation.$2,
-    ));
-    result.fold((l) {
-      prayerTimingsModel =
-          PrayerTimingsModel(code: l.code!, status: l.message, data: null);
-      emit(GetPrayerTimesErrorState(l.message));
-    }, (r) {
-      prayerTimingsModel = r;
-      emit(GetPrayerTimesSuccessState(r));
-    });
+    final result = await _getPrayerTimingsUseCase(
+      GetPrayerTimingsUseCaseUseCaseInput(
+        date: formattedDate,
+        city: recordLocation.$1,
+        country: recordLocation.$2,
+      ),
+    );
+    result.fold(
+      (l) {
+        prayerTimingsModel = PrayerTimingsModel(
+          code: l.code!,
+          status: l.message,
+          data: null,
+        );
+        emit(GetPrayerTimesErrorState(l.message));
+      },
+      (r) {
+        prayerTimingsModel = r;
+        emit(GetPrayerTimesSuccessState(r));
+      },
+    );
     // return prayerTimingsModel;
   }
 }

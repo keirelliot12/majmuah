@@ -21,7 +21,7 @@ void main() {
     id: 'doa_fajar',
     title: 'Doa Fajar',
     arabicTitle: 'دعاء الفجر',
-    category: 'Doa & Tawasul',
+    category: "Aurad & Doa'",
     tags: const ['doa'],
     content: const ['Bacaan doa setelah fajar'],
   );
@@ -56,8 +56,9 @@ void main() {
     );
   }
 
-  testWidgets('shows material results after typing a search query',
-      (tester) async {
+  testWidgets('shows material results after typing a search query', (
+    tester,
+  ) async {
     await tester.pumpWidget(buildSubject());
 
     await tester.enterText(find.byType(TextField), 'fajar');
@@ -68,8 +69,9 @@ void main() {
     expect(find.text('Doa Fajar'), findsOneWidget);
   });
 
-  testWidgets('returns to the empty search state for whitespace-only query',
-      (tester) async {
+  testWidgets('returns to the empty search state for whitespace-only query', (
+    tester,
+  ) async {
     await tester.pumpWidget(buildSubject());
 
     await tester.enterText(find.byType(TextField), 'fajar');
@@ -88,10 +90,8 @@ void main() {
 }
 
 class _SearchMaterialRepository extends MaterialContentRepository {
-  _SearchMaterialRepository(
-    SharedPreferences preferences,
-    this.materials,
-  ) : super(MaterialDataSource(), NotesLocalDataSource(preferences));
+  _SearchMaterialRepository(SharedPreferences preferences, this.materials)
+    : super(MaterialDataSource(), NotesLocalDataSource(preferences));
 
   final List<MaterialModel> materials;
   final List<String> queries = [];
@@ -102,13 +102,15 @@ class _SearchMaterialRepository extends MaterialContentRepository {
     final normalizedQuery = query.toLowerCase();
 
     return materials
-        .where((material) =>
-            material.title.toLowerCase().contains(normalizedQuery) ||
-            material.category.toLowerCase().contains(normalizedQuery) ||
-            material.arabicTitle.contains(query) ||
-            material.content.any(
-              (content) => content.toLowerCase().contains(normalizedQuery),
-            ))
+        .where(
+          (material) =>
+              material.title.toLowerCase().contains(normalizedQuery) ||
+              material.category.toLowerCase().contains(normalizedQuery) ||
+              material.arabicTitle.contains(query) ||
+              material.content.any(
+                (content) => content.toLowerCase().contains(normalizedQuery),
+              ),
+        )
         .toList();
   }
 }

@@ -5,63 +5,43 @@
       "title": "Al-Quran",
       "icon_asset": "assets/icons/al_quran.png",
       "route": "/category",
-      "filter_key": "Al-Quran"
-    },
-    {
-      "id": 2,
-      "title": "Aurad Shalat",
-      "icon_asset": "assets/icons/aurad_shalat.png",
-      "route": "/category",
-      "filter_key": "Aurad Shalat"
-    },
-    {
-      "id": 3,
-      "title": "Doa & Tawasul",
-      "icon_asset": "assets/icons/doa_tawasul.png",
-      "route": "/category",
-      "filter_key": "Doa & Tawasul"
-    },
-    {
-      "id": 4,
-      "title": "Sholawat",
-      "icon_asset": "assets/icons/sholawat.png",
-      "route": "/category",
-      "filter_key": "Sholawat"
-    },
-    {
-      "id": 5,
-      "title": "Ratib",
-      "icon_asset": "assets/icons/ratib.png",
-      "route": "/category",
-      "filter_key": "Ratib",
-      "color_hex": "6366F1"
-    },
-    {
-      "id": 6,
-      "title": "Hizib",
-      "icon_asset": "assets/icons/hizib.png",
-      "route": "/category",
-      "filter_key": "Hizib",
+      "filter_key": "Al-Quran",
       "color_hex": "0D9488"
     },
     {
-      "id": 7,
-      "title": "Maulid",
-      "icon_asset": "assets/icons/maulid.png",
+      "id": 2,
+      "title": "Aurad & Doa'",
+      "icon_asset": "assets/icons/aurad_shalat.png",
       "route": "/category",
-      "filter_key": "Maulid",
-      "color_hex": "F97316"
+      "filter_key": "Aurad & Doa'",
+      "color_hex": "059669"
     },
     {
-      "id": 8,
-      "title": "Qasidah",
-      "icon_asset": "assets/icons/qasidah.png",
+      "id": 3,
+      "title": "Hizib & Ratib",
+      "icon_asset": "assets/icons/ratib.png",
       "route": "/category",
-      "filter_key": "Qasidah",
-      "color_hex": "0891B2"
+      "filter_key": "Hizib & Ratib",
+      "color_hex": "4F46E5"
     },
     {
-      "id": 9,
+      "id": 4,
+      "title": "Puji-pujian & Bilal",
+      "icon_asset": "assets/icons/puji_pujian_bilal.png",
+      "route": "/category",
+      "filter_key": "Puji-pujian & Bilal",
+      "color_hex": "D97706"
+    },
+    {
+      "id": 5,
+      "title": "Amalan Hijriyah",
+      "icon_asset": "assets/icons/doa_tawasul.png",
+      "route": "/category",
+      "filter_key": "Amalan Hijriyah",
+      "color_hex": "0F766E"
+    },
+    {
+      "id": 6,
       "title": "Tahlil & Ziarah",
       "icon_asset": "assets/icons/tahlil_ziarah.png",
       "route": "/category",
@@ -69,43 +49,39 @@
       "color_hex": "0D9488"
     },
     {
-      "id": 10,
-      "title": "Manaqib & Istighosah",
-      "icon_asset": "assets/icons/manaqib_istighosah.png",
+      "id": 7,
+      "title": "Qosidah Pilihan",
+      "icon_asset": "assets/icons/qasidah.png",
       "route": "/category",
-      "filter_key": "Manaqib & Istighosah"
+      "filter_key": "Qosidah Pilihan",
+      "color_hex": "0891B2"
+    },
+    {
+      "id": 8,
+      "title": "Sholawat",
+      "icon_asset": "assets/icons/sholawat.png",
+      "route": "/category",
+      "filter_key": "Sholawat",
+      "color_hex": "E11D48"
+    },
+    {
+      "id": 9,
+      "title": "Kaifiyah",
+      "icon_asset": "assets/icons/panduan_ibadah.png",
+      "route": "/category",
+      "filter_key": "Kaifiyah",
+      "color_hex": "16A34A"
+    },
+    {
+      "id": 10,
+      "title": "Maulid",
+      "icon_asset": "assets/icons/maulid.png",
+      "route": "/category",
+      "filter_key": "Maulid",
+      "color_hex": "F97316"
     },
     {
       "id": 11,
-      "title": "Puji-pujian & Bilal",
-      "icon_asset": "assets/icons/puji_pujian_bilal.png",
-      "route": "/category",
-      "filter_key": "Puji-pujian & Bilal"
-    },
-    {
-      "id": 12,
-      "title": "Panduan Ibadah",
-      "icon_asset": "assets/icons/panduan_ibadah.png",
-      "route": "/category",
-      "filter_key": "Panduan Ibadah"
-    },
-    {
-      "id": 13,
-      "title": "Notes",
-      "icon_asset": "assets/icons/notes.png",
-      "route": "/category",
-      "filter_key": "Notes"
-    },
-    {
-      "id": 14,
-      "title": "Khutbah",
-      "icon_asset": "assets/icons/khutbah.png",
-      "route": "/category",
-      "filter_key": "Khutbah",
-      "color_hex": "F43F5E"
-    },
-    {
-      "id": 15,
       "title": "KBIHU Nur Multazam",
       "icon_asset": "assets/icons/kbihu_nur_multazam.png",
       "route": "/category",

@@ -17,26 +17,34 @@ class WisdomQuoteCard extends StatelessWidget {
 
   const WisdomQuoteCard({
     Key? key,
-    this.quote = '"Sesungguhnya bersama kesulitan ada kemudahan. Maka apabila engkau telah selesai (dari sesuatu urusan), tetaplah bekerja keras (untuk urusan yang lain)."',
+    this.quote =
+        '"Sesungguhnya bersama kesulitan ada kemudahan. Maka apabila engkau telah selesai (dari sesuatu urusan), tetaplah bekerja keras (untuk urusan yang lain)."',
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 24.0.w,
-        vertical: 8.0.h,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 22.0.w, vertical: 8.0.h),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24.r),
+        borderRadius: BorderRadius.circular(22.r),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
           child: Container(
             padding: EdgeInsets.all(20.0.w),
             decoration: BoxDecoration(
-              color: Colors.white.withAlpha(51),
-              borderRadius: BorderRadius.circular(24.r),
-              border: Border.all(color: Colors.white.withAlpha(51), width: 1),
+              color: AppColors.darkTeal,
+              borderRadius: BorderRadius.circular(22.r),
+              border: Border.all(
+                color: AppColors.lemonYellow.withAlpha(46),
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.darkerTeal.withAlpha(24),
+                  blurRadius: 16.r,
+                  offset: Offset(0, 8.r),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +54,7 @@ class WisdomQuoteCard extends StatelessWidget {
                   children: [
                     Icon(
                       Symbols.format_quote,
-                      color: Colors.white,
+                      color: AppColors.lemonYellow,
                       size: 16.r,
                     ),
                     SizedBox(width: 8.0.w),
@@ -55,8 +63,8 @@ class WisdomQuoteCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 10.sp,
                         fontWeight: FontWeightsManager.bold,
-                        color: Colors.white,
-                        letterSpacing: 1.5,
+                        color: AppColors.white.withAlpha(222),
+                        letterSpacing: 0,
                       ),
                     ),
                   ],
@@ -70,7 +78,7 @@ class WisdomQuoteCard extends StatelessWidget {
                     fontSize: 14.sp,
                     fontWeight: FontWeightsManager.medium,
                     fontStyle: FontStyle.italic,
-                    color: Colors.white,
+                    color: AppColors.white.withAlpha(230),
                     height: 1.6,
                   ),
                 ),

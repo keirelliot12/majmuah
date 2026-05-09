@@ -4,26 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:islamic/app/resources/strings_manager.dart';
 import 'package:islamic/presentation/browseyoutube/view/browseyoutube_screen.dart';
-import 'package:islamic/presentation/pillars/view/pillars_screen.dart';
 
 import '../../di/di.dart';
 import '../../presentation/custom_adhkar/view/custom_adhkar_view.dart';
 import '../../presentation/custom_adhkar/view/custom_dhikr_view.dart';
 import '../../presentation/dhikr_builder/view/dhikr_builder_view.dart';
-import '../../presentation/hadith_builder/view/hadith_builder_view.dart';
 import '../../presentation/home/view/home_view.dart';
 import '../../presentation/home/cubit/beranda_material_cubit.dart';
 import '../../presentation/surah_builder/view/surah_builder_view.dart';
 import '../../presentation/home/screens/all_categories/all_categories_screen.dart';
 import '../../presentation/material/material_list_screen.dart';
 import '../../presentation/material/material_detail_screen.dart';
-import '../../presentation/notes/notes_list_screen.dart';
-import '../../presentation/notes/note_detail_screen.dart';
 import '../../presentation/search/search_result_screen.dart';
 import '../../presentation/search/smart_search_screen.dart';
 import '../../presentation/splash/splash_view.dart';
 import '../../presentation/settings/download_manager_screen.dart';
-import '../../domain/models/note/note_model.dart';
 
 class Routes {
   static const String splashRoute = "/";
@@ -33,7 +28,6 @@ class Routes {
   static const String adhkarRoute = "/adhkar";
   static const String customAdhkarRoute = "/customAdhkar";
   static const String customDhikrRoute = "/customDhikr";
-  static const String pillarsRoute = "/pillars";
   static const String browsenetRoute = "/browse";
 
   // Beranda Feature Routes
@@ -54,7 +48,6 @@ class RoutesGenerator {
         return MaterialPageRoute(builder: (_) => const SplashView());
       case Routes.homeRoute:
         initQuranModule();
-        initHadithModule();
         initAdhkarModule();
         initPrayerTimingsModule();
         initBerandaModule();
@@ -62,30 +55,30 @@ class RoutesGenerator {
       case Routes.quranRoute:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-            builder: (_) => SurahBuilderView(
-                quranList: args["quranList"], pageNo: args["pageNo"]));
-      case Routes.hadithRoute:
-        final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
-            builder: (_) =>
-                HadithBuilderView(hadithModel: args["hadithModel"]));
+          builder: (_) => SurahBuilderView(
+            quranList: args["quranList"],
+            pageNo: args["pageNo"],
+          ),
+        );
       case Routes.adhkarRoute:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-            builder: (_) => DhikrBuilderView(
-                adhkarList: args["adhkarList"], category: args["category"]));
+          builder: (_) => DhikrBuilderView(
+            adhkarList: args["adhkarList"],
+            category: args["category"],
+          ),
+        );
       case Routes.customAdhkarRoute:
         initCustomAdhkarModule();
         return MaterialPageRoute(builder: (_) => CustomAdhkarView());
       case Routes.customDhikrRoute:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-            builder: (_) => CustomDhikrView(
-                  customDhikrText: args["customDhikrText"],
-                  noOfRepetitions: args["noOfRepetitions"],
-                ));
-      case Routes.pillarsRoute:
-        return MaterialPageRoute(builder: (_) => PillarsScreen());
+          builder: (_) => CustomDhikrView(
+            customDhikrText: args["customDhikrText"],
+            noOfRepetitions: args["noOfRepetitions"],
+          ),
+        );
       case Routes.browsenetRoute:
         return MaterialPageRoute(builder: (_) => BrowseYoutubeScreen());
       case Routes.downloadManagerRoute:
@@ -114,24 +107,11 @@ class RoutesGenerator {
             categoryColor: args['categoryColor'],
           ),
         );
-      case Routes.notesListRoute:
-        initBerandaModule();
-        return MaterialPageRoute(builder: (_) => const NotesListScreen());
-      case Routes.noteDetailRoute:
-        initBerandaModule();
-        final args = settings.arguments as Map<String, dynamic>?;
-        return MaterialPageRoute(
-          builder: (_) => NoteDetailScreen(
-            note: args?['note'] as NoteModel?,
-          ),
-        );
       case Routes.searchResultRoute:
         initBerandaModule();
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (_) => SearchResultScreen(
-            query: args['query'],
-          ),
+          builder: (_) => SearchResultScreen(query: args['query']),
         );
       case Routes.smartSearchRoute:
         initBerandaModule();
@@ -150,16 +130,8 @@ class RoutesGenerator {
   static Route<dynamic> unDefinedRoute() {
     return MaterialPageRoute(
       builder: (_) => Scaffold(
-        appBar: AppBar(
-          title: Text(
-            AppStrings.noRouteFound.tr(),
-          ),
-        ),
-        body: Center(
-          child: Text(
-            AppStrings.noRouteFound.tr(),
-          ),
-        ),
+        appBar: AppBar(title: Text(AppStrings.noRouteFound.tr())),
+        body: Center(child: Text(AppStrings.noRouteFound.tr())),
       ),
     );
   }

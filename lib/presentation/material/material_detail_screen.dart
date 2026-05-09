@@ -24,11 +24,20 @@ class MaterialDetailScreen extends StatefulWidget {
 class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
   final AppPreferences _preferences = instance<AppPreferences>();
   double _arabicFontScale = defaultArabicReadingFontScale;
+  String _arabicFontFamily = defaultArabicReadingFontFamily;
+  bool _readingNightMode = false;
+
+  static final RegExp _arabicTextPattern = RegExp(
+    r'[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]',
+  );
+  static final RegExp _badPlaceholderPattern = RegExp(r'^\?{3,}$');
 
   @override
   void initState() {
     super.initState();
     _arabicFontScale = _preferences.getArabicReadingFontScale();
+    _arabicFontFamily = _preferences.getArabicReadingFontFamily();
+    _readingNightMode = _preferences.getReadingNightMode();
     // Update last read when opened
     WidgetsBinding.instance.addPostFrameCallback((_) {
       instance<BerandaMaterialCubit>().setLastRead(widget.material.id);
@@ -37,56 +46,88 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final title = _cleanUiText(widget.material.title, 'Materi');
+    final arabicTitle = _cleanUiText(widget.material.arabicTitle, '');
+    final hasArabicContent =
+        arabicTitle.isNotEmpty ||
+        widget.material.content.any((paragraph) => _hasArabicText(paragraph));
+
     return Scaffold(
-      backgroundColor: AppColors.offWhite,
+      backgroundColor: _readingNightMode
+          ? AppColors.deepEmerald
+          : AppColors.background,
       appBar: AppBar(
         title: Text(
-          widget.material.title,
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+          title,
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
         ),
-        backgroundColor: widget.categoryColor,
-        foregroundColor: Colors.white,
+        backgroundColor: _readingNightMode
+            ? AppColors.deepEmerald
+            : AppColors.background,
+        foregroundColor: _readingNightMode
+            ? AppColors.surface
+            : AppColors.deepEmerald,
         elevation: 0,
+        actions: [
+          IconButton(
+            tooltip: 'Pengaturan baca',
+            onPressed: () => _showReadingSettingsSheet(hasArabicContent),
+            icon: const Icon(Icons.tune_rounded),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header with title and arabic title
             Container(
               width: double.infinity,
-              padding: EdgeInsets.all(AppPadding.p24.w),
+              margin: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 0),
+              padding: EdgeInsets.fromLTRB(20.w, 22.h, 20.w, 24.h),
               decoration: BoxDecoration(
-                color: widget.categoryColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(32.r),
-                  bottomRight: Radius.circular(32.r),
+                color: _readingNightMode
+                    ? AppColors.surface.withAlpha(20)
+                    : widget.categoryColor.withAlpha(24),
+                borderRadius: BorderRadius.circular(24.r),
+                border: Border.all(
+                  color: _readingNightMode
+                      ? AppColors.surface.withAlpha(42)
+                      : widget.categoryColor.withAlpha(30),
                 ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: Text(
-                      widget.material.arabicTitle,
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontFamily: 'UthmanTN',
-                        fontSize: 32.sp,
-                        color: Colors.white,
-                        height: 1.5,
+                  if (arabicTitle.isNotEmpty) ...[
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Text(
+                        arabicTitle,
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontFamily: _arabicFontFamily,
+                          fontSize: 32.sp * _arabicFontScale,
+                          color: _readingNightMode
+                              ? AppColors.limeGold
+                              : widget.categoryColor,
+                          height: 1.55,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 16.h),
+                    SizedBox(height: 16.h),
+                  ],
                   Text(
-                    widget.material.title,
-                    textAlign: TextAlign.center,
+                    title,
+                    textAlign: arabicTitle.isNotEmpty
+                        ? TextAlign.center
+                        : TextAlign.start,
                     style: TextStyle(
                       fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white.withAlpha(230),
+                      height: 1.35,
+                      fontWeight: FontWeight.w700,
+                      color: _readingNightMode
+                          ? AppColors.surface
+                          : AppColors.deepEmerald,
                     ),
                   ),
                 ],
@@ -94,32 +135,22 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
             ),
 
             Padding(
-              padding: EdgeInsets.fromLTRB(
-                AppPadding.p24.w,
-                AppPadding.p20.h,
-                AppPadding.p24.w,
-                0,
-              ),
-              child: _FontScaleControl(
-                value: _arabicFontScale,
-                categoryColor: widget.categoryColor,
-                onChanged: _setArabicFontScale,
-              ),
-            ),
-
-            // Content paragraphs
-            Padding(
-              padding: EdgeInsets.all(AppPadding.p24.w),
+              padding: EdgeInsets.fromLTRB(22.w, 24.h, 22.w, 0),
               child: ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: widget.material.content.length,
-                separatorBuilder: (context, index) => SizedBox(height: 24.h),
+                separatorBuilder: (context, index) => SizedBox(height: 18.h),
                 itemBuilder: (context, index) {
                   return ReadingParagraphCard(
-                    text: widget.material.content[index],
+                    text: _cleanUiText(
+                      widget.material.content[index],
+                      'Materi sedang disiapkan.',
+                    ),
                     categoryColor: widget.categoryColor,
                     fontScale: _arabicFontScale,
+                    arabicFontFamily: _arabicFontFamily,
+                    nightMode: _readingNightMode,
                   );
                 },
               ),
@@ -138,56 +169,269 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
 
     await _preferences.setArabicReadingFontScale(value);
   }
+
+  Future<void> _setArabicFontFamily(String value) async {
+    setState(() {
+      _arabicFontFamily = value;
+    });
+    await _preferences.setArabicReadingFontFamily(value);
+  }
+
+  Future<void> _setReadingNightMode(bool value) async {
+    setState(() {
+      _readingNightMode = value;
+    });
+    await _preferences.setReadingNightMode(value);
+  }
+
+  void _showReadingSettingsSheet(bool hasArabicContent) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            void updateFontScale(double value) {
+              setSheetState(() => _arabicFontScale = value);
+              _setArabicFontScale(value);
+            }
+
+            void updateFontFamily(String value) {
+              setSheetState(() => _arabicFontFamily = value);
+              _setArabicFontFamily(value);
+            }
+
+            void updateNightMode(bool value) {
+              setSheetState(() => _readingNightMode = value);
+              _setReadingNightMode(value);
+            }
+
+            return _ReadingSettingsSheet(
+              hasArabicContent: hasArabicContent,
+              fontScale: _arabicFontScale,
+              selectedFontFamily: _arabicFontFamily,
+              nightMode: _readingNightMode,
+              categoryColor: widget.categoryColor,
+              onFontScaleChanged: updateFontScale,
+              onFontFamilyChanged: updateFontFamily,
+              onNightModeChanged: updateNightMode,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  static bool _hasArabicText(String text) => _arabicTextPattern.hasMatch(text);
+
+  static String _cleanUiText(String value, String fallback) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty || _badPlaceholderPattern.hasMatch(trimmed)) {
+      return fallback;
+    }
+    return trimmed;
+  }
 }
 
-class _FontScaleControl extends StatelessWidget {
-  final double value;
+class _ReadingSettingsSheet extends StatelessWidget {
+  final bool hasArabicContent;
+  final double fontScale;
+  final String selectedFontFamily;
+  final bool nightMode;
   final Color categoryColor;
-  final ValueChanged<double> onChanged;
+  final ValueChanged<double> onFontScaleChanged;
+  final ValueChanged<String> onFontFamilyChanged;
+  final ValueChanged<bool> onNightModeChanged;
 
-  const _FontScaleControl({
-    required this.value,
+  const _ReadingSettingsSheet({
+    required this.hasArabicContent,
+    required this.fontScale,
+    required this.selectedFontFamily,
+    required this.nightMode,
     required this.categoryColor,
-    required this.onChanged,
+    required this.onFontScaleChanged,
+    required this.onFontFamilyChanged,
+    required this.onNightModeChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppPadding.p16.w,
-        vertical: AppPadding.p12.h,
-      ),
+      padding: EdgeInsets.fromLTRB(24.w, 10.h, 24.w, 28.h),
       decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: categoryColor.withAlpha(31)),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(34.r)),
       ),
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.format_size, color: categoryColor, size: 22.r),
-          SizedBox(width: 12.w),
-          Text(
-            'Ukuran Arab',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.darkerTeal,
-                  fontWeight: FontWeight.w600,
-                ),
-          ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Slider(
-              value: value,
-              min: minArabicReadingFontScale,
-              max: maxArabicReadingFontScale,
-              divisions: 6,
-              activeColor: categoryColor,
-              label: '${(value * 100).round()}%',
-              onChanged: onChanged,
+          Center(
+            child: Container(
+              width: 54.w,
+              height: 5.h,
+              decoration: BoxDecoration(
+                color: AppColors.softBorder,
+                borderRadius: BorderRadius.circular(999.r),
+              ),
             ),
+          ),
+          SizedBox(height: 26.h),
+          Text('UKURAN HURUF', style: _sheetLabelStyle(context)),
+          SizedBox(height: 14.h),
+          Row(
+            children: [
+              Text('A', style: TextStyle(fontSize: 18.sp)),
+              Expanded(
+                child: Slider(
+                  value: fontScale,
+                  min: minArabicReadingFontScale,
+                  max: maxArabicReadingFontScale,
+                  divisions: 6,
+                  activeColor: categoryColor,
+                  label: '${(fontScale * 100).round()}%',
+                  onChanged: hasArabicContent ? onFontScaleChanged : null,
+                ),
+              ),
+              Text(
+                'A',
+                style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.w800),
+              ),
+            ],
+          ),
+          SizedBox(height: 22.h),
+          Text('JENIS FONT', style: _sheetLabelStyle(context)),
+          SizedBox(height: 14.h),
+          _FontChoiceRow(
+            selectedFontFamily: selectedFontFamily,
+            onChanged: hasArabicContent ? onFontFamilyChanged : (_) {},
+          ),
+          SizedBox(height: 24.h),
+          _SwitchRow(
+            title: 'Mode Malam',
+            subtitle: 'Gunakan tema gelap untuk membaca',
+            value: nightMode,
+            onChanged: onNightModeChanged,
+            activeColor: categoryColor,
           ),
         ],
       ),
+    );
+  }
+
+  TextStyle? _sheetLabelStyle(BuildContext context) {
+    return Theme.of(context).textTheme.labelMedium?.copyWith(
+      color: AppColors.mutedEmerald,
+      fontWeight: FontWeight.w800,
+      letterSpacing: 1.4,
+    );
+  }
+}
+
+class _FontChoiceRow extends StatelessWidget {
+  final String selectedFontFamily;
+  final ValueChanged<String> onChanged;
+
+  const _FontChoiceRow({
+    required this.selectedFontFamily,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const choices = [
+      ('Utsmani', FontConstants.uthmanTNFontFamily),
+      ('Hafs', FontConstants.hafsFontFamily),
+      ('Quran', FontConstants.meQuranFontFamily),
+    ];
+
+    return Container(
+      padding: EdgeInsets.all(5.w),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(22.r),
+      ),
+      child: Row(
+        children: choices.map((choice) {
+          final isSelected = selectedFontFamily == choice.$2;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () => onChanged(choice.$2),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding: EdgeInsets.symmetric(vertical: 14.h),
+                decoration: BoxDecoration(
+                  color: isSelected ? AppColors.surface : Colors.transparent,
+                  borderRadius: BorderRadius.circular(18.r),
+                  boxShadow: isSelected ? AppColors.softShadow : null,
+                ),
+                child: Text(
+                  choice.$1,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: isSelected
+                        ? AppColors.emerald
+                        : AppColors.mutedEmerald,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _SwitchRow extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  final Color activeColor;
+
+  const _SwitchRow({
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+    required this.activeColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: AppColors.deepEmerald,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              SizedBox(height: 3.h),
+              Text(
+                subtitle,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: AppColors.mutedEmerald),
+              ),
+            ],
+          ),
+        ),
+        Switch(
+          value: value,
+          onChanged: onChanged,
+          activeThumbColor: AppColors.surface,
+          activeTrackColor: activeColor,
+        ),
+      ],
     );
   }
 }

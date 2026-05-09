@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import '../../app/resources/color_manager.dart';
-import '../../app/resources/values.dart';
+import '../../app/resources/resources.dart';
 import '../download/cubit/download_cubit.dart';
 import '../download/cubit/download_state.dart';
 import '../download/widgets/download_prompt_dialog.dart';
@@ -17,9 +16,13 @@ class DownloadManagerScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => instance<DownloadCubit>()..checkManifest(),
       child: Scaffold(
+        backgroundColor: AppColors.offWhite,
         appBar: AppBar(
           title: const Text("Kelola Unduhan"),
           centerTitle: true,
+          backgroundColor: AppColors.white,
+          foregroundColor: AppColors.darkerTeal,
+          elevation: 0,
         ),
         body: BlocBuilder<DownloadCubit, DownloadState>(
           builder: (context, state) {
@@ -72,7 +75,7 @@ class DownloadManagerScreen extends StatelessWidget {
               .toDouble();
       statusText =
           "Mengunduh bagian ${state.currentChunk} dari ${state.totalChunks} (${state.progress.percentage.toInt()}%)";
-      statusColor = ColorManager.lightPrimary;
+      statusColor = AppColors.tealGreen;
     } else if (state is DownloadSuccess) {
       isDownloaded = state.message.contains("berhasil diunduh") ||
           state.message.contains("sudah diunduh");
@@ -85,8 +88,12 @@ class DownloadManagerScreen extends StatelessWidget {
       statusColor = Colors.red;
     }
 
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.s16.r)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppSize.s16.r),
+        border: Border.all(color: AppColors.darkTeal.withAlpha(14)),
+      ),
       child: Padding(
         padding: EdgeInsets.all(AppPadding.p16.r),
         child: Column(
@@ -94,17 +101,39 @@ class DownloadManagerScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Symbols.menu_book, color: ColorManager.gold, size: 28.sp),
+                Container(
+                  width: 44.r,
+                  height: 44.r,
+                  decoration: BoxDecoration(
+                    color: AppColors.lemonYellow.withAlpha(55),
+                    borderRadius: BorderRadius.circular(14.r),
+                  ),
+                  child: Icon(Symbols.menu_book, color: AppColors.tealGreen, size: 24.sp),
+                ),
                 SizedBox(width: 12.w),
-                const Text(
-                  "Data Al-Quran",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                const Expanded(
+                  child: Text(
+                    "Data Al-Quran",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: AppColors.darkerTeal,
+                    ),
+                  ),
                 ),
               ],
             ),
             SizedBox(height: 16.h),
             if (!isDownloaded || isDownloading)
-              LinearProgressIndicator(value: isLoading ? null : progress),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.r),
+                child: LinearProgressIndicator(
+                  value: isLoading ? null : progress,
+                  minHeight: 10.h,
+                  backgroundColor: AppColors.tealGreen.withAlpha(22),
+                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.tealGreen),
+                ),
+              ),
             SizedBox(height: 8.h),
             Text(statusText, style: TextStyle(color: statusColor, fontSize: 13)),
             SizedBox(height: 16.h),
@@ -128,6 +157,15 @@ class DownloadManagerScreen extends StatelessWidget {
                       },
                       icon: const Icon(Symbols.download),
                       label: Text(hasFailure ? "Coba Lagi" : "Unduh"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.tealGreen,
+                        foregroundColor: AppColors.white,
+                        elevation: 0,
+                        padding: EdgeInsets.symmetric(vertical: AppPadding.p12.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppSize.s14.r),
+                        ),
+                      ),
                     ),
                   ),
                 if (isDownloading)
@@ -136,15 +174,33 @@ class DownloadManagerScreen extends StatelessWidget {
                       onPressed: null,
                       icon: const Icon(Symbols.downloading),
                       label: const Text("Mengunduh..."),
+                      style: ElevatedButton.styleFrom(
+                        disabledBackgroundColor: AppColors.tealGreen.withAlpha(40),
+                        disabledForegroundColor: AppColors.darkerTeal.withAlpha(130),
+                        elevation: 0,
+                        padding: EdgeInsets.symmetric(vertical: AppPadding.p12.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppSize.s14.r),
+                        ),
+                      ),
                     ),
                   ),
                 if (isDownloaded)
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: () => _confirmDeleteQuran(context),
-                      icon: const Icon(Symbols.delete, color: Colors.red),
-                      label: const Text("Hapus Data", style: TextStyle(color: Colors.red)),
-                      style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.red)),
+                      icon: const Icon(Symbols.delete, color: Color(0xFFB3261E)),
+                      label: const Text(
+                        "Hapus Data",
+                        style: TextStyle(color: Color(0xFFB3261E)),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Color(0xFFB3261E)),
+                        padding: EdgeInsets.symmetric(vertical: AppPadding.p12.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppSize.s14.r),
+                        ),
+                      ),
                     ),
                   ),
               ],
@@ -156,30 +212,49 @@ class DownloadManagerScreen extends StatelessWidget {
   }
 
   Widget _buildSyncContentCard() {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.s16.r)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppSize.s16.r),
+        border: Border.all(color: AppColors.darkTeal.withAlpha(14)),
+      ),
       child: ListTile(
         enabled: false,
-        leading: Icon(Icons.sync_disabled, color: Colors.grey, size: 28.sp),
-        title: const Text("Pembaruan Konten", style: TextStyle(fontWeight: FontWeight.bold)),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        leading: Icon(Icons.sync_disabled, color: AppColors.darkerTeal.withAlpha(110), size: 28.sp),
+        title: const Text(
+          "Pembaruan Konten",
+          style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.darkerTeal),
+        ),
         subtitle: Text(
           "Sinkronisasi konten belum tersedia di rilis ini",
-          style: TextStyle(color: Colors.grey[600]),
+          style: TextStyle(color: AppColors.darkerTeal.withAlpha(130)),
         ),
-        trailing: const Icon(Icons.lock_outline, color: Colors.grey),
+        trailing: Icon(Icons.lock_outline, color: AppColors.darkerTeal.withAlpha(110)),
       ),
     );
   }
 
   Widget _buildCleanupCard() {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSize.s16.r)),
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppSize.s16.r),
+        border: Border.all(color: AppColors.darkTeal.withAlpha(14)),
+      ),
       child: ListTile(
         enabled: false,
-        leading: Icon(Symbols.cleaning_services, color: Colors.grey, size: 28.sp),
-        title: const Text("Bersihkan Cache", style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: const Text("Pembersihan cache belum tersedia di rilis ini"),
-        trailing: const Icon(Icons.lock_outline, color: Colors.grey),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        leading: Icon(Symbols.cleaning_services, color: AppColors.darkerTeal.withAlpha(110), size: 28.sp),
+        title: const Text(
+          "Bersihkan Cache",
+          style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.darkerTeal),
+        ),
+        subtitle: Text(
+          "Pembersihan cache belum tersedia di rilis ini",
+          style: TextStyle(color: AppColors.darkerTeal.withAlpha(130)),
+        ),
+        trailing: Icon(Icons.lock_outline, color: AppColors.darkerTeal.withAlpha(110)),
       ),
     );
   }

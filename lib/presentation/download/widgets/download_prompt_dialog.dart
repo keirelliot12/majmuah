@@ -2,8 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import '../../../../app/resources/color_manager.dart';
-import '../../../../app/resources/values.dart';
+import '../../../../app/resources/resources.dart';
 
 class DownloadPromptDialog extends StatelessWidget {
   final String featureName;
@@ -24,10 +23,10 @@ class DownloadPromptDialog extends StatelessWidget {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: AlertDialog(
-        backgroundColor: Colors.white.withAlpha(180),
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24.r),
-          side: const BorderSide(color: Colors.white, width: 1.5),
+          borderRadius: BorderRadius.circular(22.r),
+          side: BorderSide(color: AppColors.tealGreen.withAlpha(28), width: 1),
         ),
         contentPadding: EdgeInsets.all(AppPadding.p24.r),
         content: Column(
@@ -36,22 +35,22 @@ class DownloadPromptDialog extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
-                color: ColorManager.gold.withAlpha(50),
+                color: AppColors.lemonYellow.withAlpha(55),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Symbols.download_for_offline,
                 size: 48.sp,
-                color: ColorManager.gold,
+                color: AppColors.tealGreen,
               ),
             ),
             SizedBox(height: 20.h),
             Text(
-              "Download Diperlukan",
+              "Mushaf Belum Diunduh",
               style: TextStyle(
                 fontSize: 20.sp,
-                fontWeight: FontWeight.bold,
-                color: ColorManager.lightPrimary,
+                fontWeight: FontWeight.w700,
+                color: AppColors.darkerTeal,
               ),
             ),
             SizedBox(height: 12.h),
@@ -60,7 +59,7 @@ class DownloadPromptDialog extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14.sp,
-                color: Colors.black87,
+                color: AppColors.darkerTeal.withAlpha(190),
                 height: 1.5,
               ),
             ),
@@ -68,20 +67,25 @@ class DownloadPromptDialog extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: Colors.black.withAlpha(20),
+                color: AppColors.offWhite,
                 borderRadius: BorderRadius.circular(12.r),
+                border: Border.all(color: AppColors.tealGreen.withAlpha(30)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Symbols.database, size: 18.sp, color: Colors.black54),
+                  Icon(
+                    Symbols.database,
+                    size: 18.sp,
+                    color: AppColors.tealGreen,
+                  ),
                   SizedBox(width: 8.w),
                   Text(
                     "Ukuran: ~$totalSize",
                     style: TextStyle(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black54,
+                      color: AppColors.darkerTeal.withAlpha(170),
                     ),
                   ),
                 ],
@@ -97,8 +101,11 @@ class DownloadPromptDialog extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 12.h),
                     ),
                     child: Text(
-                      "Nanti",
-                      style: TextStyle(color: Colors.grey[600]),
+                      "Download Nanti",
+                      style: TextStyle(
+                        color: AppColors.darkerTeal.withAlpha(155),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
@@ -110,7 +117,7 @@ class DownloadPromptDialog extends StatelessWidget {
                       onDownload();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorManager.lightPrimary,
+                      backgroundColor: AppColors.tealGreen,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       padding: EdgeInsets.symmetric(vertical: 12.h),
@@ -118,7 +125,7 @@ class DownloadPromptDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                     ),
-                    child: const Text("Download"),
+                    child: const Text("Download Sekarang"),
                   ),
                 ),
               ],

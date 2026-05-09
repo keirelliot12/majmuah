@@ -10,6 +10,7 @@ sealed class ImageAsset {
   static const String prayerIcon = "$imagePath/mosque-ic.svg";
   static const String adhkarIcon = "$imagePath/adhkar-ic.svg";
   static const String launcherIcon = "$imagePath/islamic_ic.png";
+  static const String anNibrosLogo = "$imagePath/an_nibros_logo.jpg";
   static List<String> pillarsimgd = [
     "$pillarsPath/pillar1.png",
     "$pillarsPath/pillar2.jpg",

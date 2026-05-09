@@ -1,9 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:islamic/presentation/components/separator.dart';
 import '../../../app/resources/resources.dart';
-
+import 'app_brand_logo.dart';
 
 class MyDrawer extends StatelessWidget {
   @override
@@ -13,23 +11,16 @@ class MyDrawer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: AppPadding.p40),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              height: AppSize.s140,
-              width: AppSize.s160,
-              margin: EdgeInsets.symmetric(vertical: AppMargin.m20),
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(ImageAsset.launcherIcon),
-                      fit: BoxFit.fill)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppPadding.p20),
+              child: AppBrandLogo(size: 54, showLabel: true),
             ),
-            _draweritem(AppStrings.pillars.tr(), () {
-              Navigator.of(context).pushNamed(Routes.pillarsRoute);
-            }),
-            getSeparator(context),
+            const SizedBox(height: AppSize.s24),
             _draweritem(AppStrings.browse.tr(), () {
               Navigator.of(context).pushNamed(Routes.browsenetRoute);
-            })
+            }),
           ],
         ),
       ),
@@ -40,10 +31,36 @@ class MyDrawer extends StatelessWidget {
     return InkWell(
       onTap: ontap,
       child: Container(
-        margin: EdgeInsets.only(top: AppMargin.m16),
+        margin: EdgeInsets.only(
+          top: AppMargin.m16,
+          left: AppMargin.m16,
+          right: AppMargin.m16,
+        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppPadding.p16,
+          vertical: AppPadding.p14,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(AppSize.s16),
+          border: Border.all(color: AppColors.softBorder),
+        ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [Text(title,style: TextStyle(fontSize: AppSize.s20),), Icon(Icons.double_arrow)],
+          children: [
+            const Icon(Icons.play_circle_outline, color: AppColors.emerald),
+            const SizedBox(width: AppSize.s12),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: AppSize.s16,
+                  color: AppColors.deepEmerald,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: AppColors.mutedEmerald),
+          ],
         ),
       ),
     );

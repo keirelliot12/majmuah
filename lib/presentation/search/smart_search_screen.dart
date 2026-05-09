@@ -68,10 +68,7 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
       Navigator.pushNamed(
         context,
         Routes.materialDetailRoute,
-        arguments: {
-          'material': material,
-          'categoryColor': AppColors.tealGreen,
-        },
+        arguments: {'material': material, 'categoryColor': AppColors.tealGreen},
       );
     }
   }
@@ -86,14 +83,14 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: AppColors.offWhite,
       body: Column(
         children: [
           _buildHeader(),
           Expanded(
             child: _searchController.text.trim().isEmpty
-              ? _buildHistoryPlaceholder()
-              : _buildSearchResults(),
+                ? _buildHistoryPlaceholder()
+                : _buildSearchResults(),
           ),
         ],
       ),
@@ -102,15 +99,16 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
 
   Widget _buildHeader() {
     return Container(
-      padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight + 10.h, left: 24.w, right: 24.w, bottom: 24.h),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.lemonYellow,
-            Color(0xFFA8D5A2), // matching the HTML 'search-container' bottom
-          ],
+      padding: EdgeInsets.only(
+        top: ScreenUtil().statusBarHeight + 10.h,
+        left: 20.w,
+        right: 20.w,
+        bottom: 20.h,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        border: Border(
+          bottom: BorderSide(color: AppColors.darkTeal.withAlpha(18)),
         ),
       ),
       child: Column(
@@ -118,14 +116,19 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
           Row(
             children: [
               IconButton(
-                icon: const Icon(Icons.arrow_back_ios, size: 20),
+                icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                color: AppColors.darkerTeal,
                 onPressed: () => Navigator.pop(context),
               ),
               const Expanded(
                 child: Center(
                   child: Text(
                     'Pencarian Cerdas',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                      color: AppColors.darkerTeal,
+                    ),
                   ),
                 ),
               ),
@@ -134,33 +137,40 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
           ),
           SizedBox(height: 16.h),
           Container(
-            height: 50.h,
+            height: 52.h,
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(20),
-                  blurRadius: 20,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              color: AppColors.offWhite,
+              borderRadius: BorderRadius.circular(18.r),
+              border: Border.all(color: AppColors.tealGreen.withAlpha(35)),
             ),
             child: TextField(
               controller: _searchController,
               onChanged: _onSearchChanged,
               autofocus: true,
-              style: const TextStyle(fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: AppColors.darkerTeal,
+              ),
               decoration: InputDecoration(
-                hintText: 'Cari Surah, Wirid, atau Doa...',
-                hintStyle: TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.normal),
-                prefixIcon: Icon(Symbols.search, color: Colors.grey.shade500),
+                hintText: 'Cari surah, wirid, atau doa...',
+                hintStyle: TextStyle(
+                  color: AppColors.darkerTeal.withAlpha(105),
+                  fontWeight: FontWeight.w400,
+                ),
+                prefixIcon: const Icon(
+                  Symbols.search,
+                  color: AppColors.tealGreen,
+                ),
                 suffixIcon: _searchController.text.isNotEmpty
-                  ? IconButton(
-                      icon: Icon(Symbols.cancel, color: Colors.grey.shade400, size: 20),
-                      onPressed: _clearSearch,
-                    )
-                  : null,
+                    ? IconButton(
+                        icon: Icon(
+                          Symbols.cancel,
+                          color: AppColors.darkerTeal.withAlpha(120),
+                          size: 20,
+                        ),
+                        onPressed: _clearSearch,
+                      )
+                    : null,
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(vertical: 15.h),
               ),
@@ -185,16 +195,20 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
                   'PENCARIAN TERAKHIR',
                   style: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey,
-                    letterSpacing: 1.5,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkerTeal,
+                    letterSpacing: 1.2,
                   ),
                 ),
                 TextButton(
                   onPressed: _clearHistory,
                   child: const Text(
                     'Bersihkan',
-                    style: TextStyle(color: AppColors.islamicTeal, fontSize: 12, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: AppColors.tealGreen,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],
@@ -203,31 +217,70 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
             Wrap(
               spacing: 8.w,
               runSpacing: 8.h,
-              children: _searchHistory.map((query) => GestureDetector(
-                onTap: () => _handleHistoryTap(query),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: Text(
-                    query,
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black54),
-                  ),
-                ),
-              )).toList(),
+              children: _searchHistory
+                  .map(
+                    (query) => GestureDetector(
+                      onTap: () => _handleHistoryTap(query),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 8.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.circular(20.r),
+                          border: Border.all(
+                            color: AppColors.tealGreen.withAlpha(28),
+                          ),
+                        ),
+                        child: Text(
+                          query,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.darkerTeal,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
           ] else
             Center(
               child: Column(
                 children: [
                   SizedBox(height: 100.h),
-                  Icon(Symbols.search, size: 80.r, color: Colors.grey.shade200),
+                  Container(
+                    width: 88.r,
+                    height: 88.r,
+                    decoration: BoxDecoration(
+                      color: AppColors.lemonYellow.withAlpha(55),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Symbols.travel_explore,
+                      size: 42.r,
+                      color: AppColors.tealGreen,
+                    ),
+                  ),
                   SizedBox(height: 16.h),
+                  const Text(
+                    'Temukan panduan ibadah',
+                    style: TextStyle(
+                      color: AppColors.darkerTeal,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
                   Text(
-                    'Mulai cari bimbingan spiritualmu',
-                    style: TextStyle(color: Colors.grey.shade400),
+                    'Ketik kata kunci untuk mencari surah, wirid, atau doa.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: AppColors.darkerTeal.withAlpha(140),
+                      fontSize: 12,
+                    ),
                   ),
                 ],
               ),
@@ -255,12 +308,12 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
                 return Padding(
                   padding: EdgeInsets.only(bottom: 16.h),
                   child: const Text(
-                    'INSTANT SUGGESTIONS',
+                    'SARAN CEPAT',
                     style: TextStyle(
                       fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                      letterSpacing: 1.5,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.darkerTeal,
+                      letterSpacing: 1.2,
                     ),
                   ),
                 );
@@ -270,7 +323,9 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
             },
           );
         } else if (state is BerandaMaterialError) {
-          return Center(child: Text('Error: ${state.message}'));
+          return Center(
+            child: Text('Gagal melakukan pencarian: ${state.message}'),
+          );
         }
         return Container();
       },
@@ -285,20 +340,21 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
 
     // Mapping categories to types in design
     if (material.category.toLowerCase().contains('quran')) {
-      typeLabel = 'SUrat';
+      typeLabel = 'Surat';
       icon = Symbols.menu_book;
       iconColor = AppColors.islamicTeal;
-      bgColor = Colors.teal.shade50;
-    } else if (material.category.toLowerCase().contains('doa') || material.category.toLowerCase().contains('dzikir')) {
-      typeLabel = 'AYAT'; // or 'DOA'
+      bgColor = AppColors.islamicTeal.withAlpha(22);
+    } else if (material.category.toLowerCase().contains('doa') ||
+        material.category.toLowerCase().contains('dzikir')) {
+      typeLabel = 'Doa';
       icon = Symbols.star;
       iconColor = Colors.amber.shade500;
-      bgColor = Colors.amber.shade50;
+      bgColor = AppColors.lemonYellow.withAlpha(55);
     } else {
-      typeLabel = 'KONTEN';
+      typeLabel = 'Konten';
       icon = Symbols.auto_stories;
-      iconColor = Colors.indigo.shade500;
-      bgColor = Colors.indigo.shade50;
+      iconColor = AppColors.darkTeal;
+      bgColor = AppColors.tealGreen.withAlpha(18);
     }
 
     return GestureDetector(
@@ -307,15 +363,9 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
         margin: EdgeInsets.only(bottom: 12.h),
         padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(16.r),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(10),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          border: Border.all(color: AppColors.darkTeal.withAlpha(14)),
         ),
         child: Row(
           children: [
@@ -337,7 +387,7 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
                     typeLabel.toUpperCase(),
                     style: TextStyle(
                       fontSize: 10,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w700,
                       color: iconColor,
                     ),
                   ),
@@ -345,8 +395,8 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
                     material.title,
                     style: const TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.darkerTeal,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -354,7 +404,11 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: Colors.grey, size: 20),
+            Icon(
+              Icons.chevron_right,
+              color: AppColors.darkerTeal.withAlpha(120),
+              size: 20,
+            ),
           ],
         ),
       ),
@@ -363,13 +417,44 @@ class _SmartSearchScreenState extends State<SmartSearchScreen> {
 
   Widget _buildNoResults() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Symbols.search_off, size: 80.r, color: Colors.grey.shade200),
-          SizedBox(height: 16.h),
-          const Text('Hasil tidak ditemukan', style: TextStyle(color: Colors.grey)),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 32.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 88.r,
+              height: 88.r,
+              decoration: BoxDecoration(
+                color: AppColors.tealGreen.withAlpha(18),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Symbols.search_off,
+                size: 42.r,
+                color: AppColors.tealGreen,
+              ),
+            ),
+            SizedBox(height: 16.h),
+            const Text(
+              'Belum ada hasil',
+              style: TextStyle(
+                color: AppColors.darkerTeal,
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(height: 6.h),
+            Text(
+              'Coba gunakan kata kunci lain yang lebih singkat.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: AppColors.darkerTeal.withAlpha(140),
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
