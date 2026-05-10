@@ -77,6 +77,7 @@ class AllCategoriesScreen extends StatelessWidget {
                           title: _cleanUiText(category.title, 'Kategori'),
                           icon: categoryVisual.icon,
                           color: categoryVisual.color,
+                          assetPath: categoryVisual.assetPath,
                           onTap: () {
                             Navigator.pushNamed(
                               context,
@@ -140,12 +141,14 @@ class _CategoryTile extends StatelessWidget {
   final String title;
   final IconData icon;
   final Color color;
+  final String? assetPath;
   final VoidCallback onTap;
 
   const _CategoryTile({
     required this.title,
     required this.icon,
     required this.color,
+    this.assetPath,
     required this.onTap,
   });
 
@@ -168,7 +171,18 @@ class _CategoryTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20.r),
                   border: Border.all(color: color.withAlpha(35)),
                 ),
-                child: Icon(icon, size: 32.r, color: color),
+                child: assetPath == null
+                    ? Icon(icon, size: 32.r, color: color)
+                    : Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.r),
+                            child: Image.asset(assetPath!, fit: BoxFit.contain),
+                          ),
+                          Icon(icon, size: 28.r, color: color),
+                        ],
+                      ),
               ),
               SizedBox(height: 10.h),
               Flexible(

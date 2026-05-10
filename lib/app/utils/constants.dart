@@ -11,7 +11,8 @@ sealed class Constants {
   static const int prayerNumbers = 6;
   static const int nextPageDuration = 500;
   static const String baseUrl = "https://api.aladhan.com/v1/timingsByCity/";
-  static const String prayerTimingPath = "{date}?city={city}&country={country}";
+  static const String prayerTimingPath = "{date}";
+  static const int prayerTimingMethodIndonesia = 20;
   static const Duration timeOut = Duration(seconds: 60);
   static const String token = "SEND TOKEN HERE";
 

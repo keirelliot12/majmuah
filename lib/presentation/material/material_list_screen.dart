@@ -13,7 +13,7 @@ class MaterialListScreen extends StatelessWidget {
   final String categoryFilterKey;
   final Color categoryColor;
 
-  static final RegExp _badPlaceholderPattern = RegExp(r'^\?{3,}$');
+  static final RegExp _badPlaceholderPattern = RegExp(r'^[\?\s]+$');
 
   const MaterialListScreen({
     Key? key,
@@ -114,6 +114,17 @@ class MaterialListScreen extends StatelessWidget {
           categoryColor: categoryColor,
           cleanUiText: _cleanUiText,
           onTap: () {
+            if (material.tags.contains('placeholder')) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Materi ini sedang disiapkan untuk pembaruan berikutnya.',
+                  ),
+                ),
+              );
+              return;
+            }
+
             Navigator.pushNamed(
               context,
               Routes.materialDetailRoute,
@@ -224,6 +235,7 @@ class _MaterialRow extends StatelessWidget {
     final itemColor = itemVisual?.color ?? categoryColor;
     final title = cleanUiText(material.title, 'Materi');
     final arabicTitle = cleanUiText(material.arabicTitle, '');
+    final isPlaceholder = material.tags.contains('placeholder');
 
     return Material(
       color: Colors.transparent,
@@ -262,6 +274,16 @@ class _MaterialRow extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    if (isPlaceholder) ...[
+                      SizedBox(height: 4.h),
+                      Text(
+                        'Sedang disiapkan',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.gray500,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                     if (arabicTitle.isNotEmpty) ...[
                       SizedBox(height: 5.h),
                       Directionality(
@@ -282,7 +304,13 @@ class _MaterialRow extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 10.w),
-              Icon(Icons.chevron_right_rounded, color: itemColor, size: 22.r),
+              Icon(
+                isPlaceholder
+                    ? Icons.hourglass_empty_rounded
+                    : Icons.chevron_right_rounded,
+                color: itemColor,
+                size: 22.r,
+              ),
             ],
           ),
         ),

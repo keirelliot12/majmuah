@@ -26,11 +26,12 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
   double _arabicFontScale = defaultArabicReadingFontScale;
   String _arabicFontFamily = defaultArabicReadingFontFamily;
   bool _readingNightMode = false;
+  bool _showMaulidTranslation = true;
 
   static final RegExp _arabicTextPattern = RegExp(
     r'[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]',
   );
-  static final RegExp _badPlaceholderPattern = RegExp(r'^\?{3,}$');
+  static final RegExp _badPlaceholderPattern = RegExp(r'^[\?\s]+$');
 
   @override
   void initState() {
@@ -38,6 +39,7 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
     _arabicFontScale = _preferences.getArabicReadingFontScale();
     _arabicFontFamily = _preferences.getArabicReadingFontFamily();
     _readingNightMode = _preferences.getReadingNightMode();
+    _showMaulidTranslation = _preferences.getMaulidTranslationVisible();
     // Update last read when opened
     WidgetsBinding.instance.addPostFrameCallback((_) {
       instance<BerandaMaterialCubit>().setLastRead(widget.material.id);
@@ -51,6 +53,11 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
     final hasArabicContent =
         arabicTitle.isNotEmpty ||
         widget.material.content.any((paragraph) => _hasArabicText(paragraph));
+    final isMaulid = widget.material.category.toLowerCase() == 'maulid';
+    final visibleContent = _visibleContent(
+      widget.material.content,
+      isMaulid: isMaulid,
+    );
 
     return Scaffold(
       backgroundColor: _readingNightMode
@@ -103,7 +110,7 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
                       textDirection: TextDirection.rtl,
                       child: Text(
                         arabicTitle,
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: _arabicFontFamily,
                           fontSize: 32.sp * _arabicFontScale,
@@ -139,12 +146,12 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
               child: ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: widget.material.content.length,
+                itemCount: visibleContent.length,
                 separatorBuilder: (context, index) => SizedBox(height: 18.h),
                 itemBuilder: (context, index) {
                   return ReadingParagraphCard(
                     text: _cleanUiText(
-                      widget.material.content[index],
+                      visibleContent[index],
                       'Materi sedang disiapkan.',
                     ),
                     categoryColor: widget.categoryColor,
@@ -184,6 +191,13 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
     await _preferences.setReadingNightMode(value);
   }
 
+  Future<void> _setMaulidTranslationVisible(bool value) async {
+    setState(() {
+      _showMaulidTranslation = value;
+    });
+    await _preferences.setMaulidTranslationVisible(value);
+  }
+
   void _showReadingSettingsSheet(bool hasArabicContent) {
     showModalBottomSheet(
       context: context,
@@ -207,15 +221,23 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
               _setReadingNightMode(value);
             }
 
+            void updateMaulidTranslation(bool value) {
+              setSheetState(() => _showMaulidTranslation = value);
+              _setMaulidTranslationVisible(value);
+            }
+
             return _ReadingSettingsSheet(
               hasArabicContent: hasArabicContent,
+              isMaulid: widget.material.category.toLowerCase() == 'maulid',
               fontScale: _arabicFontScale,
               selectedFontFamily: _arabicFontFamily,
               nightMode: _readingNightMode,
+              showMaulidTranslation: _showMaulidTranslation,
               categoryColor: widget.categoryColor,
               onFontScaleChanged: updateFontScale,
               onFontFamilyChanged: updateFontFamily,
               onNightModeChanged: updateNightMode,
+              onMaulidTranslationChanged: updateMaulidTranslation,
             );
           },
         );
@@ -224,6 +246,26 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
   }
 
   static bool _hasArabicText(String text) => _arabicTextPattern.hasMatch(text);
+
+  List<String> _visibleContent(List<String> content, {required bool isMaulid}) {
+    if (!isMaulid || _showMaulidTranslation) return content;
+
+    final filtered = <String>[];
+    for (var index = 0; index < content.length; index++) {
+      final text = content[index].trim();
+      if (text.isEmpty) continue;
+
+      final hasArabic = _hasArabicText(text);
+      final previousHasArabic = index > 0 && _hasArabicText(content[index - 1]);
+
+      if (!hasArabic && previousHasArabic) {
+        continue;
+      }
+
+      filtered.add(text);
+    }
+    return filtered;
+  }
 
   static String _cleanUiText(String value, String fallback) {
     final trimmed = value.trim();
@@ -236,23 +278,29 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
 
 class _ReadingSettingsSheet extends StatelessWidget {
   final bool hasArabicContent;
+  final bool isMaulid;
   final double fontScale;
   final String selectedFontFamily;
   final bool nightMode;
+  final bool showMaulidTranslation;
   final Color categoryColor;
   final ValueChanged<double> onFontScaleChanged;
   final ValueChanged<String> onFontFamilyChanged;
   final ValueChanged<bool> onNightModeChanged;
+  final ValueChanged<bool> onMaulidTranslationChanged;
 
   const _ReadingSettingsSheet({
     required this.hasArabicContent,
+    required this.isMaulid,
     required this.fontScale,
     required this.selectedFontFamily,
     required this.nightMode,
+    required this.showMaulidTranslation,
     required this.categoryColor,
     required this.onFontScaleChanged,
     required this.onFontFamilyChanged,
     required this.onNightModeChanged,
+    required this.onMaulidTranslationChanged,
   });
 
   @override
@@ -315,6 +363,16 @@ class _ReadingSettingsSheet extends StatelessWidget {
             onChanged: onNightModeChanged,
             activeColor: categoryColor,
           ),
+          if (isMaulid) ...[
+            SizedBox(height: 20.h),
+            _SwitchRow(
+              title: 'Terjemahan',
+              subtitle: 'Tampilkan arti Bahasa Indonesia',
+              value: showMaulidTranslation,
+              onChanged: onMaulidTranslationChanged,
+              activeColor: categoryColor,
+            ),
+          ],
         ],
       ),
     );

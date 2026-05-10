@@ -27,80 +27,90 @@ class HomeHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Left: Location and Date
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Location from constants.dart
-              BlocBuilder<HomeCubit, HomeState>(
-                builder: (context, state) {
-                  final String cityName = recordLocation.$1;
-                  final String countryName = recordLocation.$2;
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Location from constants.dart
+                BlocBuilder<HomeCubit, HomeState>(
+                  builder: (context, state) {
+                    final String cityName = recordLocation.$1;
+                    final String countryName = recordLocation.$2;
 
-                  final locationText = cityName.isEmpty
-                      ? 'MENCARI LOKASI...'
-                      : '${cityName.toUpperCase()}, ${countryName.toUpperCase()}';
+                    final locationText = cityName.isEmpty
+                        ? 'MENCARI LOKASI...'
+                        : '${cityName.toUpperCase()}, ${countryName.toUpperCase()}';
 
-                  return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Symbols.location_on,
-                        color: AppColors.lemonYellow.withAlpha(230),
-                        size: 16.0.r,
-                      ),
-                      SizedBox(width: 4.0.w),
-                      Text(
-                        locationText,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.white.withAlpha(238),
-                          fontWeight: FontWeightsManager.bold,
-                          fontSize: 12.0.sp,
-                          letterSpacing: 0,
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Symbols.location_on,
+                          color: AppColors.lemonYellow.withAlpha(230),
+                          size: 16.0.r,
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-              SizedBox(height: 4.0.h),
-
-              BlocBuilder<PrayerTimingsCubit, PrayerTimingsState>(
-                builder: (context, state) {
-                  final cubit = PrayerTimingsCubit.get(context);
-                  final date = cubit.prayerTimingsModel.data?.date;
-                  final hijri = date?.hijri;
-                  final hijriText = hijri == null
-                      ? 'Kalender Hijriyah memuat...'
-                      : '${hijri.day} ${hijri.month?.en ?? ''} ${hijri.year} H';
-                  final gregorianText = _formatGregorianDate();
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        hijriText,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.limeGold.withAlpha(230),
-                          fontWeight: FontWeightsManager.bold,
-                          fontSize: 12.0.sp,
+                        SizedBox(width: 4.0.w),
+                        Flexible(
+                          child: Text(
+                            locationText,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: AppColors.white.withAlpha(238),
+                                  fontWeight: FontWeightsManager.bold,
+                                  fontSize: 12.0.sp,
+                                  letterSpacing: 0,
+                                ),
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 2.h),
-                      Text(
-                        gregorianText,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.white.withAlpha(194),
-                          fontWeight: FontWeightsManager.medium,
-                          fontSize: 12.0.sp,
+                      ],
+                    );
+                  },
+                ),
+                SizedBox(height: 4.0.h),
+
+                BlocBuilder<PrayerTimingsCubit, PrayerTimingsState>(
+                  builder: (context, state) {
+                    final cubit = PrayerTimingsCubit.get(context);
+                    final date = cubit.prayerTimingsModel.data?.date;
+                    final hijri = date?.hijri;
+                    final hijriText = hijri == null
+                        ? 'Kalender Hijriyah memuat...'
+                        : '${hijri.day} ${hijri.month?.en ?? ''} ${hijri.year} H';
+                    final gregorianText = _formatGregorianDate();
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          hijriText,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: AppColors.limeGold.withAlpha(230),
+                                fontWeight: FontWeightsManager.bold,
+                                fontSize: 12.0.sp,
+                              ),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
+                        SizedBox(height: 2.h),
+                        Text(
+                          gregorianText,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: AppColors.white.withAlpha(194),
+                                fontWeight: FontWeightsManager.medium,
+                                fontSize: 12.0.sp,
+                              ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
 
+          SizedBox(width: 12.w),
           const AppBrandLogo(size: 48),
         ],
       ),

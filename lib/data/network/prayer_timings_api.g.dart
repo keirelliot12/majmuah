@@ -25,11 +25,13 @@ class _PrayerTimingsServiceClient implements PrayerTimingsServiceClient {
     String date,
     String city,
     String country,
+    int method,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'city': city,
       r'country': country,
+      r'method': method,
     };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
@@ -41,7 +43,7 @@ class _PrayerTimingsServiceClient implements PrayerTimingsServiceClient {
     )
             .compose(
               _dio.options,
-              '${date}?city={city}&country={country}',
+              '${date}',
               queryParameters: queryParameters,
               data: _data,
             )

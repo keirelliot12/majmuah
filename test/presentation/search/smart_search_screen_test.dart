@@ -85,7 +85,7 @@ void main() {
 
     expect(repository.queries, isNot(contains('   ')));
     expect(find.text('Doa Fajar'), findsNothing);
-    expect(find.text('Mulai cari bimbingan spiritualmu'), findsOneWidget);
+    expect(find.text('Temukan panduan ibadah'), findsOneWidget);
   });
 }
 

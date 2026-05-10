@@ -10,12 +10,14 @@ class MenuItemModel {
   final String title;
   final IconData icon;
   final Color iconColor;
+  final String? assetPath;
   final VoidCallback onTap;
 
   MenuItemModel({
     required this.title,
     required this.icon,
     required this.iconColor,
+    this.assetPath,
     required this.onTap,
   });
 }
@@ -61,6 +63,7 @@ class MenuGridWidget extends StatelessWidget {
       title: title,
       icon: visual.icon,
       iconColor: visual.color,
+      assetPath: visual.assetPath,
       onTap: onTap,
     );
   }
@@ -117,13 +120,30 @@ class MenuGridWidget extends StatelessWidget {
                   ),
                   child: Center(
                     child: Container(
-                      width: 36.w,
-                      height: 36.w,
-                      decoration: BoxDecoration(
-                        color: item.iconColor.withAlpha(24),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(item.icon, size: 22.r, color: item.iconColor),
+                      width: item.assetPath == null ? 36.w : 46.w,
+                      height: item.assetPath == null ? 36.w : 46.w,
+                      decoration: item.assetPath == null
+                          ? BoxDecoration(
+                              color: item.iconColor.withAlpha(24),
+                              shape: BoxShape.circle,
+                            )
+                          : null,
+                      child: item.assetPath == null
+                          ? Icon(item.icon, size: 22.r, color: item.iconColor)
+                          : Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Image.asset(
+                                  item.assetPath!,
+                                  fit: BoxFit.contain,
+                                ),
+                                Icon(
+                                  item.icon,
+                                  size: 20.r,
+                                  color: item.iconColor,
+                                ),
+                              ],
+                            ),
                     ),
                   ),
                 ),

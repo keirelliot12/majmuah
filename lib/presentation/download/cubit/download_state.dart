@@ -24,12 +24,11 @@ class DownloadManifestLoaded extends DownloadState {
     this.currentVersion,
   });
 
-  bool get isQuranFullyDownloaded =>
-      manifest.quran.chunks
-          .every((chunk) => downloadedChunks.contains(chunk.id));
+  bool get isQuranFullyDownloaded => manifest.quran.chunks.every(
+    (chunk) => downloadedChunks.contains(chunk.id),
+  );
 
-  bool get isUpdateAvailable =>
-      manifest.version != currentVersion;
+  bool get isUpdateAvailable => manifest.version != currentVersion;
 
   @override
   List<Object?> get props => [manifest, downloadedChunks, currentVersion];
@@ -39,15 +38,28 @@ class DownloadProgressState extends DownloadState {
   final DownloadProgress progress;
   final int currentChunk;
   final int totalChunks;
+  final DownloadManifest? manifest;
+  final List<String> downloadedChunks;
+  final String? activeChunkId;
 
   const DownloadProgressState({
     required this.progress,
     required this.currentChunk,
     required this.totalChunks,
+    this.manifest,
+    this.downloadedChunks = const [],
+    this.activeChunkId,
   });
 
   @override
-  List<Object?> get props => [progress, currentChunk, totalChunks];
+  List<Object?> get props => [
+    progress,
+    currentChunk,
+    totalChunks,
+    manifest,
+    downloadedChunks,
+    activeChunkId,
+  ];
 }
 
 class DownloadSuccess extends DownloadState {

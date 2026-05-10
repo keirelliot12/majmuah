@@ -9,6 +9,7 @@ Worktree: `C:\tmp\majmuah-master-audit`
 - Dashboard didesain ulang dengan header lokasi, tanggal Masehi/Hijriyah, kartu jadwal shalat, pencarian, terakhir dibaca, grid menu, dan kartu mutiara hikmah.
 - Navigasi bawah dan menu utama dirapikan, termasuk KBIHU Nur Multazam, Maulid placeholder, dan penghapusan fitur yang tidak dipakai.
 - Kategori materi disesuaikan dari revisi Excel dan konten KBIHU mulai diadakan.
+- Keputusan terbaru: Khutbah perlu dikembalikan sebagai konten dinamis/API-backed; Mutiara Hikmah juga akan API-backed. Konten bacaan lainnya tetap statis dari bundle JSON.
 - Pencarian diperbaiki agar bisa menampilkan hasil dan detail materi.
 - Bacaan materi dirapikan: paragraf lebih jelas, tombol salin di bacaan dihapus, dan reading settings ditambahkan.
 - Al-Quran tidak lagi diblokir halaman penuh saat mushaf belum diunduh; daftar surah tetap terlihat dan download muncul sebagai popup.
@@ -24,6 +25,12 @@ Worktree: `C:\tmp\majmuah-master-audit`
 - Perlu audit ulang layar detail bacaan setelah desain utama stabil.
 - Perlu cleanup repo asli `C:\Users\COMPUTER\Documents\GitHub\majmuah` karena sempat tercampur perubahan; fokus kerja saat ini tetap di worktree.
 - Perlu smoke test Android Studio/emulator setelah web flow stabil.
+- Khutbah belum dikembalikan ke navigasi aktif dan belum tersambung API.
+- Mutiara Hikmah masih statis di dashboard; belum tersambung API/cache.
+
+## Plan Lanjutan
+
+- `docs/superpowers/plans/2026-05-10-annibros-release-backlog-plan.md`
 
 ## Verifikasi Terakhir
 

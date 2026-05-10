@@ -1,6 +1,5 @@
-
-
 import '../../../di/di.dart';
+import '../../../app/utils/constants.dart';
 import '../../network/prayer_timings_api.dart';
 import '../../responses/prayer_timings/prayer_timings_response.dart';
 
@@ -18,11 +17,15 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<PrayerTimingsResponse> getPrayerTimings(
-      String date, String city, String country) async {
+    String date,
+    String city,
+    String country,
+  ) async {
     return await _prayerTimingsServiceClient.getPrayerTimings(
       date,
       city,
       country,
+      Constants.prayerTimingMethodIndonesia,
     );
   }
 }

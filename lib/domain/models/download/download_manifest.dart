@@ -47,6 +47,10 @@ class QuranChunk {
   final int endPage;
   final int sizeBytes;
   final String checksum;
+  final String title;
+  final String subtitle;
+  final int startJuz;
+  final int endJuz;
 
   QuranChunk({
     required this.id,
@@ -55,16 +59,29 @@ class QuranChunk {
     required this.endPage,
     required this.sizeBytes,
     required this.checksum,
+    required this.title,
+    required this.subtitle,
+    required this.startJuz,
+    required this.endJuz,
   });
 
   factory QuranChunk.fromJson(Map<String, dynamic> json) {
+    final startJuz = json['startJuz'] ?? 1;
+    final endJuz = json['endJuz'] ?? startJuz;
+    final startPage = json['startPage'] ?? 1;
+    final endPage = json['endPage'] ?? startPage;
+
     return QuranChunk(
       id: json['id'],
       url: json['url'],
-      startPage: json['startPage'],
-      endPage: json['endPage'],
-      sizeBytes: json['sizeBytes'],
+      startPage: startPage,
+      endPage: endPage,
+      sizeBytes: json['sizeBytes'] ?? 0,
       checksum: json['checksum'] ?? '',
+      title: json['title'] ?? 'Juz $startJuz-$endJuz',
+      subtitle: json['subtitle'] ?? 'Halaman $startPage-$endPage',
+      startJuz: startJuz,
+      endJuz: endJuz,
     );
   }
 }

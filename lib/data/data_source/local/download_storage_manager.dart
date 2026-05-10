@@ -32,6 +32,12 @@ class DownloadStorageManager {
     }
   }
 
+  Future<void> unmarkChunkDownloaded(String chunkId) async {
+    final status = _prefs.getStringList(_downloadStatusKey) ?? [];
+    status.remove(chunkId);
+    await _prefs.setStringList(_downloadStatusKey, status);
+  }
+
   Future<String?> getQuranPagePath(int pageNumber) async {
     final quranDir = await quranDirectory;
     final fileName = 'page${pageNumber.toString().padLeft(3, '0')}.png';
@@ -49,6 +55,33 @@ class DownloadStorageManager {
 
     final files = await quranDir.list().toList();
     return files.where((f) => f.path.endsWith('.png')).length;
+  }
+
+  Future<bool> isPageRangeAvailable(int startPage, int endPage) async {
+    final quranDir = await quranDirectory;
+    for (var page = startPage; page <= endPage; page++) {
+      final fileName = 'page${page.toString().padLeft(3, '0')}.png';
+      if (!await File('${quranDir.path}/$fileName').exists()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  Future<void> deletePageRange({
+    required String chunkId,
+    required int startPage,
+    required int endPage,
+  }) async {
+    final quranDir = await quranDirectory;
+    for (var page = startPage; page <= endPage; page++) {
+      final fileName = 'page${page.toString().padLeft(3, '0')}.png';
+      final file = File('${quranDir.path}/$fileName');
+      if (await file.exists()) {
+        await file.delete();
+      }
+    }
+    await unmarkChunkDownloaded(chunkId);
   }
 
   Future<void> clearQuranData() async {

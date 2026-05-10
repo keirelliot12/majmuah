@@ -17,5 +17,6 @@ abstract class PrayerTimingsServiceClient {
     @Path("date") String date,
     @Query("city") String city,
     @Query("country") String country,
+    @Query("method") int method,
   );
 }

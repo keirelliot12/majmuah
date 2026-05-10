@@ -6,6 +6,8 @@ import 'package:islamic/domain/models/material/material_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('MaterialContentRepository Tests', () {
     late MaterialContentRepository repository;
     late MaterialDataSource dataSource;
@@ -59,41 +61,17 @@ void main() {
       expect(results, isNotEmpty);
     });
 
-    test('should search materials by category and Arabic text', () async {
-      // Arrange
-      final searchRepository = MaterialContentRepository(
-        _FakeMaterialDataSource([
-          MaterialModel(
-            id: 'panduan_wudhu',
-            title: 'Wudhu',
-            arabicTitle: '\u0627\u0644\u0648\u0636\u0648\u0621',
-            category: 'Kaifiyah',
-            tags: const ['bersuci'],
-            content: const ['Tata cara bersuci'],
-          ),
-          MaterialModel(
-            id: 'doa_fajar',
-            title: 'Doa Fajar',
-            arabicTitle:
-                '\u062f\u0639\u0627\u0621 \u0627\u0644\u0641\u062c\u0631',
-            category: "Aurad & Doa'",
-            tags: const ['doa'],
-            content: const ['Bacaan setelah fajar'],
-          ),
-        ]),
-        localDataSource,
-      );
-
+    test('should search materials by tag and Arabic text', () async {
       // Act
-      final categoryResults = await searchRepository.searchMaterials('panduan');
-      final arabicResults = await searchRepository.searchMaterials(
+      final tagResults = await repository.searchMaterials('panduan');
+      final arabicResults = await repository.searchMaterials(
         '\u0627\u0644\u0641\u062c\u0631',
       );
 
       // Assert
       expect(
-        categoryResults.map((material) => material.id),
-        contains('panduan_wudhu'),
+        tagResults.map((material) => material.id),
+        contains('tata_cara_sholat_tasbih'),
       );
       expect(
         arabicResults.map((material) => material.id),
@@ -143,13 +121,4 @@ void main() {
       expect(bookmarked, isNotEmpty);
     });
   });
-}
-
-class _FakeMaterialDataSource extends MaterialDataSource {
-  _FakeMaterialDataSource(this.materials);
-
-  final List<MaterialModel> materials;
-
-  @override
-  Future<List<MaterialModel>> loadMaterials() async => materials;
 }

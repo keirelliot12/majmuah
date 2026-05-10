@@ -6,8 +6,13 @@ import '../../../app/resources/resources.dart';
 class CategoryVisual {
   final IconData icon;
   final Color color;
+  final String? assetPath;
 
-  const CategoryVisual({required this.icon, required this.color});
+  const CategoryVisual({
+    required this.icon,
+    required this.color,
+    this.assetPath,
+  });
 }
 
 class CategoryVisuals {
@@ -26,6 +31,7 @@ class CategoryVisuals {
         return const CategoryVisual(
           icon: Symbols.mosque,
           color: AppColors.emerald500,
+          assetPath: 'assets/images/icons/aurad_doa.png',
         );
       case 'doa tawasul':
       case 'doa tawassul':
@@ -37,17 +43,20 @@ class CategoryVisuals {
         return const CategoryVisual(
           icon: Symbols.auto_stories,
           color: AppColors.indigo500,
+          assetPath: 'assets/images/icons/hizib_ratib.png',
         );
       case 'puji bilal':
       case 'puji pujian bilal':
         return const CategoryVisual(
           icon: Symbols.record_voice_over,
           color: AppColors.amber500,
+          assetPath: 'assets/images/icons/puji_bilal.png',
         );
       case 'amalan hijriyah':
         return const CategoryVisual(
           icon: Icons.calendar_month_rounded,
           color: AppColors.teal600,
+          assetPath: 'assets/images/icons/amalan_hijriyah.png',
         );
       case 'sholawat':
         return const CategoryVisual(
@@ -68,6 +77,7 @@ class CategoryVisuals {
         return const CategoryVisual(
           icon: Symbols.auto_awesome,
           color: AppColors.orange500,
+          assetPath: 'assets/images/icons/maulid.png',
         );
       case 'qasidah':
       case 'qosidah pilihan':
@@ -79,6 +89,7 @@ class CategoryVisuals {
         return const CategoryVisual(
           icon: Symbols.history_edu,
           color: AppColors.teal600,
+          assetPath: 'assets/images/icons/tahlil_ziarah.png',
         );
       case 'manaqib istighosah':
         return const CategoryVisual(
@@ -106,6 +117,7 @@ class CategoryVisuals {
         return const CategoryVisual(
           icon: Icons.account_balance_rounded,
           color: AppColors.blue500,
+          assetPath: 'assets/images/icons/kbihu.png',
         );
       case 'profil':
         return const CategoryVisual(
@@ -141,6 +153,7 @@ class CategoryVisuals {
         return const CategoryVisual(
           icon: Symbols.grid_view,
           color: AppColors.gray500,
+          assetPath: 'assets/images/icons/lainnya.png',
         );
       default:
         return CategoryVisual(

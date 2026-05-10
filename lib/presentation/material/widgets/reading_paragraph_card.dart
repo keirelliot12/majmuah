@@ -9,6 +9,7 @@ class ReadingParagraphCard extends StatelessWidget {
   final double fontScale;
   final String arabicFontFamily;
   final bool nightMode;
+  final TextAlign? textAlign;
 
   static final RegExp _arabicTextPattern = RegExp(
     r'[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]',
@@ -21,6 +22,7 @@ class ReadingParagraphCard extends StatelessWidget {
     required this.fontScale,
     this.arabicFontFamily = FontConstants.uthmanTNFontFamily,
     this.nightMode = false,
+    this.textAlign,
   }) : super(key: key);
 
   @override
@@ -54,7 +56,7 @@ class ReadingParagraphCard extends StatelessWidget {
               ),
         child: Text(
           text.trim(),
-          textAlign: hasArabicText ? TextAlign.right : TextAlign.start,
+          textAlign: textAlign ?? TextAlign.justify,
           style: hasArabicText
               ? TextStyle(
                   fontFamily: arabicFontFamily,

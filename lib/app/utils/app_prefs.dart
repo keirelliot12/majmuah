@@ -13,6 +13,7 @@ const String searchHistoryKey = "SEARCH_HISTORY_KEY";
 const String arabicReadingFontScaleKey = "ARABIC_READING_FONT_SCALE_KEY";
 const String arabicReadingFontFamilyKey = "ARABIC_READING_FONT_FAMILY_KEY";
 const String readingNightModeKey = "READING_NIGHT_MODE_KEY";
+const String maulidTranslationVisibleKey = "MAULID_TRANSLATION_VISIBLE_KEY";
 
 const double minArabicReadingFontScale = 0.8;
 const double maxArabicReadingFontScale = 1.4;
@@ -166,5 +167,13 @@ class AppPreferences {
 
   Future<void> setReadingNightMode(bool enabled) async {
     await _preferences.setBool(readingNightModeKey, enabled);
+  }
+
+  bool getMaulidTranslationVisible() {
+    return _preferences.getBool(maulidTranslationVisibleKey) ?? true;
+  }
+
+  Future<void> setMaulidTranslationVisible(bool visible) async {
+    await _preferences.setBool(maulidTranslationVisibleKey, visible);
   }
 }

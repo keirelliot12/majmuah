@@ -23,6 +23,10 @@ Use this checklist for the final release smoke pass after the implemented fixes.
 ## Lainnya
 
 - [ ] Lainnya icons are clear.
+- [ ] Khutbah category is visible from Lainnya or dashboard.
+- [ ] Khutbah list loads from API when online.
+- [ ] Khutbah list falls back to cached/default content when offline.
+- [ ] Khutbah detail opens and uses readable paragraph styling.
 - [ ] KBIHU Nur Multazam is reachable.
 - [ ] KBIHU Profil opens.
 - [ ] KBIHU Manasik Haji opens.
@@ -30,6 +34,7 @@ Use this checklist for the final release smoke pass after the implemented fixes.
 - [ ] KBIHU Tempat Sejarah opens.
 - [ ] KBIHU Do'a opens.
 - [ ] KBIHU Dialog dan Hikmah opens.
+- [ ] Mutiara Hikmah loads remote/cached/default quote on dashboard.
 
 ## Final Commands To Run Later
 
