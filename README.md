@@ -1,231 +1,215 @@
-# Flutter Islamic App 🌙📱
-Welcome to the Flutter Islamic App, where technology meets spirituality! Immerse yourself in the beauty of the Quran, stay connected with accurate prayer times, explore Hadith, and more. With YouTube integration, multiple themes, and seamless localization, this app is your go-to companion for a enriched Islamic experience. Dive in and embark on a journey of faith and knowledge! 🚀✨
-<br/>
-##   التطبيق الاسلامى
-هذا التطبيق الاسلامى يحتوى على القران كاملا،الاحاديث الاربعين النووية،مواقيت الصلاة،الاذكار،الادعية و أركان الاسلام الخمسة.
-التطبيق يحتوى على اضافات عديدة منها تشغيل الفديوهات من اليوتيوب ، البحث عن اى كلمة فى القران ، تعدد اللغات و امكانية تفعيل الوضع الليلى و اضافات اخرى. 
-
-
-
-## State Management
-- **Cubit:** Utilizing Cubit for efficient and organized state management. 
-
-
-## Features
-
-### Clean Architecture
-Built on a foundation of Clean Architecture, the Flutter Islamic App ensures a modular and maintainable codebase, promoting scalability and robustness.
-
-### Dependency Injection
-Utilizing Dependency Injection for efficient management and organization of services, the app ensures a streamlined and easily maintainable structure.
-
-### Responsive Design
-Experience a seamless transition between portrait and landscape modes with a Responsive Design. The app adapts fluidly to different screen orientations, providing a consistent and user-friendly experience.
-
-### Complete Quran
-Immerse yourself in the divine words with the entire Quran available at your fingertips. Search for specific verses and explore the beauty of the Holy Book.
-
-### Prayer Times API
-Never miss a prayer again with accurate prayer times based on your location. Stay connected to your faith throughout the day.
-
-### Hadith
-Delve into the wisdom of the Prophet with the Hadith feature, providing you with insightful teachings and their explanations.
-
-### Azkar
-Keep your heart connected to Allah through a collection of Azkar and Duas. Enhance your spiritual journey with these supplications.
-
-### Five Pillars of Islam
-Understand and practice the core principles of Islam with information on the Five Pillars.
-
-### YouTube Integration
-Explore a curated list of YouTube videos to enrich your knowledge and understanding. You can also play any YouTube video within the app.
-
-### Search Quran
-Effortlessly search for any word or phrase within the Quran. Access specific verses and deepen your understanding.
-
-### Localization
-Choose between Arabic and English languages to experience the app in the language that resonates with you.
-
-### Multiple Themes
-Customize your app experience with multiple themes, ensuring a visually pleasing interface that suits your preferences.
-
-### Bookmarks and Azkar Management
-Bookmark your favorite verses or save Azkar for quick access. Personalize your experience and create a spiritual space tailored to your needs.
-<br />
-
-## Dependencies
-
-Explore the list of dependencies that contribute to the seamless functionality of the app:
-
-- **`youtube_player_flutter`**: A Flutter plugin for embedding YouTube videos. Enhance your app with the ability to play YouTube videos seamlessly.
-
-- **`dots_indicator`**: A simple yet customizable package for displaying indicators for PageViews. Perfect for indicating the current position in image carousels or onboarding screens.
-
-- **`flutter_svg`**: Allows you to display SVG files in Flutter. Bring vector graphics into your app for a polished and scalable user interface.
-
-- **`build_runner`**: A tool to generate files at build-time. Utilized for code generation in the Flutter app to streamline development.
-
-- **`dartz`**: Functional programming in Dart. It provides immutable data types and functional programming tools, enhancing code reliability and readability.
-
-- **`shared_preferences`**: A Flutter plugin for reading and writing simple key-value pairs. Ideal for storing and retrieving lightweight app preferences.
-
-- **`get_it`**: A simple Service Locator for Dart and Flutter projects. Efficiently manage and access services throughout the app.
-
-- **`easy_localization`**: A Flutter package for easy localization of your app. Support multiple languages effortlessly.
-
-- **`flutter_phoenix`**: A Flutter plugin to gracefully restart your app. Useful for refreshing the app state without a full restart.
-
-- **`flutter_bloc`**: A state management library for Flutter applications. Implement the BLoC (Business Logic Component) pattern to manage state efficiently.
-
-- **`equatable`**: A Dart library for value-based equality. Simplifies equality comparisons in Dart applications.
-
-- **`flutter_screenutil`**: A Flutter adaptation of the ScreenUtil plugin, providing a simple way to adapt screen sizes.
-
-- **`conditional_builder_null_safety`**: A package for conditional widget building based on a condition. Enhances widget composition based on runtime conditions.
-
-- **`json_serializable` & `json_annotation`**: Dart libraries for JSON serialization. Convert Dart objects to and from JSON effortlessly.
-
-- **`floor` & `floor_generator`**: A persistence library for Flutter that simplifies database operations. Utilize SQLite for efficient data storage.
-
-- **`sqlite3_flutter_libs`**: SQLite3 native bindings for Flutter. Enables SQLite database functionality in Flutter apps.
-
-- **`retrofit` & `retrofit_generator`**: A type-safe HTTP client for Flutter and Dart. Simplifies API interactions by generating code based on annotated Dart classes.
-
-- **`dio`**: A powerful HTTP client for Dart, providing features like request/response interception, FormData, and more.
-
-- **`pretty_dio_logger`**: A Dio interceptor for logging HTTP requests and responses. Enhances debugging and troubleshooting during API interactions.
-
-- **`internet_connection_checker`**: A Dart package for detecting internet connectivity. Ensure a reliable internet connection for your app's functionality.
-
-- **`location` & `geocoding`**: Flutter plugins for accessing device location and geocoding services. Integrate location-based features seamlessly.
-
-- **`wakelock`**: A Flutter plugin for preventing the device from sleeping. Useful for keeping the screen awake during specific app interactions.
-
-- **`url_launcher`**: A Flutter plugin for launching URLs. Open external links in the default browser or other installed apps.
-
-- **`google_fonts`**: A Flutter package for accessing Google Fonts. Enhance your app's typography with a wide selection of fonts.
-
-- **`sqflite`**: A Flutter plugin for SQLite databases. Enable structured and persistent data storage in your app.
-
-### Demo Video
-<a href="https://youtu.be/GxJ1lFVL3W8"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Logo_of_YouTube_%282015-2017%29.svg/2560px-Logo_of_YouTube_%282015-2017%29.svg.png" width="100"></img></a>
-<br />
-
-### Download App
-<a href="https://github.com/mo7amedaliEbaid/islamic/releases/download/v1.0.0/islamic.apk"><img src="https://playerzon.com/asset/download.png" width="120"></img></a>
-
-### Screen Shots
-For more screen shots [Here](https://github.com/mo7amedaliEbaid/islamic/blob/5236b4010cb4f9b09eeef87f444d11b23e418654/islamic_screenshots)
-
-##### Portrait
-
-<br />
-<p float="left">
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/0519b5e0d4021f2ce2110c5db345b095d75884ef/islamic_screenshots/Screenshot_20231109_165850.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/0519b5e0d4021f2ce2110c5db345b095d75884ef/islamic_screenshots/readqurandark.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/0519b5e0d4021f2ce2110c5db345b095d75884ef/islamic_screenshots/readquran1.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/5236b4010cb4f9b09eeef87f444d11b23e418654/islamic_screenshots/drawereng.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/5236b4010cb4f9b09eeef87f444d11b23e418654/islamic_screenshots/permission.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/5236b4010cb4f9b09eeef87f444d11b23e418654/islamic_screenshots/prayertimelight.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/b566b84719521bb430267794ee8b05db69b445bc/islamic_screenshots/prayerdark.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/5236b4010cb4f9b09eeef87f444d11b23e418654/islamic_screenshots/quranlight.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/5236b4010cb4f9b09eeef87f444d11b23e418654/islamic_screenshots/youtubelist.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/5236b4010cb4f9b09eeef87f444d11b23e418654/islamic_screenshots/searchdark1.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/5236b4010cb4f9b09eeef87f444d11b23e418654/islamic_screenshots/quranlight1.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/5236b4010cb4f9b09eeef87f444d11b23e418654/islamic_screenshots/azkharlight.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/5236b4010cb4f9b09eeef87f444d11b23e418654/islamic_screenshots/haditheng.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/5236b4010cb4f9b09eeef87f444d11b23e418654/islamic_screenshots/drawereng1.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/2072c2624b0f422a27cf8fc8791ee68a3e3df406/islamic_screenshots/hadithread.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/0519b5e0d4021f2ce2110c5db345b095d75884ef/islamic_screenshots/Screenshot_20231109_165621.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/0519b5e0d4021f2ce2110c5db345b095d75884ef/islamic_screenshots/adddkireng.jpg" width="170" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/0519b5e0d4021f2ce2110c5db345b095d75884ef/islamic_screenshots/azkharadded.jpg" width="170" />
-</p>
-
-##### Landscape 
-
-<p float="left">
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/b566b84719521bb430267794ee8b05db69b445bc/islamic_screenshots/Screenshot_20231031_013247.jpg" width="370" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/b566b84719521bb430267794ee8b05db69b445bc/islamic_screenshots/Screenshot_20231031_013347.jpg" width="370" />
-   <img src="https://github.com/mo7amedaliEbaid/islamic/blob/b566b84719521bb430267794ee8b05db69b445bc/islamic_screenshots/Screenshot_20231031_013714.jpg" width="370" />
-</p>
-
-## Development Setup
-
-### Using Dev Container (Recommended)
-
-This project includes a complete dev container configuration for automatic setup.
-
-#### GitHub Codespaces / VS Code Dev Containers
-
-1. **Open in Codespace/Container**: Click "Open in GitHub Codespaces" or open in VS Code with Dev Containers extension
-2. **Automatic Setup**: All dependencies will be installed automatically via the setup script
-3. **Start Developing**: Once setup is complete, you can start developing immediately!
-
-The dev container includes:
-- ✅ Flutter SDK (latest stable)
-- ✅ All system dependencies (GTK, build tools, graphics libraries)
-- ✅ VS Code extensions (Dart, Flutter, snippets)
-- ✅ Project dependencies from pubspec.yaml
-- ✅ Linux desktop support enabled
-
-#### Quick Commands
-
-Use the provided script for common tasks:
-
-```bash
-# Run the app
-./flutter-commands.sh run
-
-# Build for release
-./flutter-commands.sh build
-
-# Run tests
-./flutter-commands.sh test
-
-# Clean and rebuild
-./flutter-commands.sh clean
-
-# See all commands
-./flutter-commands.sh help
+# Aplikasi An Nibros 🕌
+
+> **Teman mendekatkan diri kepada Allah** — [annibros.app](https://annibros.app)
+
+Aplikasi An Nibros adalah aplikasi mobile & web berbasis Flutter yang dirancang sebagai pendamping spiritual harian bagi umat Muslim. Tersedia di Android, iOS, Web, dan Desktop (Linux/macOS/Windows).
+
+---
+
+## Fitur Utama
+
+| Fitur | Keterangan |
+|---|---|
+| 📖 **Al-Quran Lengkap** | Baca seluruh 114 surah dengan font Utsman & Hafs. Termasuk fitur pencarian kata/ayat. |
+| 🕌 **Hadith Arba'in An-Nawawi** | 40 hadith pilihan lengkap dengan terjemahan. |
+| 🕐 **Waktu Shalat** | Jadwal shalat otomatis berdasarkan lokasi perangkat (via API [aladhan.com](https://aladhan.com)). |
+| 📿 **Dzikir & Doa** | Koleksi dzikir harian dan doa pilihan. Mendukung dzikir kustom yang bisa ditambah/edit/hapus. |
+| 🏛️ **Rukun Islam** | Penjelasan dan informasi Lima Rukun Islam. |
+| 🎬 **Video YouTube** | Daftar video Islami pilihan yang bisa diputar langsung di dalam aplikasi. |
+| 📚 **Materi Islami** | Konten/materi keislaman yang dapat dijelajahi berdasarkan kategori. |
+| 📝 **Catatan** | Buat dan simpan catatan pribadi. |
+| 🌐 **Multi-bahasa** | Tersedia dalam Bahasa Arab dan Bahasa Inggris. |
+| 📥 **Download Manager** | Unduh aset Al-Quran (gambar halaman) untuk dibaca secara offline. |
+
+---
+
+## Arsitektur & Teknologi
+
+- **Framework**: Flutter (Dart) — multi-platform (Android, iOS, Web, Linux, macOS, Windows)
+- **Arsitektur**: Clean Architecture (layer `data` / `domain` / `presentation`)
+- **State Management**: Flutter BLoC — pola Cubit
+- **Dependency Injection**: GetIt
+- **Database Lokal**: Floor (SQLite ORM) + sqflite
+- **HTTP Client**: Dio + Retrofit (dengan interceptor logging)
+- **Lokalisasi**: Easy Localization (`assets/translations/ar.json`, `en.json`)
+- **Code Generation**: `build_runner` + `json_serializable` + `retrofit_generator` + `floor_generator`
+
+---
+
+## Struktur Direktori
+
+```
+majmuah/
+├── android/              # Konfigurasi platform Android
+├── ios/                  # Konfigurasi platform iOS
+├── linux/                # Konfigurasi platform Linux Desktop
+├── macos/                # Konfigurasi platform macOS
+├── windows/              # Konfigurasi platform Windows
+├── web/                  # Konfigurasi platform Web
+├── assets/
+│   ├── fonts/            # Font kustom (ElMessiri, UthmanTN, Hafs, dll)
+│   ├── images/           # Gambar & ikon
+│   ├── json/             # Data lokal (quran.json, hadith, adhkar, dll)
+│   └── translations/     # File lokalisasi (ar.json, en.json)
+├── lib/
+│   ├── app/              # Resources, utilities, konstanta, preferences
+│   ├── core/             # Inisialisasi aplikasi & BLoC observer
+│   ├── data/             # Implementasi data (API, database, mapper, repository)
+│   ├── di/               # Dependency injection (GetIt)
+│   ├── domain/           # Model, use case, interface repository
+│   ├── presentation/     # UI — screens, cubits, widgets
+│   └── main.dart         # Entry point aplikasi
+├── test/                 # Unit & widget tests
+├── pubspec.yaml          # Konfigurasi project Flutter
+└── Makefile              # Shortcut perintah umum
 ```
 
-### Manual Setup
+---
 
-If you prefer manual setup:
+## Instalasi & Menjalankan di Lokal
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/mo7amedaliEbaid/islamic.git
-   cd islamic
-   ```
+### Prasyarat
 
-2. **Install Flutter SDK**
-   - Download from [flutter.dev](https://flutter.dev)
-   - Add Flutter to PATH
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) versi `>=3.10.3`
+- Dart SDK (sudah termasuk dalam Flutter)
+- Untuk **Linux Desktop**: paket sistem tambahan (lihat langkah 3)
 
-3. **Install system dependencies** (Linux)
-   ```bash
-   sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev
-   ```
+### Langkah-langkah
 
-4. **Get dependencies**
-   ```bash
-   flutter pub get
-   ```
+**1. Clone repository**
+```bash
+git clone https://github.com/keirelliot12/majmuah.git
+cd majmuah
+```
 
-5. **Enable desktop support**
-   ```bash
-   flutter config --enable-linux-desktop
-   ```
+**2. Install dependensi**
+```bash
+flutter pub get
+```
 
-6. **Run the app**
-   ```bash
-   flutter run -d linux
-   ```
+**3. (Khusus Linux Desktop) Install dependensi sistem**
+```bash
+sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev
+flutter config --enable-linux-desktop
+```
 
-### Supported Platforms
+**4. Generate kode (jika belum ada file `.g.dart`)**
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
 
-- ✅ Android
-- ✅ iOS
-- ✅ Linux Desktop
-- ✅ Web (with limitations)
+**5. Jalankan aplikasi**
+```bash
+# Android (pastikan emulator/device terhubung)
+flutter run
+
+# Web
+flutter run -d chrome
+
+# Linux Desktop
+flutter run -d linux
+```
+
+### Menggunakan Makefile
+
+```bash
+make setup     # Install dependensi
+make run       # Jalankan di Linux
+make test      # Jalankan tests
+make generate  # Generate kode (build_runner)
+make analyze   # Analisis kode
+make clean     # Bersihkan build artifacts
+make help      # Tampilkan semua perintah
+```
+
+### Menggunakan Dev Container (VS Code / GitHub Codespaces)
+
+Project ini menyertakan konfigurasi dev container yang sudah siap pakai:
+
+1. Buka folder di VS Code dengan ekstensi **Dev Containers**, atau klik **"Open in GitHub Codespaces"**
+2. Semua dependensi (Flutter SDK, library sistem, ekstensi VS Code) akan terinstal otomatis
+3. Langsung mulai coding!
+
+---
+
+## Environment Variables
+
+Aplikasi An Nibros **tidak memerlukan konfigurasi environment variable** untuk menjalankan fitur utamanya.
+
+API Waktu Shalat menggunakan endpoint publik [aladhan.com](https://aladhan.com) tanpa kunci API:
+```
+https://api.aladhan.com/v1/timingsByCity/{date}?city={city}&country={country}
+```
+
+---
+
+## Build & Deploy
+
+### Build Android (APK / AAB)
+```bash
+# APK debug
+flutter build apk
+
+# APK release
+flutter build apk --release
+
+# Android App Bundle (untuk Play Store)
+flutter build appbundle --release
+```
+
+### Build iOS
+```bash
+flutter build ios --release
+```
+
+### Build Web
+```bash
+flutter build web --release
+# Output: build/web/
+```
+
+### Build Linux Desktop
+```bash
+flutter build linux --release
+# Output: build/linux/x64/release/bundle/
+```
+
+---
+
+## Platform yang Didukung
+
+| Platform | Status |
+|---|---|
+| Android | ✅ Didukung |
+| iOS | ✅ Didukung |
+| Web | ✅ Didukung |
+| Linux Desktop | ✅ Didukung |
+| macOS | ✅ Didukung |
+| Windows | ✅ Didukung |
+
+---
+
+## Kontribusi
+
+Kontribusi sangat disambut! Silakan ikuti langkah berikut:
+
+1. Fork repository ini
+2. Buat branch fitur baru: `git checkout -b fitur/nama-fitur`
+3. Commit perubahan: `git commit -m 'feat: tambah fitur baru'`
+4. Push ke branch: `git push origin fitur/nama-fitur`
+5. Buat Pull Request
+
+Harap baca juga [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) sebelum berkontribusi.
+
+---
+
+## Lisensi
+
+Didistribusikan di bawah lisensi **MIT**. Lihat file [LICENSE](LICENSE) untuk detail lengkap.
+
+---
+
+## Kontak
+
+Website: [annibros.app](https://annibros.app)  
+Repository: [github.com/keirelliot12/majmuah](https://github.com/keirelliot12/majmuah)
