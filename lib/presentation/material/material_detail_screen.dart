@@ -149,11 +149,23 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
                 itemCount: visibleContent.length,
                 separatorBuilder: (context, index) => SizedBox(height: 18.h),
                 itemBuilder: (context, index) {
+                  final text = _cleanUiText(
+                    visibleContent[index],
+                    'Materi sedang disiapkan.',
+                  );
+
+                  final headingLevel = _contentHeadingLevel(text);
+                  if (headingLevel != null) {
+                    return _ReadingHeading(
+                      text: _stripHeadingMarker(text),
+                      level: headingLevel,
+                      categoryColor: widget.categoryColor,
+                      nightMode: _readingNightMode,
+                    );
+                  }
+
                   return ReadingParagraphCard(
-                    text: _cleanUiText(
-                      visibleContent[index],
-                      'Materi sedang disiapkan.',
-                    ),
+                    text: text,
                     categoryColor: widget.categoryColor,
                     fontScale: _arabicFontScale,
                     arabicFontFamily: _arabicFontFamily,
@@ -273,6 +285,74 @@ class _MaterialDetailScreenState extends State<MaterialDetailScreen> {
       return fallback;
     }
     return trimmed;
+  }
+
+  static int? _contentHeadingLevel(String value) {
+    if (value.startsWith('### ')) return 3;
+    if (value.startsWith('## ')) return 2;
+    if (value.startsWith('# ')) return 1;
+    return null;
+  }
+
+  static String _stripHeadingMarker(String value) {
+    return value.replaceFirst(RegExp(r'^#{1,3}\s+'), '').trim();
+  }
+}
+
+class _ReadingHeading extends StatelessWidget {
+  final String text;
+  final int level;
+  final Color categoryColor;
+  final bool nightMode;
+
+  const _ReadingHeading({
+    required this.text,
+    required this.level,
+    required this.categoryColor,
+    required this.nightMode,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isMain = level == 1;
+    final isSection = level == 2;
+    final backgroundColor = nightMode
+        ? AppColors.surface.withAlpha(isMain ? 28 : 16)
+        : categoryColor.withAlpha(isMain ? 28 : 16);
+    final borderColor = nightMode
+        ? AppColors.limeGold.withAlpha(isMain ? 170 : 96)
+        : categoryColor.withAlpha(isMain ? 180 : 92);
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMain ? 18.w : 14.w,
+        vertical: isMain ? 16.h : 12.h,
+      ),
+      decoration: BoxDecoration(
+        color: isSection || isMain ? backgroundColor : Colors.transparent,
+        borderRadius: BorderRadius.circular(isMain ? 18.r : 14.r),
+        border: BorderDirectional(
+          start: BorderSide(color: borderColor, width: isMain ? 4.w : 3.w),
+        ),
+      ),
+      child: Text(
+        text,
+        textAlign: isMain ? TextAlign.center : TextAlign.start,
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          fontSize:
+              (isMain
+                      ? 19
+                      : isSection
+                      ? 17
+                      : 15)
+                  .sp,
+          height: 1.35,
+          fontWeight: isMain ? FontWeight.w900 : FontWeight.w800,
+          color: nightMode ? AppColors.surface : AppColors.deepEmerald,
+        ),
+      ),
+    );
   }
 }
 
