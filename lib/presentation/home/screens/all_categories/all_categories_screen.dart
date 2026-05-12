@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:material_symbols_icons/symbols.dart';
 import '../../../../app/resources/resources.dart';
 import '../../../../di/di.dart';
+import '../../../components/app_category_icon.dart';
 import '../../cubit/beranda_category_cubit.dart';
 import '../../helpers/category_visuals.dart';
 
@@ -71,11 +71,13 @@ class AllCategoriesScreen extends StatelessWidget {
                               ? category.filterKey
                               : category.title,
                           fallbackColor: category.iconColor,
+                          assetPath: category.iconAsset,
                         );
 
                         return _CategoryTile(
                           title: _cleanUiText(category.title, 'Kategori'),
                           icon: categoryVisual.icon,
+                          iconAsset: categoryVisual.assetPath,
                           color: categoryVisual.color,
                           onTap: () {
                             Navigator.pushNamed(
@@ -88,6 +90,7 @@ class AllCategoriesScreen extends StatelessWidget {
                                 ),
                                 'categoryFilterKey': category.filterKey,
                                 'categoryColor': categoryVisual.color,
+                                'categoryIconAsset': categoryVisual.assetPath,
                               },
                             );
                           },
@@ -111,7 +114,8 @@ class AllCategoriesScreen extends StatelessWidget {
   Widget _buildAllMaterialsCard(BuildContext context) {
     return _CategoryTile(
       title: 'Semua Materi',
-      icon: Symbols.library_books,
+      icon: CategoryVisuals.forCategory('Al-Quran').icon,
+      iconAsset: 'assets/icons/all_materials.png',
       color: AppColors.tealGreen,
       onTap: () {
         Navigator.pushNamed(
@@ -121,6 +125,7 @@ class AllCategoriesScreen extends StatelessWidget {
             'categoryName': 'Semua Materi',
             'categoryFilterKey': '', // Empty string means no filter
             'categoryColor': AppColors.tealGreen,
+            'categoryIconAsset': 'assets/icons/all_materials.png',
           },
         );
       },
@@ -139,12 +144,14 @@ class AllCategoriesScreen extends StatelessWidget {
 class _CategoryTile extends StatelessWidget {
   final String title;
   final IconData icon;
+  final String? iconAsset;
   final Color color;
   final VoidCallback onTap;
 
   const _CategoryTile({
     required this.title,
     required this.icon,
+    this.iconAsset,
     required this.color,
     required this.onTap,
   });
@@ -168,7 +175,14 @@ class _CategoryTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20.r),
                   border: Border.all(color: color.withAlpha(35)),
                 ),
-                child: Icon(icon, size: 32.r, color: color),
+                child: Center(
+                  child: AppCategoryIcon(
+                    assetPath: iconAsset,
+                    fallbackIcon: icon,
+                    color: color,
+                    size: 42,
+                  ),
+                ),
               ),
               SizedBox(height: 10.h),
               Flexible(

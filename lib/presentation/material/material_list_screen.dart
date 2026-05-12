@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../app/resources/resources.dart';
 import '../../di/di.dart';
 import '../../domain/models/material/material_model.dart';
+import '../components/app_category_icon.dart';
 import '../home/helpers/category_visuals.dart';
 import '../home/cubit/beranda_material_cubit.dart';
 import '../home/cubit/beranda_material_state.dart';
@@ -12,6 +13,7 @@ class MaterialListScreen extends StatelessWidget {
   final String categoryName;
   final String categoryFilterKey;
   final Color categoryColor;
+  final String? categoryIconAsset;
 
   static final RegExp _badPlaceholderPattern = RegExp(r'^\?{3,}$');
 
@@ -20,6 +22,7 @@ class MaterialListScreen extends StatelessWidget {
     required this.categoryName,
     required this.categoryFilterKey,
     required this.categoryColor,
+    this.categoryIconAsset,
   }) : super(key: key);
 
   @override
@@ -105,6 +108,7 @@ class MaterialListScreen extends StatelessWidget {
             title: _cleanUiText(categoryName, 'Materi'),
             count: materials.length,
             color: categoryColor,
+            iconAsset: categoryIconAsset,
           );
         }
 
@@ -138,11 +142,13 @@ class _ListIntro extends StatelessWidget {
   final String title;
   final int count;
   final Color color;
+  final String? iconAsset;
 
   const _ListIntro({
     required this.title,
     required this.count,
     required this.color,
+    this.iconAsset,
   });
 
   @override
@@ -166,7 +172,14 @@ class _ListIntro extends StatelessWidget {
                 color: color.withAlpha(32),
                 shape: BoxShape.circle,
               ),
-              child: Icon(Icons.menu_book_rounded, color: color, size: 22.r),
+              child: Center(
+                child: AppCategoryIcon(
+                  assetPath: iconAsset,
+                  fallbackIcon: Icons.menu_book_rounded,
+                  color: color,
+                  size: 28,
+                ),
+              ),
             ),
             SizedBox(width: 14.w),
             Expanded(
@@ -222,6 +235,7 @@ class _MaterialRow extends StatelessWidget {
           )
         : null;
     final itemColor = itemVisual?.color ?? categoryColor;
+    final itemIconAsset = itemVisual?.assetPath;
     final title = cleanUiText(material.title, 'Materi');
     final arabicTitle = cleanUiText(material.arabicTitle, '');
 
@@ -241,10 +255,13 @@ class _MaterialRow extends StatelessWidget {
                   color: itemColor.withAlpha(24),
                   borderRadius: BorderRadius.circular(14.r),
                 ),
-                child: Icon(
-                  itemVisual?.icon ?? Icons.article_outlined,
-                  color: itemColor,
-                  size: 23.r,
+                child: Center(
+                  child: AppCategoryIcon(
+                    assetPath: itemIconAsset,
+                    fallbackIcon: itemVisual?.icon ?? Icons.article_outlined,
+                    color: itemColor,
+                    size: 30,
+                  ),
                 ),
               ),
               SizedBox(width: 14.w),

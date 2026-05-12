@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../app/resources/resources.dart';
+import '../../components/app_category_icon.dart';
 import '../helpers/category_visuals.dart';
 
 /// Model for menu items
@@ -10,12 +11,14 @@ class MenuItemModel {
   final String title;
   final IconData icon;
   final Color iconColor;
+  final String? iconAsset;
   final VoidCallback onTap;
 
   MenuItemModel({
     required this.title,
     required this.icon,
     required this.iconColor,
+    this.iconAsset,
     required this.onTap,
   });
 }
@@ -61,6 +64,7 @@ class MenuGridWidget extends StatelessWidget {
       title: title,
       icon: visual.icon,
       iconColor: visual.color,
+      iconAsset: visual.assetPath,
       onTap: onTap,
     );
   }
@@ -123,7 +127,12 @@ class MenuGridWidget extends StatelessWidget {
                         color: item.iconColor.withAlpha(24),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(item.icon, size: 22.r, color: item.iconColor),
+                      child: AppCategoryIcon(
+                        assetPath: item.iconAsset,
+                        fallbackIcon: item.icon,
+                        color: item.iconColor,
+                        size: 28,
+                      ),
                     ),
                   ),
                 ),

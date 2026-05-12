@@ -96,6 +96,7 @@ class RoutesGenerator {
             categoryName: args['categoryName'],
             categoryFilterKey: args['categoryFilterKey'],
             categoryColor: args['categoryColor'],
+            categoryIconAsset: args['categoryIconAsset'],
           ),
         );
       case Routes.materialDetailRoute:

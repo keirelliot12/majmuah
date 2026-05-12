@@ -303,6 +303,7 @@ class HomeView extends StatelessWidget {
             'categoryName': "Aurad & Doa'",
             'categoryFilterKey': "Aurad & Doa'",
             'categoryColor': AppColors.emerald500,
+            'categoryIconAsset': 'assets/icons/aurad_shalat.png',
           },
         );
         break;
@@ -314,6 +315,7 @@ class HomeView extends StatelessWidget {
             'categoryName': 'Hizib & Ratib',
             'categoryFilterKey': 'Hizib & Ratib',
             'categoryColor': AppColors.indigo500,
+            'categoryIconAsset': 'assets/icons/ratib.png',
           },
         );
         break;
@@ -325,6 +327,7 @@ class HomeView extends StatelessWidget {
             'categoryName': 'Puji-pujian & Bilal',
             'categoryFilterKey': 'Puji-pujian & Bilal',
             'categoryColor': AppColors.amber500,
+            'categoryIconAsset': 'assets/icons/puji_pujian_bilal.png',
           },
         );
         break;
@@ -336,6 +339,7 @@ class HomeView extends StatelessWidget {
             'categoryName': 'Amalan Hijriyah',
             'categoryFilterKey': 'Amalan Hijriyah',
             'categoryColor': AppColors.teal600,
+            'categoryIconAsset': 'assets/icons/doa_tawasul.png',
           },
         );
         break;
@@ -347,6 +351,7 @@ class HomeView extends StatelessWidget {
             'categoryName': 'Maulid',
             'categoryFilterKey': 'Maulid',
             'categoryColor': AppColors.orange500,
+            'categoryIconAsset': 'assets/icons/maulid.png',
           },
         );
         break;
@@ -358,6 +363,7 @@ class HomeView extends StatelessWidget {
             'categoryName': 'Tahlil & Ziarah',
             'categoryFilterKey': 'Tahlil & Ziarah',
             'categoryColor': AppColors.teal600,
+            'categoryIconAsset': 'assets/icons/tahlil_ziarah.png',
           },
         );
         break;
@@ -369,6 +375,7 @@ class HomeView extends StatelessWidget {
             'categoryName': 'KBIHU Nur Multazam',
             'categoryFilterKey': 'KBIHU Nur Multazam',
             'categoryColor': AppColors.blue500,
+            'categoryIconAsset': 'assets/icons/kbihu_nur_multazam.png',
           },
         );
         break;

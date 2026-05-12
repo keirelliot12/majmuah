@@ -5,7 +5,7 @@
     <application
         android:label="Annibros App"
         android:name="${applicationName}"
-        android:icon="@mipmap/islamic_ic">
+        android:icon="@mipmap/annibros_app_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
