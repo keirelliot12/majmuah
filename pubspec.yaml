@@ -2,7 +2,7 @@ name: annibros
 description: Aplikasi resmi An-Nibros teman mendekatkan diri kepada Allah
 
 publish_to: 'none'
-version: 1.0.0+1
+version: 2.0.0+4
 
 environment:
   sdk: '>=3.10.3 <4.0.0'   # Sesuaikan dengan lock file Annibros
