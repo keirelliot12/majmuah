@@ -18,147 +18,168 @@ class CategoryVisual {
 class CategoryVisuals {
   const CategoryVisuals._();
 
-  static CategoryVisual forCategory(String category, {Color? fallbackColor}) {
+  static CategoryVisual forCategory(
+    String category, {
+    Color? fallbackColor,
+    String? assetPath,
+  }) {
     switch (_normalize(category)) {
       case 'al quran':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.menu_book,
           color: AppColors.tealGreen,
+          assetPath: assetPath ?? 'assets/icons/al_quran.png',
         );
       case 'aurad shalat':
       case 'aurad sholat':
       case 'aurad doa':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.mosque,
           color: AppColors.emerald500,
-          assetPath: 'assets/images/icons/aurad_doa.png',
+          assetPath: assetPath ?? 'assets/icons/aurad_shalat.png',
         );
       case 'doa tawasul':
       case 'doa tawassul':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.front_hand,
           color: AppColors.amber500,
+          assetPath: assetPath ?? 'assets/icons/doa_tawasul.png',
         );
       case 'hizib ratib':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.auto_stories,
           color: AppColors.indigo500,
-          assetPath: 'assets/images/icons/hizib_ratib.png',
+          assetPath: assetPath ?? 'assets/icons/ratib.png',
         );
       case 'puji bilal':
       case 'puji pujian bilal':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.record_voice_over,
           color: AppColors.amber500,
-          assetPath: 'assets/images/icons/puji_bilal.png',
+          assetPath: assetPath ?? 'assets/icons/puji_pujian_bilal.png',
         );
       case 'amalan hijriyah':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Icons.calendar_month_rounded,
           color: AppColors.teal600,
-          assetPath: 'assets/images/icons/amalan_hijriyah.png',
+          assetPath: assetPath ?? 'assets/icons/doa_tawasul.png',
         );
       case 'sholawat':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.star,
           color: AppColors.rose500,
+          assetPath: assetPath ?? 'assets/icons/sholawat.png',
         );
       case 'ratib':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.auto_stories,
           color: AppColors.indigo500,
+          assetPath: assetPath ?? 'assets/icons/ratib.png',
         );
       case 'hizib':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.wb_twilight,
           color: AppColors.teal600,
+          assetPath: assetPath ?? 'assets/icons/ratib.png',
         );
       case 'maulid':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.auto_awesome,
           color: AppColors.orange500,
-          assetPath: 'assets/images/icons/maulid.png',
+          assetPath: assetPath ?? 'assets/icons/maulid.png',
         );
       case 'qasidah':
       case 'qosidah pilihan':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Icons.music_note_rounded,
           color: AppColors.cyan600,
+          assetPath: assetPath ?? 'assets/icons/qasidah.png',
         );
       case 'tahlil ziarah':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.history_edu,
           color: AppColors.teal600,
-          assetPath: 'assets/images/icons/tahlil_ziarah.png',
+          assetPath: assetPath ?? 'assets/icons/tahlil_ziarah.png',
         );
       case 'manaqib istighosah':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Icons.volunteer_activism_rounded,
           color: AppColors.blue500,
+          assetPath: assetPath,
         );
       case 'panduan ibadah':
       case 'kaifiyah':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.local_library,
           color: AppColors.tealGreen,
+          assetPath: assetPath ?? 'assets/icons/panduan_ibadah.png',
         );
       case 'notes':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.edit_note,
           color: AppColors.cyan600,
+          assetPath: assetPath,
         );
       case 'khutbah':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.record_voice_over,
           color: AppColors.rose500,
+          assetPath: assetPath,
         );
       case 'kbihu nur multazam':
       case 'kbihu':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Icons.account_balance_rounded,
           color: AppColors.blue500,
-          assetPath: 'assets/images/icons/kbihu.png',
+          assetPath: assetPath ?? 'assets/icons/kbihu_nur_multazam.png',
         );
       case 'profil':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Icons.badge_outlined,
           color: AppColors.blue500,
+          assetPath: assetPath ?? 'assets/icons/kbihu_profil.png',
         );
       case 'manasik haji':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Icons.account_balance_outlined,
           color: AppColors.tealGreen,
+          assetPath: assetPath ?? 'assets/icons/kbihu_manasik_haji.png',
         );
       case 'manasik umroh':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Icons.route_outlined,
           color: AppColors.emerald500,
+          assetPath: assetPath ?? 'assets/icons/kbihu_manasik_umroh.png',
         );
       case 'tempat sejarah':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Icons.history_edu_outlined,
           color: AppColors.amber500,
+          assetPath: assetPath ?? 'assets/icons/kbihu_tempat_sejarah.png',
         );
       case "do'a":
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Icons.volunteer_activism_outlined,
           color: AppColors.rose500,
+          assetPath: assetPath ?? 'assets/icons/kbihu_doa.png',
         );
       case 'dialog dan hikmah':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Icons.forum_outlined,
           color: AppColors.indigo500,
+          assetPath: assetPath ?? 'assets/icons/kbihu_dialog_hikmah.png',
         );
       case 'lainnya':
-        return const CategoryVisual(
+        return CategoryVisual(
           icon: Symbols.grid_view,
           color: AppColors.gray500,
-          assetPath: 'assets/images/icons/lainnya.png',
+          assetPath: assetPath ?? 'assets/icons/lainnya.png',
         );
       default:
         return CategoryVisual(
           icon: Symbols.library_books,
           color: fallbackColor ?? AppColors.tealGreen,
+          assetPath: assetPath,
         );
     }
   }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:islamic/domain/models/prayer_timings/prayer_timings_model.dart';
-import 'package:islamic/presentation/home/screens/prayer_times/cubit/prayer_timings_cubit.dart';
-import 'package:islamic/presentation/home/widgets/prayer_countdown_card.dart';
+import 'package:annibros/domain/models/prayer_timings/prayer_timings_model.dart';
+import 'package:annibros/presentation/home/screens/prayer_times/cubit/prayer_timings_cubit.dart';
+import 'package:annibros/presentation/home/widgets/prayer_countdown_card.dart';
 
 Widget _wrapWithScreenUtil(Widget child, PrayerTimingsCubit cubit) {
   return ScreenUtilInit(

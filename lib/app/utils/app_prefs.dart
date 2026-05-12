@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:islamic/app/utils/extensions.dart';
+import 'package:annibros/app/utils/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../di/di.dart';

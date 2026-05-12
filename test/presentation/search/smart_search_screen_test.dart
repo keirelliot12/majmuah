@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:islamic/app/utils/app_prefs.dart';
-import 'package:islamic/data/data_source/local/notes_local_data_source.dart';
-import 'package:islamic/data/data_source/remote/material_data_source.dart';
-import 'package:islamic/data/repository/material_content_repository.dart';
-import 'package:islamic/di/di.dart';
-import 'package:islamic/domain/models/material/material_model.dart';
-import 'package:islamic/presentation/home/cubit/beranda_material_cubit.dart';
-import 'package:islamic/presentation/search/smart_search_screen.dart';
+import 'package:annibros/app/utils/app_prefs.dart';
+import 'package:annibros/data/data_source/local/notes_local_data_source.dart';
+import 'package:annibros/data/data_source/remote/material_data_source.dart';
+import 'package:annibros/data/repository/material_content_repository.dart';
+import 'package:annibros/di/di.dart';
+import 'package:annibros/domain/models/material/material_model.dart';
+import 'package:annibros/presentation/home/cubit/beranda_material_cubit.dart';
+import 'package:annibros/presentation/search/smart_search_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

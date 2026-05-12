@@ -1,6 +1,6 @@
 
 
-import 'package:islamic/app/utils/extensions.dart';
+import 'package:annibros/app/utils/extensions.dart';
 
 import '../../app/utils/constants.dart';
 import '../../domain/models/adhkar/adhkar_model.dart';

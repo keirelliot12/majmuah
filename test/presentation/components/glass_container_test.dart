@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:islamic/presentation/components/glass_container.dart';
+import 'package:annibros/presentation/components/glass_container.dart';
 import 'dart:ui';
 
 void main() {

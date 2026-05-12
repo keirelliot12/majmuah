@@ -5,9 +5,9 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
-import 'package:islamic/data/repository/material_content_repository.dart'
+import 'package:annibros/data/repository/material_content_repository.dart'
     as _i2;
-import 'package:islamic/domain/models/material/material_model.dart' as _i4;
+import 'package:annibros/domain/models/material/material_model.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -33,103 +33,92 @@ class MockMaterialContentRepository extends _i1.Mock
   }
 
   @override
-  _i3.Future<List<_i4.MaterialModel>> getAllMaterials() => (super.noSuchMethod(
-        Invocation.method(
-          #getAllMaterials,
-          [],
-        ),
-        returnValue:
-            _i3.Future<List<_i4.MaterialModel>>.value(<_i4.MaterialModel>[]),
-      ) as _i3.Future<List<_i4.MaterialModel>>);
+  _i3.Future<List<_i4.MaterialModel>> getAllMaterials() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAllMaterials, []),
+            returnValue: _i3.Future<List<_i4.MaterialModel>>.value(
+              <_i4.MaterialModel>[],
+            ),
+          )
+          as _i3.Future<List<_i4.MaterialModel>>);
 
   @override
   _i3.Future<List<_i4.MaterialModel>> getMaterialsByCategory(
-          String? category) =>
+    String? category,
+  ) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getMaterialsByCategory,
-          [category],
-        ),
-        returnValue:
-            _i3.Future<List<_i4.MaterialModel>>.value(<_i4.MaterialModel>[]),
-      ) as _i3.Future<List<_i4.MaterialModel>>);
+            Invocation.method(#getMaterialsByCategory, [category]),
+            returnValue: _i3.Future<List<_i4.MaterialModel>>.value(
+              <_i4.MaterialModel>[],
+            ),
+          )
+          as _i3.Future<List<_i4.MaterialModel>>);
 
   @override
   _i3.Future<_i4.MaterialModel?> getMaterialById(String? id) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getMaterialById,
-          [id],
-        ),
-        returnValue: _i3.Future<_i4.MaterialModel?>.value(),
-      ) as _i3.Future<_i4.MaterialModel?>);
+            Invocation.method(#getMaterialById, [id]),
+            returnValue: _i3.Future<_i4.MaterialModel?>.value(),
+          )
+          as _i3.Future<_i4.MaterialModel?>);
 
   @override
   _i3.Future<List<_i4.MaterialModel>> searchMaterials(String? query) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #searchMaterials,
-          [query],
-        ),
-        returnValue:
-            _i3.Future<List<_i4.MaterialModel>>.value(<_i4.MaterialModel>[]),
-      ) as _i3.Future<List<_i4.MaterialModel>>);
+            Invocation.method(#searchMaterials, [query]),
+            returnValue: _i3.Future<List<_i4.MaterialModel>>.value(
+              <_i4.MaterialModel>[],
+            ),
+          )
+          as _i3.Future<List<_i4.MaterialModel>>);
 
   @override
-  _i3.Future<void> updateLastRead(String? materialId) => (super.noSuchMethod(
-        Invocation.method(
-          #updateLastRead,
-          [materialId],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+  _i3.Future<void> updateLastRead(String? materialId) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateLastRead, [materialId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  _i3.Future<void> toggleBookmark(String? materialId) => (super.noSuchMethod(
-        Invocation.method(
-          #toggleBookmark,
-          [materialId],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+  _i3.Future<void> toggleBookmark(String? materialId) =>
+      (super.noSuchMethod(
+            Invocation.method(#toggleBookmark, [materialId]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
   _i3.Future<List<_i4.MaterialModel>> getBookmarkedMaterials() =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getBookmarkedMaterials,
-          [],
-        ),
-        returnValue:
-            _i3.Future<List<_i4.MaterialModel>>.value(<_i4.MaterialModel>[]),
-      ) as _i3.Future<List<_i4.MaterialModel>>);
+            Invocation.method(#getBookmarkedMaterials, []),
+            returnValue: _i3.Future<List<_i4.MaterialModel>>.value(
+              <_i4.MaterialModel>[],
+            ),
+          )
+          as _i3.Future<List<_i4.MaterialModel>>);
 
   @override
-  _i3.Future<_i4.MaterialModel?> getLastReadMaterial() => (super.noSuchMethod(
-        Invocation.method(
-          #getLastReadMaterial,
-          [],
-        ),
-        returnValue: _i3.Future<_i4.MaterialModel?>.value(),
-      ) as _i3.Future<_i4.MaterialModel?>);
+  _i3.Future<_i4.MaterialModel?> getLastReadMaterial() =>
+      (super.noSuchMethod(
+            Invocation.method(#getLastReadMaterial, []),
+            returnValue: _i3.Future<_i4.MaterialModel?>.value(),
+          )
+          as _i3.Future<_i4.MaterialModel?>);
 
   @override
-  _i3.Future<bool> isBookmarked(String? materialId) => (super.noSuchMethod(
-        Invocation.method(
-          #isBookmarked,
-          [materialId],
-        ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+  _i3.Future<bool> isBookmarked(String? materialId) =>
+      (super.noSuchMethod(
+            Invocation.method(#isBookmarked, [materialId]),
+            returnValue: _i3.Future<bool>.value(false),
+          )
+          as _i3.Future<bool>);
 
   @override
   void clearCache() => super.noSuchMethod(
-        Invocation.method(
-          #clearCache,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#clearCache, []),
+    returnValueForMissingStub: null,
+  );
 }

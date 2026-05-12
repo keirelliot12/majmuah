@@ -5,8 +5,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
-import 'package:islamic/data/repository/notes_repository.dart' as _i2;
-import 'package:islamic/domain/models/note/note_model.dart' as _i4;
+import 'package:annibros/data/repository/notes_repository.dart' as _i2;
+import 'package:annibros/domain/models/note/note_model.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -31,106 +31,94 @@ class MockNotesRepository extends _i1.Mock implements _i2.NotesRepository {
   }
 
   @override
-  _i3.Future<List<_i4.NoteModel>> getAllNotes() => (super.noSuchMethod(
-        Invocation.method(
-          #getAllNotes,
-          [],
-        ),
-        returnValue: _i3.Future<List<_i4.NoteModel>>.value(<_i4.NoteModel>[]),
-      ) as _i3.Future<List<_i4.NoteModel>>);
+  _i3.Future<List<_i4.NoteModel>> getAllNotes() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAllNotes, []),
+            returnValue: _i3.Future<List<_i4.NoteModel>>.value(
+              <_i4.NoteModel>[],
+            ),
+          )
+          as _i3.Future<List<_i4.NoteModel>>);
 
   @override
-  _i3.Future<_i4.NoteModel?> getNoteById(String? id) => (super.noSuchMethod(
-        Invocation.method(
-          #getNoteById,
-          [id],
-        ),
-        returnValue: _i3.Future<_i4.NoteModel?>.value(),
-      ) as _i3.Future<_i4.NoteModel?>);
+  _i3.Future<_i4.NoteModel?> getNoteById(String? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#getNoteById, [id]),
+            returnValue: _i3.Future<_i4.NoteModel?>.value(),
+          )
+          as _i3.Future<_i4.NoteModel?>);
 
   @override
-  _i3.Future<void> createNote(_i4.NoteModel? note) => (super.noSuchMethod(
-        Invocation.method(
-          #createNote,
-          [note],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+  _i3.Future<void> createNote(_i4.NoteModel? note) =>
+      (super.noSuchMethod(
+            Invocation.method(#createNote, [note]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  _i3.Future<void> updateNote(_i4.NoteModel? note) => (super.noSuchMethod(
-        Invocation.method(
-          #updateNote,
-          [note],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+  _i3.Future<void> updateNote(_i4.NoteModel? note) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateNote, [note]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  _i3.Future<void> deleteNote(String? id) => (super.noSuchMethod(
-        Invocation.method(
-          #deleteNote,
-          [id],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+  _i3.Future<void> deleteNote(String? id) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteNote, [id]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
   _i3.Future<List<_i4.NoteModel>> searchNotes(String? query) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #searchNotes,
-          [query],
-        ),
-        returnValue: _i3.Future<List<_i4.NoteModel>>.value(<_i4.NoteModel>[]),
-      ) as _i3.Future<List<_i4.NoteModel>>);
+            Invocation.method(#searchNotes, [query]),
+            returnValue: _i3.Future<List<_i4.NoteModel>>.value(
+              <_i4.NoteModel>[],
+            ),
+          )
+          as _i3.Future<List<_i4.NoteModel>>);
 
   @override
-  _i3.Future<void> togglePin(String? id) => (super.noSuchMethod(
-        Invocation.method(
-          #togglePin,
-          [id],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
-
-  @override
-  _i3.Future<List<_i4.NoteModel>> getPinnedNotes() => (super.noSuchMethod(
-        Invocation.method(
-          #getPinnedNotes,
-          [],
-        ),
-        returnValue: _i3.Future<List<_i4.NoteModel>>.value(<_i4.NoteModel>[]),
-      ) as _i3.Future<List<_i4.NoteModel>>);
-
-  @override
-  _i3.Future<void> updateNoteColor(
-    String? id,
-    int? colorIndex,
-  ) =>
+  _i3.Future<void> togglePin(String? id) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateNoteColor,
-          [
-            id,
-            colorIndex,
-          ],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+            Invocation.method(#togglePin, [id]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  _i3.Future<void> clearAllNotes() => (super.noSuchMethod(
-        Invocation.method(
-          #clearAllNotes,
-          [],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+  _i3.Future<List<_i4.NoteModel>> getPinnedNotes() =>
+      (super.noSuchMethod(
+            Invocation.method(#getPinnedNotes, []),
+            returnValue: _i3.Future<List<_i4.NoteModel>>.value(
+              <_i4.NoteModel>[],
+            ),
+          )
+          as _i3.Future<List<_i4.NoteModel>>);
+
+  @override
+  _i3.Future<void> updateNoteColor(String? id, int? colorIndex) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateNoteColor, [id, colorIndex]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> clearAllNotes() =>
+      (super.noSuchMethod(
+            Invocation.method(#clearAllNotes, []),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 }

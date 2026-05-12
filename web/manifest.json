@@ -1,11 +1,11 @@
 {
-    "name": "islamic",
-    "short_name": "islamic",
+    "name": "Annibros",
+    "short_name": "Annibros",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#123D32",
+    "theme_color": "#123D32",
+    "description": "Aplikasi resmi An-Nibros teman mendekatkan diri kepada Allah.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

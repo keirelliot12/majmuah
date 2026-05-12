@@ -1,4 +1,4 @@
-name: islamic
+name: annibros
 description: Aplikasi resmi An-Nibros teman mendekatkan diri kepada Allah
 
 publish_to: 'none'
@@ -85,6 +85,7 @@ flutter:
   assets:
     - assets/fonts/
     - assets/images/
+    - assets/icons/
     # - assets/images/quran/  # REMOVED: Quran images now downloaded remotely
     - assets/json/
     - assets/translations/

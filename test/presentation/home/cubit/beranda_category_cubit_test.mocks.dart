@@ -5,8 +5,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
 
-import 'package:islamic/data/repository/category_repository.dart' as _i2;
-import 'package:islamic/domain/models/category/category_model.dart' as _i4;
+import 'package:annibros/data/repository/category_repository.dart' as _i2;
+import 'package:annibros/domain/models/category/category_model.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -32,52 +32,44 @@ class MockCategoryRepository extends _i1.Mock
   }
 
   @override
-  _i3.Future<List<_i4.CategoryModel>> getAllCategories() => (super.noSuchMethod(
-        Invocation.method(
-          #getAllCategories,
-          [],
-        ),
-        returnValue:
-            _i3.Future<List<_i4.CategoryModel>>.value(<_i4.CategoryModel>[]),
-      ) as _i3.Future<List<_i4.CategoryModel>>);
+  _i3.Future<List<_i4.CategoryModel>> getAllCategories() =>
+      (super.noSuchMethod(
+            Invocation.method(#getAllCategories, []),
+            returnValue: _i3.Future<List<_i4.CategoryModel>>.value(
+              <_i4.CategoryModel>[],
+            ),
+          )
+          as _i3.Future<List<_i4.CategoryModel>>);
 
   @override
   _i3.Future<_i4.CategoryModel?> getCategoryById(int? id) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getCategoryById,
-          [id],
-        ),
-        returnValue: _i3.Future<_i4.CategoryModel?>.value(),
-      ) as _i3.Future<_i4.CategoryModel?>);
+            Invocation.method(#getCategoryById, [id]),
+            returnValue: _i3.Future<_i4.CategoryModel?>.value(),
+          )
+          as _i3.Future<_i4.CategoryModel?>);
 
   @override
   _i3.Future<_i4.CategoryModel?> getCategoryByFilterKey(String? filterKey) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #getCategoryByFilterKey,
-          [filterKey],
-        ),
-        returnValue: _i3.Future<_i4.CategoryModel?>.value(),
-      ) as _i3.Future<_i4.CategoryModel?>);
+            Invocation.method(#getCategoryByFilterKey, [filterKey]),
+            returnValue: _i3.Future<_i4.CategoryModel?>.value(),
+          )
+          as _i3.Future<_i4.CategoryModel?>);
 
   @override
   _i3.Future<List<_i4.CategoryModel>> searchCategories(String? query) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #searchCategories,
-          [query],
-        ),
-        returnValue:
-            _i3.Future<List<_i4.CategoryModel>>.value(<_i4.CategoryModel>[]),
-      ) as _i3.Future<List<_i4.CategoryModel>>);
+            Invocation.method(#searchCategories, [query]),
+            returnValue: _i3.Future<List<_i4.CategoryModel>>.value(
+              <_i4.CategoryModel>[],
+            ),
+          )
+          as _i3.Future<List<_i4.CategoryModel>>);
 
   @override
   void clearCache() => super.noSuchMethod(
-        Invocation.method(
-          #clearCache,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#clearCache, []),
+    returnValueForMissingStub: null,
+  );
 }

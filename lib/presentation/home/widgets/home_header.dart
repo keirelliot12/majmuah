@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import 'package:islamic/app/resources/resources.dart';
-import 'package:islamic/app/utils/constants.dart';
-import 'package:islamic/presentation/home/cubit/home_cubit.dart';
-import 'package:islamic/presentation/home/screens/prayer_times/cubit/prayer_timings_cubit.dart';
+import 'package:annibros/app/resources/resources.dart';
+import 'package:annibros/app/utils/constants.dart';
+import 'package:annibros/presentation/home/cubit/home_cubit.dart';
+import 'package:annibros/presentation/home/screens/prayer_times/cubit/prayer_timings_cubit.dart';
 import '../../components/app_brand_logo.dart';
 
 /// Displays the header section of the home page with location, date, and notification bell.

@@ -4,7 +4,7 @@ import '../../../domain/models/hadith/hadith_model.dart';
 import '../../components/separator.dart';
 import '../../../app/resources/resources.dart';
 
-import 'package:islamic/app/utils/extensions.dart';
+import 'package:annibros/app/utils/extensions.dart';
 
 class HadithBuilderView extends StatelessWidget {
   final HadithModel hadithModel;

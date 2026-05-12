@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../app/resources/resources.dart';
+import '../../components/app_category_icon.dart';
 import '../helpers/category_visuals.dart';
 
 /// Model for menu items
@@ -10,14 +11,14 @@ class MenuItemModel {
   final String title;
   final IconData icon;
   final Color iconColor;
-  final String? assetPath;
+  final String? iconAsset;
   final VoidCallback onTap;
 
   MenuItemModel({
     required this.title,
     required this.icon,
     required this.iconColor,
-    this.assetPath,
+    this.iconAsset,
     required this.onTap,
   });
 }
@@ -63,7 +64,7 @@ class MenuGridWidget extends StatelessWidget {
       title: title,
       icon: visual.icon,
       iconColor: visual.color,
-      assetPath: visual.assetPath,
+      iconAsset: visual.assetPath,
       onTap: onTap,
     );
   }
@@ -120,30 +121,18 @@ class MenuGridWidget extends StatelessWidget {
                   ),
                   child: Center(
                     child: Container(
-                      width: item.assetPath == null ? 36.w : 46.w,
-                      height: item.assetPath == null ? 36.w : 46.w,
-                      decoration: item.assetPath == null
-                          ? BoxDecoration(
-                              color: item.iconColor.withAlpha(24),
-                              shape: BoxShape.circle,
-                            )
-                          : null,
-                      child: item.assetPath == null
-                          ? Icon(item.icon, size: 22.r, color: item.iconColor)
-                          : Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset(
-                                  item.assetPath!,
-                                  fit: BoxFit.contain,
-                                ),
-                                Icon(
-                                  item.icon,
-                                  size: 20.r,
-                                  color: item.iconColor,
-                                ),
-                              ],
-                            ),
+                      width: 36.w,
+                      height: 36.w,
+                      decoration: BoxDecoration(
+                        color: item.iconColor.withAlpha(24),
+                        shape: BoxShape.circle,
+                      ),
+                      child: AppCategoryIcon(
+                        assetPath: item.iconAsset,
+                        fallbackIcon: item.icon,
+                        color: item.iconColor,
+                        size: 28,
+                      ),
                     ),
                   ),
                 ),

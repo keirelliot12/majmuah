@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import 'package:islamic/app/resources/resources.dart';
-import 'package:islamic/domain/models/prayer_timings/prayer_timings_model.dart';
-import 'package:islamic/presentation/components/glass_container.dart';
-import 'package:islamic/presentation/home/screens/prayer_times/cubit/prayer_timings_cubit.dart';
+import 'package:annibros/app/resources/resources.dart';
+import 'package:annibros/domain/models/prayer_timings/prayer_timings_model.dart';
+import 'package:annibros/presentation/components/glass_container.dart';
+import 'package:annibros/presentation/home/screens/prayer_times/cubit/prayer_timings_cubit.dart';
 
 class PrayerCountdownCard extends StatefulWidget {
   const PrayerCountdownCard({Key? key}) : super(key: key);

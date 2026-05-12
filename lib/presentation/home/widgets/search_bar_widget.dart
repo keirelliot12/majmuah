@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import 'package:islamic/app/resources/resources.dart';
+import 'package:annibros/app/resources/resources.dart';
 
 /// A customized search bar widget for the home screen with glassmorphism.
 ///

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:islamic/app/utils/app_prefs.dart';
-import 'package:islamic/di/di.dart';
+import 'package:annibros/app/utils/app_prefs.dart';
+import 'package:annibros/di/di.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
