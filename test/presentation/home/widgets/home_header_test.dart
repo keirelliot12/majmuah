@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:islamic/presentation/home/widgets/home_header.dart';
+import 'package:annibros/presentation/home/widgets/home_header.dart';
 
 void main() {
   group('HomeHeader Widget', () {

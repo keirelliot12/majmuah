@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:islamic/app/resources/strings_manager.dart';
-import 'package:islamic/presentation/browseyoutube/view/browseyoutube_screen.dart';
+import 'package:annibros/app/resources/strings_manager.dart';
+import 'package:annibros/presentation/browseyoutube/view/browseyoutube_screen.dart';
 
 import '../../di/di.dart';
 import '../../presentation/custom_adhkar/view/custom_adhkar_view.dart';

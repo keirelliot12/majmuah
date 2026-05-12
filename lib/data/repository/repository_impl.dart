@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:islamic/data/mapper/mapper.dart';
+import 'package:annibros/data/mapper/mapper.dart';
 
 
 import '../../app/error/exception.dart';

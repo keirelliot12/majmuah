@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:islamic/data/data_source/remote/category_data_source.dart';
-import 'package:islamic/data/repository/category_repository.dart';
-import 'package:islamic/domain/models/category/category_model.dart';
+import 'package:annibros/data/data_source/remote/category_data_source.dart';
+import 'package:annibros/data/repository/category_repository.dart';
+import 'package:annibros/domain/models/category/category_model.dart';
 
 void main() {
   group('CategoryRepository Tests', () {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:islamic/presentation/material/widgets/reading_paragraph_card.dart';
+import 'package:annibros/presentation/material/widgets/reading_paragraph_card.dart';
 
 void main() {
   const arabicText = 'اللهم صل على سيدنا محمد';

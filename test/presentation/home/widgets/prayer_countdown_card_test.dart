@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:islamic/presentation/home/widgets/prayer_countdown_card.dart';
+import 'package:annibros/presentation/home/widgets/prayer_countdown_card.dart';
 
 Widget _wrapWithScreenUtil(Widget child) {
   return ScreenUtilInit(

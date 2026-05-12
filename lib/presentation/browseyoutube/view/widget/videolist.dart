@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:islamic/app/utils/constants.dart';
+import 'package:annibros/app/utils/constants.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 /// Creates list of video players

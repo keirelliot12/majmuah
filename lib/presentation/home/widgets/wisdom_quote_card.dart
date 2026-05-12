@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import 'package:islamic/app/resources/resources.dart';
+import 'package:annibros/app/resources/resources.dart';
 
 /// Displays a wisdom quote card with glassmorphism effect.
 ///

@@ -1,9 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:islamic/presentation/home/cubit/beranda_material_cubit.dart';
-import 'package:islamic/presentation/home/cubit/beranda_material_state.dart';
-import 'package:islamic/data/repository/material_content_repository.dart';
-import 'package:islamic/domain/models/material/material_model.dart';
+import 'package:annibros/presentation/home/cubit/beranda_material_cubit.dart';
+import 'package:annibros/presentation/home/cubit/beranda_material_state.dart';
+import 'package:annibros/data/repository/material_content_repository.dart';
+import 'package:annibros/domain/models/material/material_model.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 

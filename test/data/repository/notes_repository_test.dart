@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:islamic/data/data_source/local/notes_local_data_source.dart';
-import 'package:islamic/data/repository/notes_repository.dart';
-import 'package:islamic/domain/models/note/note_model.dart';
+import 'package:annibros/data/data_source/local/notes_local_data_source.dart';
+import 'package:annibros/data/repository/notes_repository.dart';
+import 'package:annibros/domain/models/note/note_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
